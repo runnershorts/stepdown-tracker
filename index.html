@@ -942,6 +942,75 @@
             }
         ];
 
+        const CLARITY_SCALE = [
+            { val: 1, label: 'Foggy' },
+            { val: 2, label: 'Hazy' },
+            { val: 3, label: 'Clear' },
+            { val: 4, label: 'Sharp' },
+            { val: 5, label: 'Laser' }
+        ];
+
+        const ENERGY_SCALE = [
+            { val: 1, label: 'Drained' },
+            { val: 2, label: 'Low' },
+            { val: 3, label: 'Steady' },
+            { val: 4, label: 'High' },
+            { val: 5, label: 'Peak' }
+        ];
+
+        // ==========================================
+        // 2. DATE UTILITIES & APPLICATION STATE
+        // ==========================================
+        function toDateKey(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getTodayKey() {
+            return toDateKey(new Date());
+        }
+
+        function isIsoDateKey(str) {
+            return typeof str === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(str);
+        }
+
+        function parseDateKey(key) {
+            if (!isIsoDateKey(key)) return new Date();
+            const [y, m, d] = key.split('-').map(Number);
+            return new Date(y, m - 1, d);
+        }
+
+        function addDaysToKey(key, delta) {
+            const dt = parseDateKey(key);
+            dt.setDate(dt.getDate() + delta);
+            return toDateKey(dt);
+        }
+
+        function formatShortDateKey(key) {
+            return parseDateKey(key).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function formatFullDateKey(key) {
+            return parseDateKey(key).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        const nowInit = new Date();
+        let activeTimeRange = '30d';
+        let calendarViewYear = nowInit.getFullYear();
+        let calendarViewMonth = nowInit.getMonth();
+
+        let appState = {
+            baselineWeekly: 14,
+            weeklyTarget: 7,
+            startDate: getTodayKey(),
+            weightUnit: 'lbs',
+            startingWeight: null,
+            goalWeight: null,
+            logs: {}
+        };
+
         let currentSuggestedWorkout = null;
 
         let activeModalDate = getTodayKey();
@@ -1033,6 +1102,41 @@
                    (workout.muscleGroups && workout.muscleGroups.length > 0) ||
                    (Number(workout.duration) > 0) ||
                    (workout.lifts && workout.lifts.length > 0);
+        }
+
+        function normalizeLogsObject(rawLogs, startDate) {
+            const result = {};
+            if (!rawLogs || typeof rawLogs !== 'object') return result;
+            const baseStart = isIsoDateKey(startDate) ? startDate : getTodayKey();
+
+            for (const [k, v] of Object.entries(rawLogs)) {
+                if (!v || typeof v !== 'object') continue;
+                let dateKey = null;
+                if (isIsoDateKey(k)) {
+                    dateKey = k;
+                } else if (/^\d+$/.test(k)) {
+                    const dayNum = parseInt(k, 10);
+                    if (dayNum >= 1 && dayNum <= 366) {
+                        dateKey = addDaysToKey(baseStart, dayNum - 1);
+                    }
+                }
+                if (!dateKey) continue;
+
+                result[dateKey] = {
+                    logged: v.logged !== undefined ? Boolean(v.logged) : true,
+                    drinks: Number(v.drinks) || 0,
+                    naDrinks: Number(v.naDrinks) || 0,
+                    weight: v.weight !== undefined && v.weight !== null && v.weight !== '' ? Number(v.weight) : null,
+                    rhr: v.rhr !== undefined && v.rhr !== null && v.rhr !== '' ? Number(v.rhr) : null,
+                    sleepQuality: normalizeSleepScore(v.sleepQuality),
+                    mentalClarity: v.mentalClarity !== undefined && v.mentalClarity !== null && v.mentalClarity !== '' ? Number(v.mentalClarity) : null,
+                    energyLevel: v.energyLevel !== undefined && v.energyLevel !== null && v.energyLevel !== '' ? Number(v.energyLevel) : null,
+                    workout: normalizeWorkout(v.workout),
+                    habits: v.habits && typeof v.habits === 'object' ? { ...v.habits } : {},
+                    notes: String(v.notes || '')
+                };
+            }
+            return result;
         }
 
         function loadState() {
@@ -2023,6 +2127,12 @@
             renderModalMuscleGroups();
         }
 
+        function updateDurationDraft(val) {
+            if (!tempDayDraft) return;
+            tempDayDraft.workout.duration = Math.max(0, Number(val) || 0);
+            modalDirty = true;
+        }
+
         function setDurationPreset(mins) {
             document.getElementById('modal-workout-duration').value = mins;
             updateDurationDraft(mins);
@@ -2075,28 +2185,6 @@
             modalDirty = true;
             renderModalLifts();
             renderModalMuscleGroups();
-        }
-
-        function addPresetLift(name) {
-            addLiftRow(name, 3, 8, 135);
-        }
-
-        function updateLiftField(idx, field, val) {
-            if (!tempDayDraft || !tempDayDraft.workout.lifts[idx]) return;
-            if (field === 'name') {
-                tempDayDraft.workout.lifts[idx].name = val;
-            } else {
-                tempDayDraft.workout.lifts[idx][field] = Math.max(0, Number(val) || 0);
-            }
-            modalDirty = true;
-            updateSessionVolumeBadge();
-        }
-
-        function removeLiftRow(idx) {
-            if (!tempDayDraft) return;
-            tempDayDraft.workout.lifts.splice(idx, 1);
-            modalDirty = true;
-            renderModalLifts();
         }
 
         function updateSessionVolumeBadge() {
@@ -2515,6 +2603,72 @@
             renderModalLifts();
             showToast(`Loaded "${currentSuggestedWorkout.title}" into today's log`);
         }
+
+        function renderRecoveryComparisonCard(dateKeys) {
+            const listEl = document.getElementById('recovery-comparison-list');
+            const insightEl = document.getElementById('recovery-insight-box');
+            if (!listEl || !insightEl) return;
+
+            const stats = computeRecoveryStatsForKeys(dateKeys);
+            const fmt = (v, suffix = '') => v !== null ? `${v.toFixed(1)}${suffix}` : '—';
+            const fmtInt = (v, suffix = '') => v !== null ? `${Math.round(v)}${suffix}` : '—';
+
+            listEl.innerHTML = `
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                        <span>❤️ Resting Heart Rate</span>
+                        <span class="text-[11px] font-normal text-slate-400">Lower = better</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
+                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmtInt(stats.dryAvgRhr, ' bpm')}</span>
+                        </div>
+                        <div class="bg-rose-500/10 border border-rose-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-rose-700 dark:text-rose-300 block">After Drinks</span>
+                            <span class="text-sm font-bold text-rose-800 dark:text-rose-200">${fmtInt(stats.drinkAvgRhr, ' bpm')}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                        <span>😴 Garmin Sleep Score (0–100)</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
+                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmtInt(stats.dryAvgSleep, '/100')}</span>
+                        </div>
+                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-300 block">After Drinks</span>
+                            <span class="text-sm font-bold text-amber-800 dark:text-amber-200">${fmtInt(stats.drinkAvgSleep, '/100')}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                        <span>🧠 Mental Clarity (1–5)</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
+                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmt(stats.dryAvgClarity, '/5')}</span>
+                        </div>
+                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-300 block">After Drinks</span>
+                            <span class="text-sm font-bold text-amber-800 dark:text-amber-200">${fmt(stats.drinkAvgClarity, '/5')}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const insights = [];
+            if (stats.dryAvgRhr !== null && stats.drinkAvgRhr !== null) {
+                const rhrDiff = Math.round((stats.drinkAvgRhr - stats.dryAvgRhr) * 10) / 10;
+                if (rhrDiff > 0) insights.push(`<strong>${rhrDiff} bpm lower</strong> RHR`);
+            }
             if (stats.dryAvgSleep !== null && stats.drinkAvgSleep !== null) {
                 const sleepDiff = Math.round(stats.dryAvgSleep - stats.drinkAvgSleep);
                 if (sleepDiff > 0) insights.push(`<strong>+${sleepDiff} pts</strong> Garmin sleep`);
