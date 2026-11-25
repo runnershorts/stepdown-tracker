@@ -1,0 +1,2973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Step-Down 30">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <title>30-Day Alcohol Step-Down Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'media',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#172033',
+                            950: '#0b1120',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom smooth scrollbars, safe-area support, and tap highlight removal for native mobile feel */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        html, body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+        }
+        @media (min-width: 768px) {
+            body {
+                padding-bottom: 3rem;
+            }
+        }
+        .safe-top {
+            padding-top: max(0.75rem, env(safe-area-inset-top));
+        }
+        .safe-bottom {
+            padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+        }
+        /* Prevent iOS Safari auto-zoom on form controls (<16px triggers zoom) */
+        @media (max-width: 767px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Slide-up animation for modal drawer */
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up {
+            animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 safe-top">
+        <div class="max-w-5xl mx-auto px-4 pb-3 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold shadow-sm">
+                    30
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight truncate">Step-Down Tracker</h1>
+                    <p id="header-subtitle" class="text-xs text-slate-500 dark:text-slate-400 truncate">30-Day Intentional Moderation & Weight</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="loadDemoData()" class="min-h-[44px] px-3 py-2 text-xs font-semibold rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 transition flex items-center gap-1.5 active:scale-95">
+                    <span>✨ Demo</span>
+                </button>
+                <button onclick="openSetupModal()" class="hidden md:flex min-h-[44px] px-3.5 py-2 text-xs sm:text-sm font-medium rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition items-center gap-1.5 active:scale-95">
+                    <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span>Plan Setup</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-3.5 sm:px-4 pt-4 sm:pt-5 space-y-5 sm:space-y-6">
+
+        <!-- Toast / Feedback Banner -->
+        <div id="toast-banner" class="hidden fixed bottom-24 md:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 dark:bg-slate-800 text-white px-4 py-2.5 rounded-full shadow-lg text-sm font-medium flex items-center gap-2 border border-slate-700 whitespace-nowrap">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span id="toast-message">Saved</span>
+        </div>
+
+        <!-- KPI Summary Grid -->
+        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
+            <!-- Active Week Target Progress -->
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span id="kpi-week-label" class="text-xs font-medium text-slate-500 dark:text-slate-400">Week 1 Intake</span>
+                    <span id="kpi-week-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">On Track</span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-week-actual" class="text-2xl sm:text-3xl font-bold">0</span>
+                    <span id="kpi-week-target" class="text-xs text-slate-500 dark:text-slate-400">/ 12 max</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+                    <div id="kpi-week-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Cumulative Drinks & Calories Saved -->
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Drinks Avoided</span>
+                    <span class="text-sky-500 text-sm">📉</span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-saved" class="text-2xl sm:text-3xl font-bold text-sky-600 dark:text-sky-400">0</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">vs baseline</span>
+                </div>
+                <p id="kpi-savings-extra" class="text-[11px] text-slate-400 mt-1">~0 kcal saved</p>
+            </div>
+
+            <!-- Body Weight & 7-Day Trend -->
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Weight & Delta</span>
+                    <span class="text-indigo-500 text-sm">⚖️</span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-weight" class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">—</span>
+                    <span id="kpi-weight-delta" class="text-xs font-semibold text-slate-400">0.0</span>
+                </div>
+                <p id="kpi-weight-trend" class="text-[11px] text-slate-400 mt-1">7-day trend: —</p>
+            </div>
+
+            <!-- Recovery & RHR KPI Card -->
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Recovery & RHR</span>
+                    <span class="text-rose-500 text-sm">❤️</span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-rhr" class="text-2xl sm:text-3xl font-bold text-rose-600 dark:text-rose-400">—</span>
+                    <span id="kpi-rhr-delta" class="text-xs font-semibold text-slate-400">bpm</span>
+                </div>
+                <p id="kpi-recovery-scores" class="text-[11px] text-slate-400 mt-1">Sleep —/5 · Energy —/5</p>
+            </div>
+
+            <!-- Exercise & Strength KPI -->
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Training & Lifts</span>
+                    <span class="text-violet-500 text-sm">🏋️</span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-workouts" class="text-2xl sm:text-3xl font-bold text-violet-600 dark:text-violet-400">0</span>
+                    <span id="kpi-workout-mins" class="text-xs text-slate-500 dark:text-slate-400">sessions · 0m</span>
+                </div>
+                <p id="kpi-lift-volume" class="text-[11px] text-slate-400 mt-1">0 lbs lifted · 0 str / 0 cardio</p>
+            </div>
+
+            <!-- Dry Streak & Total Dry Days -->
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Dry Days & Streak</span>
+                    <span class="text-emerald-500 text-sm">🔥</span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-dry-days" class="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">0</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">dry · <strong id="kpi-streak" class="text-slate-700 dark:text-slate-200">0d</strong> streak</span>
+                </div>
+                <p id="kpi-na-swaps" class="text-[11px] text-slate-400 mt-1">0 NA drinks swapped</p>
+            </div>
+        </section>
+
+        <!-- Primary Navigation Tabs -->
+        <div class="flex overflow-x-auto no-scrollbar p-1 bg-slate-200/70 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 gap-1">
+            <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="flex-1 min-w-[118px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm transition whitespace-nowrap">
+                Dashboard & Graphs
+            </button>
+            <button onclick="switchTab('tracker')" id="tab-btn-tracker" class="flex-1 min-w-[105px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap">
+                30-Day Grid
+            </button>
+            <button onclick="switchTab('playbook')" id="tab-btn-playbook" class="flex-1 min-w-[115px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap">
+                Tactical Playbook
+            </button>
+        </div>
+
+        <!-- TAB 1: DASHBOARD & INTERACTIVE VISUAL GRAPHS -->
+        <section id="view-analytics" class="space-y-5">
+            <!-- Quick Action Strip -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+                <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+                    <span class="inline-block w-2 h-2 shrink-0 rounded-full bg-emerald-500"></span>
+                    <span>Touch & slide across any chart to inspect exact daily metrics.</span>
+                </div>
+                <div class="hidden md:flex items-center gap-2">
+                    <button onclick="quickLogDryToday()" class="min-h-[44px] px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold rounded-xl transition">
+                        ✓ 0-Drink Quick Log
+                    </button>
+                    <button onclick="openTodayModal()" class="min-h-[44px] px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition">
+                        + Log Active Day
+                    </button>
+                </div>
+            </div>
+
+            <!-- GRAPH 1: 30-DAY PACE VS STEP-DOWN PLAN -->
+            <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h2 id="pace-chart-title" class="text-base font-bold">Cumulative 30-Day Pace vs. Step-Down Plan</h2>
+                        <p id="pace-chart-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Tracks your cumulative drinks against your old baseline and target step-down curve</p>
+                    </div>
+                    <div class="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800 self-start">
+                        <button onclick="setPaceChartMode('cumulative')" id="pace-btn-cumulative" class="min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition">
+                            Cumulative Pace
+                        </button>
+                        <button onclick="setPaceChartMode('daily')" id="pace-btn-daily" class="min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">
+                            Daily vs Ceiling
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Legend -->
+                <div id="pace-chart-legend" class="flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-slate-600 dark:text-slate-300"></div>
+
+                <!-- Interactive SVG Container -->
+                <div class="relative w-full h-60 sm:h-72 select-none touch-pan-y">
+                    <svg id="pace-svg" class="w-full h-full overflow-visible"></svg>
+                    <div id="pace-tooltip" class="hidden pointer-events-none absolute z-20 bg-slate-900/95 text-white text-xs rounded-xl px-3 py-2 shadow-xl border border-slate-700 whitespace-nowrap"></div>
+                </div>
+            </div>
+
+            <!-- GRAPH 2 & GRAPH 3 GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <!-- GRAPH 2: BODY WEIGHT TREND VS ALCOHOL INTAKE CORRELATION -->
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+                    <div>
+                        <h2 class="text-base font-bold">Weight Trend vs. Alcohol Intake</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">7-day smoothed trend & daily scale weight vs. drinks</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-indigo-500 inline-block"></span> 7-Day Trend</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-indigo-400/70 inline-block"></span> Scale Weight</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-rose-400/50 inline-block"></span> Drinks</span>
+                    </div>
+                    <div class="relative w-full h-60 sm:h-64 select-none touch-pan-y">
+                        <svg id="weight-svg" class="w-full h-full overflow-visible"></svg>
+                        <div id="weight-tooltip" class="hidden pointer-events-none absolute z-20 bg-slate-900/95 text-white text-xs rounded-xl px-3 py-2 shadow-xl border border-slate-700 whitespace-nowrap"></div>
+                    </div>
+                </div>
+
+                <!-- GRAPH 3: WEEKLY STEP-DOWN COMPARISON -->
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+                    <div>
+                        <h2 class="text-base font-bold">Weekly Step-Down Comparison</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Baseline vs. step-down target ceiling vs. actual drinks</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-slate-300 dark:bg-slate-700"></span> Baseline</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-amber-400"></span> Target Max</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-emerald-500"></span> Actual</span>
+                    </div>
+                    <div class="relative w-full h-60 sm:h-64 select-none touch-pan-y">
+                        <svg id="weekly-svg" class="w-full h-full overflow-visible"></svg>
+                        <div id="weekly-tooltip" class="hidden pointer-events-none absolute z-20 bg-slate-900/95 text-white text-xs rounded-xl px-3 py-2 shadow-xl border border-slate-700 whitespace-nowrap"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRAPH 3.5: RECOVERY & BIOMETRICS -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+                    <div>
+                        <h2 class="text-base font-bold">Resting Heart Rate, Sleep & Energy vs. Alcohol Intake</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Morning RHR (bpm) & combined Sleep/Energy index overlaid on daily drink intake</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-rose-500 inline-block"></span> Resting HR (bpm)</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 border-t-2 border-dashed border-sky-400 inline-block"></span> Sleep & Energy Avg (1–5)</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-amber-400/50 inline-block"></span> Daily Drinks</span>
+                    </div>
+                    <div class="relative w-full h-60 sm:h-64 select-none touch-pan-y">
+                        <svg id="recovery-svg" class="w-full h-full overflow-visible"></svg>
+                        <div id="recovery-tooltip" class="hidden pointer-events-none absolute z-20 bg-slate-900/95 text-white text-xs rounded-xl px-3 py-2 shadow-xl border border-slate-700 whitespace-nowrap"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div>
+                            <h2 class="text-base font-bold">Dry vs. Drinking Recovery</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Next-morning biometrics after 0-drink vs. drinking days</p>
+                        </div>
+                        <div id="recovery-comparison-list" class="space-y-2.5"></div>
+                    </div>
+                    <div id="recovery-insight-box" class="bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200/70 dark:border-rose-800/50 rounded-xl p-3 text-xs text-slate-700 dark:text-slate-300">
+                        Log morning sleep, RHR, and energy to see how dry nights improve your recovery.
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRAPH 4 & STRENGTH PROGRESSION GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
+                    <div>
+                        <h2 class="text-base font-bold">Exercise Minutes, Lifting Volume & Alcohol Alignment</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Daily active training minutes by modality vs. daily drink count</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-violet-500 inline-block"></span> Strength / Gym</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-cyan-500 inline-block"></span> Cycling / Cardio</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-teal-400 inline-block"></span> Mobility / Recovery</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> Drinks</span>
+                    </div>
+                    <div class="relative w-full h-60 sm:h-64 select-none touch-pan-y">
+                        <svg id="training-svg" class="w-full h-full overflow-visible"></svg>
+                        <div id="training-tooltip" class="hidden pointer-events-none absolute z-20 bg-slate-900/95 text-white text-xs rounded-xl px-3 py-2 shadow-xl border border-slate-700 whitespace-nowrap"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div>
+                            <h2 class="text-base font-bold">Top Logged Lifts & PRs</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Heaviest load & best single-session volume</p>
+                        </div>
+                        <div id="top-lifts-list" class="space-y-2 max-h-56 overflow-y-auto pr-1"></div>
+                    </div>
+                    <div id="training-alignment-insight" class="bg-violet-50/70 dark:bg-violet-950/30 border border-violet-200/70 dark:border-violet-800/50 rounded-xl p-3 text-xs text-slate-700 dark:text-slate-300">
+                        Log workouts and dry days to see your training consistency boost.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase Breakdown Table -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm">
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+                    <h3 class="text-sm font-bold">Phase-by-Phase Performance, Weight & Training Summary</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm">
+                        <thead class="bg-slate-50 dark:bg-slate-850 text-slate-500 dark:text-slate-400">
+                            <tr>
+                                <th class="px-4 py-3 font-semibold">Phase</th>
+                                <th class="px-4 py-3 font-semibold">Baseline</th>
+                                <th class="px-4 py-3 font-semibold">Target</th>
+                                <th class="px-4 py-3 font-semibold">Logged</th>
+                                <th class="px-4 py-3 font-semibold">Dry Days</th>
+                                <th class="px-4 py-3 font-semibold">Avg Weight</th>
+                                <th class="px-4 py-3 font-semibold">Active Min</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analytics-table-body" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Backup & Data Management -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-sm font-bold">Data & Backup</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Saved locally in your browser. Export JSON anytime or test charts with demo data.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                    <button onclick="loadDemoData()" class="min-h-[44px] flex-1 sm:flex-none px-3.5 py-2 text-xs font-semibold rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 transition">
+                        Load Demo
+                    </button>
+                    <button onclick="exportData()" class="min-h-[44px] flex-1 sm:flex-none px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition">
+                        Export JSON
+                    </button>
+                    <label class="min-h-[44px] flex-1 sm:flex-none px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition cursor-pointer flex items-center justify-center">
+                        Import JSON
+                        <input type="file" accept=".json" onchange="importData(event)" class="hidden">
+                    </label>
+                    <button onclick="confirmReset()" class="min-h-[44px] flex-1 sm:flex-none px-3.5 py-2 text-xs font-semibold rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/50 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 transition">
+                        Reset All
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: 30-DAY INTERACTIVE GRID -->
+        <section id="view-tracker" class="hidden space-y-5">
+            <!-- Legend & Quick Log Today CTA -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+                <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Dry Day (0)</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span> Within Pace</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Over Pace</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full border-2 border-slate-300 dark:border-slate-600 inline-block"></span> Unlogged</span>
+                </div>
+                <div class="hidden md:flex items-center gap-2">
+                    <button onclick="quickLogDryToday()" class="min-h-[44px] px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold rounded-xl transition">
+                        ✓ 0-Drink Quick Log
+                    </button>
+                    <button onclick="openTodayModal()" class="min-h-[44px] px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                        <span>+ Log Active Day</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Weeks Container (Rendered Dynamically) -->
+            <div id="weeks-container" class="space-y-5"></div>
+        </section>
+
+        <!-- TAB 3: TACTICAL PLAYBOOK -->
+        <section id="view-playbook" class="hidden space-y-4">
+            <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-5 rounded-2xl shadow-sm">
+                <h2 class="text-lg font-bold mb-1">The Step-Down Playbook</h2>
+                <p class="text-xs sm:text-sm text-emerald-100">Replace the habit and ritual rather than relying on 6:00 PM willpower. Use these rules week-by-week.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Week 1 (Days 1–7)</span>
+                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">85–90% Baseline</span>
+                    </div>
+                    <h3 class="font-bold text-base">Audit & Delay</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <strong>The 60-Minute Buffer:</strong> Don't cut volume aggressively yet—change timing. Start every evening with a cold NA drink in proper glassware first. Once you quench thirst and pass the 45-minute transition peak, urges drop sharply.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Week 2 (Days 8–14)</span>
+                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">65–75% Baseline</span>
+                    </div>
+                    <h3 class="font-bold text-base">Protect Weeknights</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <strong>Sun–Thu Guardrail:</strong> Designate 3–4 weeknights to be completely alcohol-free so you remove daily negotiation fatigue. Keep craft NA beers, hop waters, or tonic with bitters and lime front and center in the fridge.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Week 3 (Days 15–21)</span>
+                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">45–50% Baseline</span>
+                    </div>
+                    <h3 class="font-bold text-base">Lower ABV & Pace</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <strong>1-for-1 & ABV Downshift:</strong> Alternate every alcoholic drink with a full sparkling water. Swap high-ABV IPAs, heavy reds, or neat pours for session beers (≤4.5% ABV) or wine spritzers to halve ethanol load.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Week 4 (Days 22–30)</span>
+                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">25–35% Baseline</span>
+                    </div>
+                    <h3 class="font-bold text-base">Intentional Capping</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <strong>Pre-Decided Cap & NA First:</strong> Decide your exact drink limit before walking into a dinner or event. Order an NA drink first upon arrival so you immediately have a glass in hand, then switch back to NA once your cap is reached.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+                <h3 class="text-sm font-bold mb-3">High-Friction vs. High-Reward Ritual Swaps</h3>
+                <ul class="space-y-2.5 text-xs text-slate-600 dark:text-slate-300">
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-500 font-bold">✓</span>
+                        <span><strong>Upgrade the glass:</strong> Pour NA beer into a chilled pint glass or tonic + bitters into a rocks glass with a large ice cube and citrus peel.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-500 font-bold">✓</span>
+                        <span><strong>Move the stash:</strong> Relocate alcohol out of eye level in the main fridge; put cold NA substitutes right up front.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-500 font-bold">✓</span>
+                        <span><strong>Track recovery upside:</strong> Check your resting heart rate, HRV, and morning clarity after dry nights versus drinking nights.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- STICKY MOBILE BOTTOM ACTION BAR (<768px) -->
+    <nav aria-label="Mobile Quick Actions" class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 safe-bottom px-2.5 pt-2">
+        <div class="grid grid-cols-4 gap-1.5 max-w-md mx-auto">
+            <button onclick="openTodayModal()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-emerald-600 active:bg-emerald-700 text-white font-semibold shadow-xs transition active:scale-95 px-1">
+                <span class="text-sm leading-none mb-0.5">＋</span>
+                <span class="text-[11px] leading-tight">Log Today</span>
+            </button>
+            <button onclick="quickLogDryToday()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/70 active:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 font-semibold transition active:scale-95 px-1">
+                <span class="text-sm leading-none mb-0.5">✓</span>
+                <span class="text-[11px] leading-tight">0-Drink Log</span>
+            </button>
+            <button onclick="switchTab('analytics')" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1">
+                <span class="text-sm leading-none mb-0.5">📊</span>
+                <span class="text-[11px] leading-tight">Charts</span>
+            </button>
+            <button onclick="openSetupModal()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1">
+                <span class="text-sm leading-none mb-0.5">⚙️</span>
+                <span class="text-[11px] leading-tight">Setup</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- DAILY LOGGING MODAL / BOTTOM SHEET -->
+    <div id="day-modal" onclick="if(event.target===this) closeDayModal()" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-end md:items-center justify-center p-0 md:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-t-3xl md:rounded-3xl border-t md:border border-slate-200 dark:border-slate-800 shadow-2xl animate-slide-up max-h-[92dvh] flex flex-col overflow-hidden">
+            <!-- Drag Handle (Mobile) & Sticky Modal Header -->
+            <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-5 pt-2.5 pb-3.5 border-b border-slate-100 dark:border-slate-800 z-10">
+                <div class="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto mb-2.5 md:hidden"></div>
+                <div class="flex items-center justify-between gap-2">
+                    <div class="min-w-0">
+                        <span id="modal-week-badge" class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block truncate">Week 1 · Audit & Delay</span>
+                        <h2 id="modal-day-title" class="text-lg font-bold truncate">Day 1</h2>
+                    </div>
+                    <button onclick="closeDayModal()" aria-label="Close modal" class="w-11 h-11 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition active:scale-95">
+                        ✕
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scrollable Modal Body -->
+            <div class="flex-1 overflow-y-auto overscroll-contain p-5 space-y-5">
+                <!-- Phase Daily Rule Reminder -->
+                <div class="bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-800/60 p-3.5 rounded-2xl">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 mb-0.5">Today's Tactical Focus</p>
+                    <p id="modal-daily-rule" class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+                </div>
+
+                <!-- Steppers: Alcoholic Drinks & NA Swaps -->
+                <div class="grid grid-cols-1 min-[380px]:grid-cols-2 gap-3">
+                    <div class="bg-slate-50 dark:bg-slate-850 p-3.5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 block mb-2">Alcoholic Drinks</span>
+                        <div class="flex items-center justify-between gap-2">
+                            <button type="button" onclick="adjustCount('drinks', -0.5)" class="w-11 h-11 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-lg active:scale-95 transition">−</button>
+                            <span id="modal-drinks-val" class="text-2xl font-bold tabular-nums">0</span>
+                            <button type="button" onclick="adjustCount('drinks', 0.5)" class="w-11 h-11 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-lg active:scale-95 transition">+</button>
+                        </div>
+                        <div class="flex items-center justify-center gap-1.5 mt-2.5">
+                            <button type="button" onclick="setDrinksPreset(0)" class="min-h-[36px] px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 active:scale-95">0 Dry</button>
+                            <button type="button" onclick="setDrinksPreset(1)" class="min-h-[36px] px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-200/70 dark:bg-slate-800 active:scale-95">1</button>
+                            <button type="button" onclick="setDrinksPreset(2)" class="min-h-[36px] px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-200/70 dark:bg-slate-800 active:scale-95">2</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-850 p-3.5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 block mb-2">NA Swaps / Waters</span>
+                        <div class="flex items-center justify-between gap-2">
+                            <button type="button" onclick="adjustCount('naDrinks', -1)" class="w-11 h-11 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-lg active:scale-95 transition">−</button>
+                            <span id="modal-na-val" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">0</span>
+                            <button type="button" onclick="adjustCount('naDrinks', 1)" class="w-11 h-11 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-lg active:scale-95 transition">+</button>
+                        </div>
+                        <span class="text-[11px] text-slate-400 mt-3 block">NA beer, hop water, soda</span>
+                    </div>
+                </div>
+
+                <!-- Morning Body Weight Input -->
+                <div class="bg-indigo-50/60 dark:bg-indigo-950/30 p-3.5 rounded-2xl border border-indigo-200/70 dark:border-indigo-800/50">
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="modal-weight-input" class="text-xs font-bold uppercase tracking-wider text-indigo-900 dark:text-indigo-300">Morning Scale Weight (<span id="modal-weight-unit">lbs</span>)</label>
+                        <button type="button" onclick="clearWeightInput()" class="min-h-[36px] px-2 text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-200">Skip Weight</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="adjustWeight(-0.2)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">−0.2</button>
+                        <input type="number" inputmode="decimal" id="modal-weight-input" step="0.1" placeholder="e.g., 240.0" class="flex-1 min-w-0 h-11 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-3 text-center text-lg font-bold tabular-nums focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button type="button" onclick="adjustWeight(0.2)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">+0.2</button>
+                    </div>
+                </div>
+
+                <!-- Morning Recovery & Biometrics Section -->
+                <div class="bg-rose-50/60 dark:bg-rose-950/25 p-3.5 rounded-2xl border border-rose-200/70 dark:border-rose-800/50 space-y-3.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-rose-900 dark:text-rose-300">Morning Recovery & Biometrics</span>
+                        <span class="text-[11px] text-slate-400">Tap again to clear</span>
+                    </div>
+
+                    <div>
+                        <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block mb-1.5">😴 Sleep Quality (1–5)</span>
+                        <div id="modal-sleep-pills" class="grid grid-cols-5 gap-1.5"></div>
+                    </div>
+
+                    <div>
+                        <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block mb-1.5">⚡ Morning Energy Level (1–5)</span>
+                        <div id="modal-energy-pills" class="grid grid-cols-5 gap-1.5"></div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="modal-rhr-input" class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">❤️ Resting Heart Rate (RHR bpm)</label>
+                            <button type="button" onclick="clearRhrInput()" class="min-h-[32px] px-2 text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-200">Clear RHR</button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="adjustRhr(-1)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">−1</button>
+                            <input type="number" inputmode="numeric" id="modal-rhr-input" min="30" max="150" step="1" placeholder="e.g., 54" class="flex-1 min-w-0 h-11 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-3 text-center text-lg font-bold tabular-nums focus:outline-none focus:ring-2 focus:ring-rose-500">
+                            <button type="button" onclick="adjustRhr(1)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">+1</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercise & Weight Training Section -->
+                <div class="bg-violet-50/60 dark:bg-violet-950/25 p-3.5 rounded-2xl border border-violet-200/70 dark:border-violet-800/50 space-y-3.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-violet-900 dark:text-violet-300">Exercise & Weight Training</span>
+                        <span id="modal-session-volume-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-800 dark:bg-violet-900/70 dark:text-violet-200">0 lbs vol</span>
+                    </div>
+
+                    <div>
+                        <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1.5">Training Modality</span>
+                        <div id="modal-modality-pills" class="flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label for="modal-workout-duration" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Duration (min)</label>
+                            <input type="number" inputmode="numeric" id="modal-workout-duration" min="0" max="480" step="5" placeholder="0" oninput="updateDurationDraft(this.value)" class="w-full h-11 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-3 text-sm font-bold tabular-nums focus:outline-none focus:ring-2 focus:ring-violet-500">
+                            <div class="flex items-center gap-1.5 mt-1.5">
+                                <button type="button" onclick="setDurationPreset(30)" class="flex-1 min-h-[38px] text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 active:scale-95">30m</button>
+                                <button type="button" onclick="setDurationPreset(45)" class="flex-1 min-h-[38px] text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 active:scale-95">45m</button>
+                                <button type="button" onclick="setDurationPreset(60)" class="flex-1 min-h-[38px] text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 active:scale-95">60m</button>
+                                <button type="button" onclick="setDurationPreset(90)" class="flex-1 min-h-[38px] text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 active:scale-95">90m</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="modal-workout-rpe" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Intensity (RPE 1–10)</label>
+                            <select id="modal-workout-rpe" onchange="updateRpeDraft(this.value)" class="w-full h-11 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500">
+                                <option value="">None / Rest</option>
+                                <option value="3">RPE 3 · Easy Mobility</option>
+                                <option value="5">RPE 5 · Zone 2 / Moderate</option>
+                                <option value="6">RPE 6 · Solid Effort</option>
+                                <option value="7">RPE 7 · Hard Training</option>
+                                <option value="8">RPE 8 · Heavy / High Effort</option>
+                                <option value="9">RPE 9 · Near Max / PR</option>
+                                <option value="10">RPE 10 · Max Effort</option>
+                            </select>
+                            <span class="text-[11px] text-slate-400 mt-1.5 block">1–4 Easy · 5–7 Mod · 8–10 Hard</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-violet-200/60 dark:border-violet-800/40 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-600 dark:text-slate-300">Weight Training Lifts</span>
+                            <button type="button" onclick="addLiftRow()" class="min-h-[40px] px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold transition active:scale-95">
+                                + Add Lift
+                            </button>
+                        </div>
+
+                        <div class="flex flex-wrap gap-1.5">
+                            <button type="button" onclick="addPresetLift('Squat / Split Squat')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Squat</button>
+                            <button type="button" onclick="addPresetLift('Deadlift / RDL')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Deadlift/RDL</button>
+                            <button type="button" onclick="addPresetLift('Bench Press')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Bench</button>
+                            <button type="button" onclick="addPresetLift('Overhead Press')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ OHP</button>
+                            <button type="button" onclick="addPresetLift('Pull-ups / Rows')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Pull/Row</button>
+                            <button type="button" onclick="addPresetLift('Core / Plyometrics')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Core/Plyo</button>
+                        </div>
+
+                        <div id="modal-lifts-container" class="space-y-2"></div>
+                    </div>
+
+                    <div>
+                        <label for="modal-workout-notes" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Training & Performance Notes</label>
+                        <input type="text" id="modal-workout-notes" placeholder="e.g., 45m Zwift Zone 2 @ 210W, or RDL felt snappy..." class="w-full h-11 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500">
+                    </div>
+                </div>
+
+                <!-- Daily Tactical Checklist -->
+                <div>
+                    <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2.5">Tactical Habits Honored</label>
+                    <div id="modal-habits-list" class="space-y-2"></div>
+                </div>
+
+                <!-- Notes -->
+                <div>
+                    <label for="modal-notes" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">Triggers, Swaps & Sleep/HRV Notes</label>
+                    <textarea id="modal-notes" rows="2" placeholder="e.g., Had Athletic IPA at 6pm, slept 8h, HRV +12ms..." class="w-full rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+                </div>
+            </div>
+
+            <!-- Sticky Bottom Modal Footer -->
+            <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-5 pt-3 border-t border-slate-100 dark:border-slate-800 safe-bottom flex items-center gap-2.5 z-10">
+                <button type="button" onclick="clearCurrentDayLog()" class="min-h-[48px] px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition">
+                    Unlog Day
+                </button>
+                <button type="button" onclick="saveCurrentDayLog()" class="min-h-[48px] flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm active:scale-[0.99] transition">
+                    Save Day Log
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLAN SETUP MODAL / BOTTOM SHEET -->
+    <div id="setup-modal" onclick="if(event.target===this) closeSetupModal()" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-end md:items-center justify-center p-0 md:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-t-3xl md:rounded-3xl border-t md:border border-slate-200 dark:border-slate-800 shadow-2xl animate-slide-up max-h-[92dvh] flex flex-col overflow-hidden">
+            <div class="shrink-0 px-5 pt-2.5 pb-3.5 border-b border-slate-100 dark:border-slate-800">
+                <div class="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto mb-2.5 md:hidden"></div>
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold">Customize Step-Down Plan</h2>
+                    <button onclick="closeSetupModal()" aria-label="Close setup" class="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">✕</button>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto overscroll-contain p-5 space-y-4">
+                <div>
+                    <label for="setup-baseline" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Current Weekly Baseline (Drinks/Week)</label>
+                    <input type="number" inputmode="numeric" id="setup-baseline" min="1" max="100" value="14" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3.5 py-2.5 text-base font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <p class="text-[11px] text-slate-400 mt-1">1 standard drink = 12 oz beer (5%), 5 oz wine (12%), or 1.5 oz spirits (40%).</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Weight Unit</label>
+                        <div class="grid grid-cols-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-850 border border-slate-200 dark:border-slate-800">
+                            <button type="button" onclick="setSetupUnit('lbs')" id="unit-btn-lbs" class="min-h-[38px] py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-800 shadow-xs">lbs</button>
+                            <button type="button" onclick="setSetupUnit('kg')" id="unit-btn-kg" class="min-h-[38px] py-1.5 text-xs font-bold rounded-lg text-slate-500">kg</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="setup-startweight" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Starting Weight</label>
+                        <input type="number" inputmode="decimal" id="setup-startweight" step="0.1" placeholder="240.0" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="setup-goalweight" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Goal Weight (Opt.)</label>
+                        <input type="number" inputmode="decimal" id="setup-goalweight" step="0.1" placeholder="230.0" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label for="setup-startdate" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Day 1 Start Date</label>
+                        <input type="date" id="setup-startdate" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+
+                <!-- Live Target Preview -->
+                <div class="bg-slate-50 dark:bg-slate-850 p-3.5 rounded-2xl border border-slate-200/70 dark:border-slate-800 space-y-1.5">
+                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">Calculated Weekly Maximums:</p>
+                    <div id="setup-preview-list" class="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400"></div>
+                </div>
+            </div>
+            <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 px-5 pt-3 border-t border-slate-100 dark:border-slate-800 safe-bottom">
+                <button type="button" onclick="saveSetup()" class="w-full min-h-[48px] py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm transition active:scale-[0.99]">
+                    Apply Plan Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM CONFIRMATION MODAL -->
+    <div id="confirm-modal" onclick="if(event.target===this) closeConfirmModal()" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl border border-slate-200 dark:border-slate-800 p-5 shadow-2xl space-y-4">
+            <h3 class="text-base font-bold">Reset All Tracker Data?</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">This will erase all 30 days of logged drinks, weight, recovery, and workouts from this browser. Consider exporting a JSON backup first.</p>
+            <div class="flex items-center gap-2.5 pt-1">
+                <button type="button" onclick="closeConfirmModal()" class="flex-1 min-h-[44px] py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold">Cancel</button>
+                <button type="button" onclick="executeReset()" class="flex-1 min-h-[44px] py-2.5 rounded-xl bg-rose-600 text-white text-xs font-semibold">Yes, Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. CONSTANTS, PHASES & APPLICATION STATE
+        // ==========================================
+        const STORAGE_KEY = 'stepdown30_tracker_v2';
+
+        const PHASES = [
+            {
+                week: 1,
+                title: 'Week 1 · Audit & Delay',
+                daysRange: [1, 7],
+                targetRatio: 0.86,
+                dailyRule: '60-Minute Buffer: Start every evening with a cold NA drink in proper glassware before deciding on alcohol.',
+                habits: [
+                    { id: 'buffer60', label: 'Honored 60-minute NA buffer first' },
+                    { id: 'glassware', label: 'Used proper glassware for NA swap' },
+                    { id: 'recovery', label: 'Logged morning scale & recovery' }
+                ]
+            },
+            {
+                week: 2,
+                title: 'Week 2 · Protect Weeknights',
+                daysRange: [8, 14],
+                targetRatio: 0.71,
+                dailyRule: 'Sun–Thu Guardrail: Protect 3–4 alcohol-free weeknights to eliminate daily decision fatigue.',
+                habits: [
+                    { id: 'weeknight', label: 'Protected weeknight dry guardrail' },
+                    { id: 'naStocked', label: 'Kept cold NA options front-and-center' },
+                    { id: 'recovery', label: 'Logged morning scale & recovery' }
+                ]
+            },
+            {
+                week: 3,
+                title: 'Week 3 · Lower ABV & Pace',
+                daysRange: [15, 21],
+                targetRatio: 0.50,
+                dailyRule: '1-for-1 & ABV Downshift: Alternate every drink with sparkling water and choose ≤4.5% ABV or spritzers.',
+                habits: [
+                    { id: 'oneForOne', label: 'Alternated 1-for-1 with water / NA' },
+                    { id: 'lowAbv', label: 'Chose lower ABV or stayed dry' },
+                    { id: 'recovery', label: 'Logged morning scale & recovery' }
+                ]
+            },
+            {
+                week: 4,
+                title: 'Week 4 · Intentional Capping',
+                daysRange: [22, 30],
+                targetRatio: 0.32,
+                dailyRule: 'Pre-Decided Cap & NA First: Set your drink cap before arriving, order NA first, and switch back to NA at cap.',
+                habits: [
+                    { id: 'preCap', label: 'Pre-decided exact cap before evening' },
+                    { id: 'naFirst', label: 'Ordered NA drink first upon arrival' },
+                    { id: 'recovery', label: 'Logged morning scale & recovery' }
+                ]
+            }
+        ];
+
+        const MODALITIES = [
+            { id: 'strength', label: 'Strength / Gym', short: 'Strength', icon: '🏋️', group: 'strength' },
+            { id: 'cycling', label: 'Cycling / Ride', short: 'Cycle', icon: '🚴', group: 'cardio' },
+            { id: 'cardio', label: 'Run / Cardio', short: 'Cardio', icon: '🏃', group: 'cardio' },
+            { id: 'mobility', label: 'Mobility / Core', short: 'Mobility', icon: '🧘', group: 'recovery' },
+            { id: 'recovery', label: 'Active Recovery', short: 'Recovery', icon: '🚶', group: 'recovery' }
+        ];
+
+        const SLEEP_SCALE = [
+            { val: 1, label: 'Poor' },
+            { val: 2, label: 'Fair' },
+            { val: 3, label: 'OK' },
+            { val: 4, label: 'Good' },
+            { val: 5, label: 'Great' }
+        ];
+
+        const ENERGY_SCALE = [
+            { val: 1, label: 'Drained' },
+            { val: 2, label: 'Low' },
+            { val: 3, label: 'Steady' },
+            { val: 4, label: 'High' },
+            { val: 5, label: 'Peak' }
+        ];
+
+        let appState = {
+            baselineWeekly: 14,
+            startDate: new Date().toISOString().split('T')[0],
+            weightUnit: 'lbs',
+            startingWeight: null,
+            goalWeight: null,
+            logs: {}
+        };
+
+        let activeModalDay = 1;
+        let tempDayDraft = null;
+        let paceChartMode = 'cumulative';
+        let setupUnitTemp = 'lbs';
+
+        // ==========================================
+        // 2. HELPERS, PERSISTENCE & DATE CALCULATIONS
+        // ==========================================
+        function normalizeWorkout(rawWorkout) {
+            if (!rawWorkout || typeof rawWorkout !== 'object') {
+                return { modalities: [], duration: 0, rpe: '', lifts: [], notes: '' };
+            }
+            return {
+                modalities: Array.isArray(rawWorkout.modalities) ? rawWorkout.modalities : [],
+                duration: Number(rawWorkout.duration) || 0,
+                rpe: rawWorkout.rpe !== undefined && rawWorkout.rpe !== null ? String(rawWorkout.rpe) : '',
+                lifts: Array.isArray(rawWorkout.lifts) ? rawWorkout.lifts.map(l => ({
+                    name: String(l.name || ''),
+                    sets: Number(l.sets) || 0,
+                    reps: Number(l.reps) || 0,
+                    weight: Number(l.weight) || 0
+                })) : [],
+                notes: String(rawWorkout.notes || '')
+            };
+        }
+
+        function calcWorkoutVolume(workout) {
+            if (!workout || !Array.isArray(workout.lifts)) return 0;
+            return workout.lifts.reduce((sum, l) => {
+                return sum + ((Number(l.sets) || 0) * (Number(l.reps) || 0) * (Number(l.weight) || 0));
+            }, 0);
+        }
+
+        function isActiveWorkout(workout) {
+            if (!workout) return false;
+            return (workout.modalities && workout.modalities.length > 0) ||
+                   (Number(workout.duration) > 0) ||
+                   (workout.lifts && workout.lifts.length > 0);
+        }
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    const normalizedLogs = {};
+                    if (parsed.logs && typeof parsed.logs === 'object') {
+                        for (const [k, v] of Object.entries(parsed.logs)) {
+                            normalizedLogs[k] = {
+                                ...v,
+                                rhr: v.rhr !== undefined && v.rhr !== null && v.rhr !== '' ? Number(v.rhr) : null,
+                                sleepQuality: v.sleepQuality !== undefined && v.sleepQuality !== null && v.sleepQuality !== '' ? Number(v.sleepQuality) : null,
+                                energyLevel: v.energyLevel !== undefined && v.energyLevel !== null && v.energyLevel !== '' ? Number(v.energyLevel) : null,
+                                workout: normalizeWorkout(v.workout)
+                            };
+                        }
+                    }
+                    appState = {
+                        baselineWeekly: Number(parsed.baselineWeekly) || 14,
+                        startDate: parsed.startDate || new Date().toISOString().split('T')[0],
+                        weightUnit: parsed.weightUnit === 'kg' ? 'kg' : 'lbs',
+                        startingWeight: parsed.startingWeight !== null && parsed.startingWeight !== undefined ? Number(parsed.startingWeight) : null,
+                        goalWeight: parsed.goalWeight !== null && parsed.goalWeight !== undefined ? Number(parsed.goalWeight) : null,
+                        logs: normalizedLogs
+                    };
+                }
+            } catch (e) {
+                console.error('Failed to load state from localStorage:', e);
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            } catch (e) {
+                console.error('Failed to save state:', e);
+            }
+        }
+
+        function parseLocalDate(yyyyMmDd) {
+            const parts = String(yyyyMmDd || '').split('-').map(Number);
+            if (parts.length === 3 && !parts.some(isNaN)) {
+                return new Date(parts[0], parts[1] - 1, parts[2]);
+            }
+            const now = new Date();
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        }
+
+        function getDateForDay(dayNum) {
+            const start = parseLocalDate(appState.startDate);
+            const d = new Date(start);
+            d.setDate(start.getDate() + (dayNum - 1));
+            return d;
+        }
+
+        function formatShortDate(dateObj) {
+            return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function getActiveDayNumber() {
+            const start = parseLocalDate(appState.startDate);
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+            return Math.max(1, Math.min(30, diffDays));
+        }
+
+        function getPhaseForDay(dayNum) {
+            return PHASES.find(p => dayNum >= p.daysRange[0] && dayNum <= p.daysRange[1]) || PHASES[0];
+        }
+
+        function getPhaseDaysCount(phase) {
+            return phase.daysRange[1] - phase.daysRange[0] + 1;
+        }
+
+        function getPhaseBaselineDrinks(phase) {
+            const days = getPhaseDaysCount(phase);
+            return Math.round((appState.baselineWeekly / 7) * days);
+        }
+
+        function getPhaseTargetDrinks(phase) {
+            const days = getPhaseDaysCount(phase);
+            if (phase.week === 4) {
+                return Math.max(1, Math.round(((appState.baselineWeekly * phase.targetRatio) / 7) * days));
+            }
+            return Math.max(1, Math.round(appState.baselineWeekly * phase.targetRatio));
+        }
+
+        function getDailyCeilingForDay(dayNum) {
+            const p = getPhaseForDay(dayNum);
+            return getPhaseTargetDrinks(p) / getPhaseDaysCount(p);
+        }
+
+        function getSuggestedDefaultWeight(dayNum) {
+            for (let d = dayNum - 1; d >= 1; d--) {
+                const entry = appState.logs[d];
+                if (entry && entry.logged && entry.weight !== null && entry.weight !== undefined && entry.weight !== '') {
+                    return Number(entry.weight);
+                }
+            }
+            return appState.startingWeight !== null ? Number(appState.startingWeight) : null;
+        }
+
+        // ==========================================
+        // 3. ANALYTICS COMPUTATIONS & KPI RENDERING
+        // ==========================================
+        function computeRecoveryStats() {
+            const rhrEntries = [];
+            const sleepEntries = [];
+            const energyEntries = [];
+            const dryRhr = [], drinkRhr = [];
+            const drySleep = [], drinkSleep = [];
+            const dryEnergy = [], drinkEnergy = [];
+
+            for (let d = 1; d <= 30; d++) {
+                const entry = appState.logs[d];
+                if (!entry || !entry.logged) continue;
+
+                const priorEntry = d > 1 ? appState.logs[d - 1] : entry;
+                const priorDrinks = priorEntry && priorEntry.logged ? Number(priorEntry.drinks || 0) : Number(entry.drinks || 0);
+                const wasDryNight = priorDrinks === 0;
+
+                const rhr = entry.rhr !== null && entry.rhr !== undefined && entry.rhr !== '' ? Number(entry.rhr) : null;
+                const sleep = entry.sleepQuality ? Number(entry.sleepQuality) : null;
+                const energy = entry.energyLevel ? Number(entry.energyLevel) : null;
+
+                if (rhr !== null && !isNaN(rhr)) {
+                    rhrEntries.push({ day: d, val: rhr });
+                    if (wasDryNight) dryRhr.push(rhr);
+                    else drinkRhr.push(rhr);
+                }
+                if (sleep !== null && !isNaN(sleep)) {
+                    sleepEntries.push({ day: d, val: sleep });
+                    if (wasDryNight) drySleep.push(sleep);
+                    else drinkSleep.push(sleep);
+                }
+                if (energy !== null && !isNaN(energy)) {
+                    energyEntries.push({ day: d, val: energy });
+                    if (wasDryNight) dryEnergy.push(energy);
+                    else drinkEnergy.push(energy);
+                }
+            }
+
+            const avg = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+
+            return {
+                avgRhr: avg(rhrEntries.map(x => x.val)),
+                avgSleep: avg(sleepEntries.map(x => x.val)),
+                avgEnergy: avg(energyEntries.map(x => x.val)),
+                dryAvgRhr: avg(dryRhr),
+                drinkAvgRhr: avg(drinkRhr),
+                dryAvgSleep: avg(drySleep),
+                drinkAvgSleep: avg(drinkSleep),
+                dryAvgEnergy: avg(dryEnergy),
+                drinkAvgEnergy: avg(drinkEnergy)
+            };
+        }
+
+        function computeWeightSeries() {
+            const series = [];
+            let ema = appState.startingWeight ? Number(appState.startingWeight) : null;
+            const alpha = 0.25;
+
+            for (let d = 1; d <= 30; d++) {
+                const entry = appState.logs[d];
+                const raw = (entry && entry.logged && entry.weight !== null && entry.weight !== undefined && entry.weight !== '')
+                    ? Number(entry.weight)
+                    : null;
+
+                if (raw !== null && !isNaN(raw)) {
+                    ema = ema === null ? raw : alpha * raw + (1 - alpha) * ema;
+                }
+                series.push({
+                    day: d,
+                    rawWeight: raw,
+                    trendWeight: ema !== null ? Math.round(ema * 10) / 10 : null
+                });
+            }
+            return series;
+        }
+
+        function renderAll() {
+            renderHeaderAndKPIs();
+            renderWeeksGrid();
+            renderAnalyticsTable();
+            renderTopLiftsSummary();
+            renderRecoveryComparisonCard();
+            if (!document.getElementById('view-analytics').classList.contains('hidden')) {
+                drawAllCharts();
+            }
+        }
+
+        function renderHeaderAndKPIs() {
+            const activeDay = getActiveDayNumber();
+            const activePhase = getPhaseForDay(activeDay);
+            document.getElementById('header-subtitle').textContent = `Day ${activeDay}/30 · ${activePhase.title} · Baseline ${appState.baselineWeekly}/wk`;
+
+            // Active Week Intake KPI
+            let weekActual = 0;
+            for (let d = activePhase.daysRange[0]; d <= activePhase.daysRange[1]; d++) {
+                if (appState.logs[d]?.logged) {
+                    weekActual += Number(appState.logs[d].drinks || 0);
+                }
+            }
+            const weekTarget = getPhaseTargetDrinks(activePhase);
+            document.getElementById('kpi-week-label').textContent = `Week ${activePhase.week} Intake`;
+            document.getElementById('kpi-week-actual').textContent = Number.isInteger(weekActual) ? weekActual : weekActual.toFixed(1);
+            document.getElementById('kpi-week-target').textContent = `/ ${weekTarget} max`;
+
+            const pct = Math.min(100, Math.round((weekActual / Math.max(1, weekTarget)) * 100));
+            const bar = document.getElementById('kpi-week-bar');
+            const badge = document.getElementById('kpi-week-badge');
+            bar.style.width = `${pct}%`;
+
+            if (weekActual > weekTarget) {
+                bar.className = 'bg-rose-500 h-full rounded-full transition-all duration-300';
+                badge.textContent = 'Over Cap';
+                badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300';
+            } else if (pct >= 80) {
+                bar.className = 'bg-amber-400 h-full rounded-full transition-all duration-300';
+                badge.textContent = 'Near Cap';
+                badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300';
+            } else {
+                bar.className = 'bg-emerald-500 h-full rounded-full transition-all duration-300';
+                badge.textContent = 'On Track';
+                badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300';
+            }
+
+            // Aggregate 30-day metrics
+            let loggedDaysCount = 0;
+            let totalDrinksLogged = 0;
+            let dryDays = 0;
+            let totalNa = 0;
+            let totalSessions = 0;
+            let totalMinutes = 0;
+            let totalLiftVolume = 0;
+            let strengthSessions = 0;
+            let cardioSessions = 0;
+
+            let latestDayLogged = 0;
+            for (let d = 1; d <= 30; d++) {
+                const entry = appState.logs[d];
+                if (!entry?.logged) continue;
+                loggedDaysCount++;
+                latestDayLogged = d;
+                const drk = Number(entry.drinks || 0);
+                totalDrinksLogged += drk;
+                if (drk === 0) dryDays++;
+                totalNa += Number(entry.naDrinks || 0);
+
+                const w = normalizeWorkout(entry.workout);
+                if (isActiveWorkout(w)) {
+                    totalSessions++;
+                    totalMinutes += Number(w.duration || 0);
+                    totalLiftVolume += calcWorkoutVolume(w);
+                    if (w.modalities.includes('strength') || w.lifts.length > 0) strengthSessions++;
+                    if (w.modalities.includes('cycling') || w.modalities.includes('cardio')) cardioSessions++;
+                }
+            }
+
+            // Current dry streak counting backwards from latest logged day
+            let streak = 0;
+            for (let d = latestDayLogged; d >= 1; d--) {
+                const entry = appState.logs[d];
+                if (entry?.logged && Number(entry.drinks || 0) === 0) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+
+            // Drinks Saved KPI
+            const expectedBaseline = (appState.baselineWeekly / 7) * loggedDaysCount;
+            const saved = Math.max(0, Math.round((expectedBaseline - totalDrinksLogged) * 10) / 10);
+            const kcalSaved = Math.round(saved * 150);
+            document.getElementById('kpi-saved').textContent = Number.isInteger(saved) ? saved : saved.toFixed(1);
+            document.getElementById('kpi-savings-extra').textContent = `~${kcalSaved.toLocaleString()} kcal saved`;
+
+            // Weight & Delta KPI
+            const weightSeries = computeWeightSeries();
+            const loggedWeights = weightSeries.filter(x => x.rawWeight !== null);
+            const weightEl = document.getElementById('kpi-weight');
+            const weightDeltaEl = document.getElementById('kpi-weight-delta');
+            const weightTrendEl = document.getElementById('kpi-weight-trend');
+
+            if (loggedWeights.length > 0) {
+                const latest = loggedWeights[loggedWeights.length - 1];
+                const startRef = appState.startingWeight !== null ? Number(appState.startingWeight) : loggedWeights[0].rawWeight;
+                const delta = Math.round((latest.rawWeight - startRef) * 10) / 10;
+                weightEl.textContent = latest.rawWeight.toFixed(1);
+                weightDeltaEl.textContent = `${delta > 0 ? '+' : ''}${delta.toFixed(1)} ${appState.weightUnit}`;
+                weightDeltaEl.className = delta <= 0
+                    ? 'text-xs font-bold text-emerald-600 dark:text-emerald-400'
+                    : 'text-xs font-semibold text-amber-600 dark:text-amber-400';
+                weightTrendEl.textContent = `7-day trend: ${latest.trendWeight.toFixed(1)} ${appState.weightUnit}`;
+            } else {
+                weightEl.textContent = appState.startingWeight !== null ? Number(appState.startingWeight).toFixed(1) : '—';
+                weightDeltaEl.textContent = appState.weightUnit;
+                weightDeltaEl.className = 'text-xs font-semibold text-slate-400';
+                weightTrendEl.textContent = '7-day trend: —';
+            }
+
+            // Recovery & RHR KPI
+            const recStats = computeRecoveryStats();
+            const rhrEl = document.getElementById('kpi-rhr');
+            const rhrDeltaEl = document.getElementById('kpi-rhr-delta');
+            const recScoresEl = document.getElementById('kpi-recovery-scores');
+
+            if (recStats.avgRhr !== null) {
+                rhrEl.textContent = Math.round(recStats.avgRhr);
+                if (recStats.dryAvgRhr !== null && recStats.drinkAvgRhr !== null) {
+                    const diff = Math.round((recStats.dryAvgRhr - recStats.drinkAvgRhr) * 10) / 10;
+                    if (diff < 0) {
+                        rhrDeltaEl.textContent = `${diff} bpm dry`;
+                        rhrDeltaEl.className = 'text-xs font-bold text-emerald-600 dark:text-emerald-400';
+                    } else if (diff > 0) {
+                        rhrDeltaEl.textContent = `+${diff} bpm`;
+                        rhrDeltaEl.className = 'text-xs font-semibold text-amber-600 dark:text-amber-400';
+                    } else {
+                        rhrDeltaEl.textContent = 'bpm avg';
+                        rhrDeltaEl.className = 'text-xs font-semibold text-slate-400';
+                    }
+                } else {
+                    rhrDeltaEl.textContent = 'bpm avg';
+                    rhrDeltaEl.className = 'text-xs font-semibold text-slate-400';
+                }
+            } else {
+                rhrEl.textContent = '—';
+                rhrDeltaEl.textContent = 'bpm';
+                rhrDeltaEl.className = 'text-xs font-semibold text-slate-400';
+            }
+            const sleepStr = recStats.avgSleep !== null ? `${recStats.avgSleep.toFixed(1)}/5` : '—/5';
+            const energyStr = recStats.avgEnergy !== null ? `${recStats.avgEnergy.toFixed(1)}/5` : '—/5';
+            recScoresEl.textContent = `Sleep ${sleepStr} · Energy ${energyStr}`;
+
+            // Training KPI
+            document.getElementById('kpi-workouts').textContent = totalSessions;
+            document.getElementById('kpi-workout-mins').textContent = `sessions · ${totalMinutes}m`;
+            const volFormatted = totalLiftVolume >= 1000
+                ? `${(totalLiftVolume / 1000).toFixed(1)}k`
+                : `${Math.round(totalLiftVolume)}`;
+            document.getElementById('kpi-lift-volume').textContent = `${volFormatted} ${appState.weightUnit} · ${strengthSessions} str / ${cardioSessions} endur`;
+
+            // Dry Days & Streak KPI
+            document.getElementById('kpi-dry-days').textContent = dryDays;
+            document.getElementById('kpi-streak').textContent = `${streak}d`;
+            document.getElementById('kpi-na-swaps').textContent = `${totalNa} NA drinks swapped`;
+        }
+
+        function renderWeeksGrid() {
+            const container = document.getElementById('weeks-container');
+            container.innerHTML = '';
+            const activeDay = getActiveDayNumber();
+
+            PHASES.forEach(phase => {
+                const target = getPhaseTargetDrinks(phase);
+                const daysCount = getPhaseDaysCount(phase);
+                const dailyPaceLimit = target / daysCount;
+
+                let phaseLoggedDrinks = 0;
+                let phaseDryDays = 0;
+                for (let d = phase.daysRange[0]; d <= phase.daysRange[1]; d++) {
+                    const e = appState.logs[d];
+                    if (e?.logged) {
+                        const drk = Number(e.drinks || 0);
+                        phaseLoggedDrinks += drk;
+                        if (drk === 0) phaseDryDays++;
+                    }
+                }
+
+                const phaseCard = document.createElement('div');
+                phaseCard.className = 'bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3.5';
+
+                const overTarget = phaseLoggedDrinks > target;
+                const badgeCls = overTarget
+                    ? 'bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                    : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300';
+
+                const headerHtml = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                        <div>
+                            <h3 class="text-sm sm:text-base font-bold">${phase.title} <span class="text-xs font-normal text-slate-400">(Days ${phase.daysRange[0]}–${phase.daysRange[1]})</span></h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${phase.dailyRule}</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${badgeCls}">
+                                ${phaseLoggedDrinks} / ${target} max
+                            </span>
+                            <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                                ${phaseDryDays} dry
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                let gridHtml = `<div class="grid grid-cols-2 min-[420px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2.5">`;
+
+                for (let d = phase.daysRange[0]; d <= phase.daysRange[1]; d++) {
+                    const entry = appState.logs[d];
+                    const dateObj = getDateForDay(d);
+                    const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+                    const dateLabel = formatShortDate(dateObj);
+                    const isToday = d === activeDay;
+
+                    let cardStyle = 'bg-slate-50 dark:bg-slate-850 border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300';
+                    let statusBadge = `<span class="text-xs text-slate-400 font-medium">Tap to log</span>`;
+                    let workoutBadge = '';
+                    let recoveryBadges = '';
+                    const isDryLogged = !!(entry && entry.logged && Number(entry.drinks || 0) === 0);
+
+                    if (entry && entry.logged) {
+                        const drinks = Number(entry.drinks || 0);
+                        const na = Number(entry.naDrinks || 0);
+                        const hasWeight = entry.weight !== null && entry.weight !== undefined && entry.weight !== '';
+                        const workout = normalizeWorkout(entry.workout);
+                        const rhrVal = entry.rhr !== null && entry.rhr !== undefined && entry.rhr !== '' ? Number(entry.rhr) : null;
+                        const sleepVal = entry.sleepQuality ? Number(entry.sleepQuality) : null;
+                        const energyVal = entry.energyLevel ? Number(entry.energyLevel) : null;
+
+                        if (drinks === 0) {
+                            cardStyle = 'bg-emerald-500/12 dark:bg-emerald-500/15 border-emerald-500/50 text-emerald-900 dark:text-emerald-100';
+                            statusBadge = `<span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">0 Dry ✓</span>`;
+                        } else if (drinks <= Math.ceil(dailyPaceLimit)) {
+                            cardStyle = 'bg-amber-400/15 dark:bg-amber-400/15 border-amber-400/60 text-amber-950 dark:text-amber-100';
+                            statusBadge = `<span class="text-xs font-bold text-amber-600 dark:text-amber-400">${drinks} drk</span>`;
+                        } else {
+                            cardStyle = 'bg-rose-500/12 dark:bg-rose-500/15 border-rose-500/50 text-rose-950 dark:text-rose-100';
+                            statusBadge = `<span class="text-xs font-bold text-rose-600 dark:text-rose-400">${drinks} drk</span>`;
+                        }
+
+                        if (hasWeight) {
+                            statusBadge += `<span class="text-[11px] font-medium text-indigo-600 dark:text-indigo-300 block">${Number(entry.weight).toFixed(1)} ${appState.weightUnit}</span>`;
+                        } else if (na > 0) {
+                            statusBadge += `<span class="text-[11px] text-slate-500 dark:text-slate-400 block">+${na} NA</span>`;
+                        }
+
+                        const recChips = [];
+                        if (rhrVal !== null && !isNaN(rhrVal)) {
+                            recChips.push(`<span class="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-rose-500/12 text-rose-700 dark:text-rose-300">❤️ ${rhrVal}</span>`);
+                        }
+                        if (sleepVal !== null) {
+                            recChips.push(`<span class="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-sky-500/12 text-sky-700 dark:text-sky-300">😴 ${sleepVal}/5</span>`);
+                        }
+                        if (energyVal !== null) {
+                            recChips.push(`<span class="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-700 dark:text-amber-300">⚡ ${energyVal}/5</span>`);
+                        }
+                        if (recChips.length > 0) {
+                            recoveryBadges = `<div class="flex flex-wrap gap-1 mt-1">${recChips.join('')}</div>`;
+                        }
+
+                        if (isActiveWorkout(workout)) {
+                            const primaryMod = MODALITIES.find(m => workout.modalities.includes(m.id)) || MODALITIES[0];
+                            const durStr = workout.duration > 0 ? `${workout.duration}m` : '';
+                            workoutBadge = `<span class="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-violet-500/15 text-violet-700 dark:text-violet-300 mt-1">${primaryMod.icon} ${primaryMod.short}${durStr ? ' · ' + durStr : ''}</span>`;
+                        }
+                    }
+
+                    const todayRing = isToday ? 'ring-2 ring-emerald-500 ring-offset-2 dark:ring-offset-slate-900' : '';
+
+                    gridHtml += `
+                        <div class="relative rounded-2xl border ${cardStyle} ${todayRing} flex flex-col justify-between min-h-[112px] transition hover:shadow-xs">
+                            <button type="button" onclick="openDayModal(${d})" class="flex-1 w-full p-3 pb-1.5 text-left flex flex-col justify-between active:opacity-80">
+                                <div class="w-full flex items-center justify-between">
+                                    <span class="text-xs font-bold">D${d}</span>
+                                    <span class="text-[11px] opacity-70">${dayName} · ${dateLabel}</span>
+                                </div>
+                                <div class="my-1.5 leading-tight">
+                                    ${statusBadge}
+                                    ${recoveryBadges}
+                                    ${workoutBadge}
+                                </div>
+                            </button>
+                            <div class="px-2.5 pb-2 pt-0.5 flex items-center justify-between gap-1">
+                                <button type="button" onclick="event.stopPropagation(); quickToggleDryDay(${d})" class="w-full min-h-[32px] px-2 py-1 rounded-lg text-[11px] font-semibold transition active:scale-95 ${isDryLogged ? 'bg-emerald-600 text-white' : 'bg-white/80 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700'}">
+                                    ${isDryLogged ? '✓ Dry Logged' : '0-Drink Quick'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                gridHtml += `</div>`;
+                phaseCard.innerHTML = headerHtml + gridHtml;
+                container.appendChild(phaseCard);
+            });
+        }
+
+        // ==========================================
+        // 4. DAILY LOGGING MODAL INTERACTIONS
+        // ==========================================
+        function openTodayModal() {
+            openDayModal(getActiveDayNumber());
+        }
+
+        function quickToggleDryDay(dayNum) {
+            const existing = appState.logs[dayNum];
+            const hasExtraData = existing && (
+                isActiveWorkout(normalizeWorkout(existing.workout)) ||
+                existing.weight ||
+                existing.notes ||
+                existing.rhr ||
+                existing.sleepQuality ||
+                existing.energyLevel
+            );
+            if (existing && existing.logged && Number(existing.drinks || 0) === 0 && !hasExtraData) {
+                delete appState.logs[dayNum];
+                saveState();
+                renderAll();
+                showToast(`Day ${dayNum} unlogged`);
+                return;
+            }
+            const base = existing || {
+                logged: true,
+                drinks: 0,
+                naDrinks: 1,
+                weight: null,
+                rhr: null,
+                sleepQuality: null,
+                energyLevel: null,
+                workout: { modalities: [], duration: 0, rpe: '', lifts: [], notes: '' },
+                habits: {},
+                notes: ''
+            };
+            base.logged = true;
+            base.drinks = 0;
+            base.naDrinks = Math.max(1, Number(base.naDrinks || 0));
+            appState.logs[dayNum] = base;
+            saveState();
+            renderAll();
+            showToast(`Day ${dayNum}: 0-Drink Dry Day logged ✓`);
+        }
+
+        function quickLogDryToday() {
+            quickToggleDryDay(getActiveDayNumber());
+        }
+
+        function openDayModal(dayNum) {
+            activeModalDay = dayNum;
+            const phase = getPhaseForDay(dayNum);
+            const dateObj = getDateForDay(dayNum);
+            const dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+            const existing = appState.logs[dayNum] || {
+                logged: false,
+                drinks: 0,
+                naDrinks: 1,
+                weight: getSuggestedDefaultWeight(dayNum),
+                rhr: null,
+                sleepQuality: null,
+                energyLevel: null,
+                workout: { modalities: [], duration: 0, rpe: '', lifts: [], notes: '' },
+                habits: {},
+                notes: ''
+            };
+
+            tempDayDraft = JSON.parse(JSON.stringify(existing));
+            tempDayDraft.workout = normalizeWorkout(tempDayDraft.workout);
+            tempDayDraft.rhr = existing.rhr !== undefined && existing.rhr !== null && existing.rhr !== '' ? Number(existing.rhr) : null;
+            tempDayDraft.sleepQuality = existing.sleepQuality ? Number(existing.sleepQuality) : null;
+            tempDayDraft.energyLevel = existing.energyLevel ? Number(existing.energyLevel) : null;
+
+            document.getElementById('modal-week-badge').textContent = phase.title;
+            document.getElementById('modal-day-title').textContent = `Day ${dayNum} · ${dateStr}`;
+            document.getElementById('modal-daily-rule').textContent = phase.dailyRule;
+            document.getElementById('modal-drinks-val').textContent = tempDayDraft.drinks;
+            document.getElementById('modal-na-val').textContent = tempDayDraft.naDrinks;
+            document.getElementById('modal-weight-unit').textContent = appState.weightUnit;
+            document.getElementById('modal-weight-input').value =
+                (tempDayDraft.weight !== null && tempDayDraft.weight !== undefined) ? tempDayDraft.weight : '';
+            document.getElementById('modal-rhr-input').value =
+                (tempDayDraft.rhr !== null && tempDayDraft.rhr !== undefined) ? tempDayDraft.rhr : '';
+            document.getElementById('modal-notes').value = tempDayDraft.notes || '';
+
+            document.getElementById('modal-workout-duration').value = tempDayDraft.workout.duration || '';
+            document.getElementById('modal-workout-rpe').value = tempDayDraft.workout.rpe || '';
+            document.getElementById('modal-workout-notes').value = tempDayDraft.workout.notes || '';
+
+            renderModalRecoveryScales();
+            renderModalModalities();
+            renderModalLifts();
+            renderModalHabits(phase);
+            document.getElementById('day-modal').classList.remove('hidden');
+        }
+
+        function adjustCount(field, delta) {
+            if (!tempDayDraft) return;
+            const next = Math.max(0, Math.round((Number(tempDayDraft[field] || 0) + delta) * 10) / 10);
+            tempDayDraft[field] = next;
+            document.getElementById(field === 'drinks' ? 'modal-drinks-val' : 'modal-na-val').textContent = next;
+        }
+
+        function setDrinksPreset(val) {
+            if (!tempDayDraft) return;
+            tempDayDraft.drinks = val;
+            document.getElementById('modal-drinks-val').textContent = val;
+        }
+
+        function adjustWeight(delta) {
+            const input = document.getElementById('modal-weight-input');
+            let current = parseFloat(input.value);
+            if (isNaN(current)) {
+                current = getSuggestedDefaultWeight(activeModalDay) || (appState.weightUnit === 'kg' ? 100.0 : 220.0);
+            }
+            const next = Math.max(40, Math.round((current + delta) * 10) / 10);
+            input.value = next.toFixed(1);
+        }
+
+        function clearWeightInput() {
+            document.getElementById('modal-weight-input').value = '';
+        }
+
+        function renderModalRecoveryScales() {
+            const sleepContainer = document.getElementById('modal-sleep-pills');
+            const energyContainer = document.getElementById('modal-energy-pills');
+            if (!sleepContainer || !energyContainer || !tempDayDraft) return;
+
+            sleepContainer.innerHTML = SLEEP_SCALE.map(item => {
+                const isSelected = Number(tempDayDraft.sleepQuality) === item.val;
+                const cls = isSelected
+                    ? 'bg-sky-600 text-white border-sky-600 shadow-xs'
+                    : 'bg-white dark:bg-slate-850 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-sky-400';
+                return `
+                    <button type="button" onclick="toggleRecoveryScale('sleepQuality', ${item.val})" class="min-h-[44px] py-1.5 px-1 rounded-xl border text-center transition active:scale-95 flex flex-col items-center justify-center ${cls}">
+                        <span class="text-xs font-bold leading-none">${item.val}</span>
+                        <span class="text-[10px] leading-tight mt-0.5 opacity-90">${item.label}</span>
+                    </button>
+                `;
+            }).join('');
+
+            energyContainer.innerHTML = ENERGY_SCALE.map(item => {
+                const isSelected = Number(tempDayDraft.energyLevel) === item.val;
+                const cls = isSelected
+                    ? 'bg-amber-500 text-white border-amber-500 shadow-xs'
+                    : 'bg-white dark:bg-slate-850 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-amber-400';
+                return `
+                    <button type="button" onclick="toggleRecoveryScale('energyLevel', ${item.val})" class="min-h-[44px] py-1.5 px-1 rounded-xl border text-center transition active:scale-95 flex flex-col items-center justify-center ${cls}">
+                        <span class="text-xs font-bold leading-none">${item.val}</span>
+                        <span class="text-[10px] leading-tight mt-0.5 opacity-90">${item.label}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function toggleRecoveryScale(field, val) {
+            if (!tempDayDraft) return;
+            tempDayDraft[field] = Number(tempDayDraft[field]) === val ? null : val;
+            renderModalRecoveryScales();
+        }
+
+        function adjustRhr(delta) {
+            const input = document.getElementById('modal-rhr-input');
+            let current = parseInt(input.value, 10);
+            if (isNaN(current)) current = 54;
+            input.value = Math.max(30, Math.min(150, current + delta));
+        }
+
+        function clearRhrInput() {
+            document.getElementById('modal-rhr-input').value = '';
+        }
+
+        function renderModalModalities() {
+            const container = document.getElementById('modal-modality-pills');
+            if (!container || !tempDayDraft) return;
+            const selected = tempDayDraft.workout.modalities || [];
+            container.innerHTML = MODALITIES.map(m => {
+                const active = selected.includes(m.id);
+                const cls = active
+                    ? 'bg-violet-600 text-white border-violet-600 shadow-xs'
+                    : 'bg-white dark:bg-slate-850 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-violet-400';
+                return `
+                    <button type="button" onclick="toggleModality('${m.id}')" class="min-h-[38px] px-3 py-1.5 rounded-xl border text-xs font-semibold transition active:scale-95 flex items-center gap-1.5 ${cls}">
+                        <span>${m.icon}</span><span>${m.label}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function toggleModality(id) {
+            if (!tempDayDraft) return;
+            const list = tempDayDraft.workout.modalities;
+            const idx = list.indexOf(id);
+            if (idx >= 0) list.splice(idx, 1);
+            else list.push(id);
+            renderModalModalities();
+        }
+
+        function updateDurationDraft(val) {
+            if (!tempDayDraft) return;
+            tempDayDraft.workout.duration = Math.max(0, Number(val) || 0);
+        }
+
+        function setDurationPreset(mins) {
+            if (!tempDayDraft) return;
+            tempDayDraft.workout.duration = mins;
+            document.getElementById('modal-workout-duration').value = mins;
+        }
+
+        function updateRpeDraft(val) {
+            if (!tempDayDraft) return;
+            tempDayDraft.workout.rpe = val;
+        }
+
+        function addLiftRow(name = '', sets = 3, reps = 8, weight = 0) {
+            if (!tempDayDraft) return;
+            if (!tempDayDraft.workout.modalities.includes('strength')) {
+                tempDayDraft.workout.modalities.push('strength');
+                renderModalModalities();
+            }
+            tempDayDraft.workout.lifts.push({ name, sets, reps, weight });
+            renderModalLifts();
+        }
+
+        function addPresetLift(presetName) {
+            addLiftRow(presetName, 3, 8, 135);
+        }
+
+        function updateLiftField(idx, field, value) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[idx]) return;
+            tempDayDraft.workout.lifts[idx][field] = field === 'name' ? value : Math.max(0, Number(value) || 0);
+            updateModalVolumeBadge();
+        }
+
+        function removeLiftRow(idx) {
+            if (!tempDayDraft) return;
+            tempDayDraft.workout.lifts.splice(idx, 1);
+            renderModalLifts();
+        }
+
+        function updateModalVolumeBadge() {
+            const badge = document.getElementById('modal-session-volume-badge');
+            if (!badge || !tempDayDraft) return;
+            const vol = Math.round(calcWorkoutVolume(tempDayDraft.workout));
+            badge.textContent = `${vol.toLocaleString()} ${appState.weightUnit} vol`;
+        }
+
+        function renderModalLifts() {
+            const container = document.getElementById('modal-lifts-container');
+            if (!container || !tempDayDraft) return;
+            const lifts = tempDayDraft.workout.lifts || [];
+
+            if (lifts.length === 0) {
+                container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-2">No lifts added yet. Tap a preset above or "+ Add Lift".</p>`;
+            } else {
+                container.innerHTML = lifts.map((l, idx) => `
+                    <div class="bg-white dark:bg-slate-850 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div class="flex items-center gap-2">
+                            <input type="text" value="${l.name.replace(/"/g, '&quot;')}" oninput="updateLiftField(${idx}, 'name', this.value)" placeholder="Exercise name" class="flex-1 min-w-0 h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500">
+                            <button type="button" onclick="removeLiftRow(${idx})" aria-label="Remove lift" class="w-9 h-9 shrink-0 rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-95">✕</button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Sets</label>
+                                <input type="number" inputmode="numeric" value="${l.sets}" oninput="updateLiftField(${idx}, 'sets', this.value)" class="w-full h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 text-center text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Reps</label>
+                                <input type="number" inputmode="numeric" value="${l.reps}" oninput="updateLiftField(${idx}, 'reps', this.value)" class="w-full h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 text-center text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Load (${appState.weightUnit})</label>
+                                <input type="number" inputmode="decimal" value="${l.weight}" oninput="updateLiftField(${idx}, 'weight', this.value)" class="w-full h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 text-center text-xs font-bold">
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            updateModalVolumeBadge();
+        }
+
+        function renderModalHabits(phase) {
+            const container = document.getElementById('modal-habits-list');
+            if (!container || !tempDayDraft) return;
+            const habits = tempDayDraft.habits || {};
+            container.innerHTML = phase.habits.map(h => {
+                const checked = !!habits[h.id];
+                return `
+                    <button type="button" onclick="toggleHabit('${h.id}')" class="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl border text-left text-xs font-medium flex items-center justify-between gap-2 transition active:scale-[0.99] ${checked ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400/60 text-emerald-900 dark:text-emerald-200' : 'bg-slate-50 dark:bg-slate-850 border-slate-200/70 dark:border-slate-800 text-slate-700 dark:text-slate-300'}">
+                        <span>${h.label}</span>
+                        <span class="w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold ${checked ? 'bg-emerald-600 text-white' : 'border border-slate-300 dark:border-slate-600'}">${checked ? '✓' : ''}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function toggleHabit(id) {
+            if (!tempDayDraft) return;
+            if (!tempDayDraft.habits) tempDayDraft.habits = {};
+            tempDayDraft.habits[id] = !tempDayDraft.habits[id];
+            renderModalHabits(getPhaseForDay(activeModalDay));
+        }
+
+        function saveCurrentDayLog() {
+            tempDayDraft.logged = true;
+            const rawWeightVal = document.getElementById('modal-weight-input').value.trim();
+            tempDayDraft.weight = rawWeightVal !== '' && !isNaN(Number(rawWeightVal)) ? Math.round(Number(rawWeightVal) * 10) / 10 : null;
+
+            const rawRhrVal = document.getElementById('modal-rhr-input').value.trim();
+            tempDayDraft.rhr = rawRhrVal !== '' && !isNaN(Number(rawRhrVal)) ? Math.round(Number(rawRhrVal)) : null;
+
+            tempDayDraft.notes = document.getElementById('modal-notes').value.trim();
+            tempDayDraft.workout.duration = Math.max(0, Number(document.getElementById('modal-workout-duration').value) || 0);
+            tempDayDraft.workout.rpe = document.getElementById('modal-workout-rpe').value;
+            tempDayDraft.workout.notes = document.getElementById('modal-workout-notes').value.trim();
+            tempDayDraft.workout.lifts = tempDayDraft.workout.lifts.filter(l => l.name.trim() !== '' || l.weight > 0);
+
+            if (appState.startingWeight === null && tempDayDraft.weight !== null) {
+                appState.startingWeight = tempDayDraft.weight;
+            }
+
+            appState.logs[activeModalDay] = tempDayDraft;
+            saveState();
+            closeDayModal();
+            renderAll();
+            showToast(`Day ${activeModalDay} saved`);
+        }
+
+        function clearCurrentDayLog() {
+            delete appState.logs[activeModalDay];
+            saveState();
+            closeDayModal();
+            renderAll();
+            showToast(`Day ${activeModalDay} cleared`);
+        }
+
+        function closeDayModal() {
+            document.getElementById('day-modal').classList.add('hidden');
+            tempDayDraft = null;
+        }
+
+        // ==========================================
+        // 5. SETUP MODAL & TAB SWITCHING
+        // ==========================================
+        function setSetupUnit(unit) {
+            setupUnitTemp = unit;
+            const lbsBtn = document.getElementById('unit-btn-lbs');
+            const kgBtn = document.getElementById('unit-btn-kg');
+            if (unit === 'lbs') {
+                lbsBtn.className = 'min-h-[38px] py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-800 shadow-xs text-slate-900 dark:text-white';
+                kgBtn.className = 'min-h-[38px] py-1.5 text-xs font-bold rounded-lg text-slate-500';
+                document.getElementById('setup-startweight').placeholder = '240.0';
+                document.getElementById('setup-goalweight').placeholder = '230.0';
+            } else {
+                kgBtn.className = 'min-h-[38px] py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-800 shadow-xs text-slate-900 dark:text-white';
+                lbsBtn.className = 'min-h-[38px] py-1.5 text-xs font-bold rounded-lg text-slate-500';
+                document.getElementById('setup-startweight').placeholder = '109.0';
+                document.getElementById('setup-goalweight').placeholder = '104.0';
+            }
+        }
+
+        function openSetupModal() {
+            document.getElementById('setup-baseline').value = appState.baselineWeekly;
+            document.getElementById('setup-startdate').value = appState.startDate;
+            document.getElementById('setup-startweight').value = appState.startingWeight !== null ? appState.startingWeight : '';
+            document.getElementById('setup-goalweight').value = appState.goalWeight !== null ? appState.goalWeight : '';
+            setSetupUnit(appState.weightUnit);
+            updateSetupPreview();
+            document.getElementById('setup-modal').classList.remove('hidden');
+        }
+
+        function closeSetupModal() {
+            document.getElementById('setup-modal').classList.add('hidden');
+        }
+
+        function updateSetupPreview() {
+            const val = Math.max(1, Number(document.getElementById('setup-baseline').value) || 14);
+            const list = document.getElementById('setup-preview-list');
+            list.innerHTML = PHASES.map(p => {
+                const target = p.week === 4
+                    ? Math.max(1, Math.round(((val * p.targetRatio) / 7) * 9))
+                    : Math.max(1, Math.round(val * p.targetRatio));
+                const spanLabel = p.week === 4 ? 'Days 22–30' : `Week ${p.week}`;
+                return `<div class="bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-200/60 dark:border-slate-800">
+                    <span class="font-semibold text-slate-800 dark:text-slate-200">${spanLabel}:</span> ≤${target} drinks
+                </div>`;
+            }).join('');
+        }
+
+        function saveSetup() {
+            const baseline = Math.max(1, Number(document.getElementById('setup-baseline').value) || 14);
+            const startDate = document.getElementById('setup-startdate').value || new Date().toISOString().split('T')[0];
+            const sw = document.getElementById('setup-startweight').value.trim();
+            const gw = document.getElementById('setup-goalweight').value.trim();
+
+            appState.baselineWeekly = baseline;
+            appState.startDate = startDate;
+            appState.weightUnit = setupUnitTemp;
+            appState.startingWeight = sw !== '' && !isNaN(Number(sw)) ? Number(sw) : null;
+            appState.goalWeight = gw !== '' && !isNaN(Number(gw)) ? Number(gw) : null;
+
+            saveState();
+            closeSetupModal();
+            renderAll();
+            showToast('Step-down plan updated');
+        }
+
+        function switchTab(tabName) {
+            ['analytics', 'tracker', 'playbook'].forEach(t => {
+                const view = document.getElementById(`view-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (t === tabName) {
+                    view.classList.remove('hidden');
+                    btn.className = 'flex-1 min-w-[110px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm transition whitespace-nowrap';
+                } else {
+                    view.classList.add('hidden');
+                    btn.className = 'flex-1 min-w-[110px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap';
+                }
+            });
+
+            if (tabName === 'analytics') {
+                setTimeout(drawAllCharts, 25);
+            }
+        }
+
+        function setPaceChartMode(mode) {
+            paceChartMode = mode;
+            const cumBtn = document.getElementById('pace-btn-cumulative');
+            const dayBtn = document.getElementById('pace-btn-daily');
+
+            if (mode === 'cumulative') {
+                cumBtn.className = 'min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition';
+                dayBtn.className = 'min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition';
+                document.getElementById('pace-chart-title').textContent = 'Cumulative 30-Day Pace vs. Step-Down Plan';
+                document.getElementById('pace-chart-subtitle').textContent = 'Tracks your cumulative drinks against your old baseline and target step-down curve';
+            } else {
+                dayBtn.className = 'min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition';
+                cumBtn.className = 'min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition';
+                document.getElementById('pace-chart-title').textContent = 'Daily Drinks vs. Step-Down Daily Ceiling';
+                document.getElementById('pace-chart-subtitle').textContent = 'Daily drinks logged compared to the step-down daily allowance across Phases 1–4';
+            }
+            drawPaceChart();
+        }
+
+        // ==========================================
+        // 6. ANALYTICS CARDS, TABLE & SVG CHARTS
+        // ==========================================
+        function createSvgEl(tag, attrs = {}) {
+            const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (const [k, v] of Object.entries(attrs)) {
+                el.setAttribute(k, v);
+            }
+            return el;
+        }
+
+        function positionTooltip(tooltip, containerRect, cx, cy) {
+            tooltip.classList.remove('hidden');
+            const tipW = tooltip.offsetWidth || 160;
+            const tipH = tooltip.offsetHeight || 56;
+            let left = cx - tipW / 2;
+            left = Math.max(8, Math.min(containerRect.width - tipW - 8, left));
+            let top = cy - tipH - 12;
+            if (top < 4) top = cy + 14;
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+        }
+
+        function attachTouchScrub(svg, tooltip, count, padL, chartW, onSelect) {
+            const handleTouch = (e) => {
+                if (!e.touches || !e.touches.length) return;
+                const r = svg.parentElement.getBoundingClientRect();
+                const relX = e.touches[0].clientX - r.left;
+                const frac = Math.max(0, Math.min(1, (relX - padL) / Math.max(1, chartW)));
+                const idx = Math.min(count - 1, Math.max(0, Math.round(frac * (count - 1))));
+                onSelect(idx, r);
+            };
+            svg.ontouchstart = handleTouch;
+            svg.ontouchmove = handleTouch;
+            svg.ontouchend = () => setTimeout(() => tooltip.classList.add('hidden'), 1200);
+        }
+
+        function renderTopLiftsSummary() {
+            const listEl = document.getElementById('top-lifts-list');
+            const insightEl = document.getElementById('training-alignment-insight');
+            if (!listEl) return;
+
+            const liftMap = {};
+            let dryWorkoutDays = 0, drinkWorkoutDays = 0, totalDryDays = 0, totalDrinkDays = 0;
+
+            for (let d = 1; d <= 30; d++) {
+                const entry = appState.logs[d];
+                if (!entry?.logged) continue;
+
+                const drinks = Number(entry.drinks || 0);
+                const w = normalizeWorkout(entry.workout);
+                const active = isActiveWorkout(w);
+
+                if (drinks === 0) {
+                    totalDryDays++;
+                    if (active) dryWorkoutDays++;
+                } else {
+                    totalDrinkDays++;
+                    if (active) drinkWorkoutDays++;
+                }
+
+                w.lifts.forEach(l => {
+                    const key = (l.name || 'Unnamed Lift').trim();
+                    if (!key) return;
+                    const vol = (Number(l.sets) || 0) * (Number(l.reps) || 0) * (Number(l.weight) || 0);
+                    if (!liftMap[key]) {
+                        liftMap[key] = { name: key, maxWeight: 0, bestSetStr: '', bestVol: 0, sessions: 0 };
+                    }
+                    liftMap[key].sessions++;
+                    if (Number(l.weight) >= liftMap[key].maxWeight) {
+                        liftMap[key].maxWeight = Number(l.weight);
+                        liftMap[key].bestSetStr = `${l.sets}×${l.reps} @ ${l.weight} ${appState.weightUnit}`;
+                    }
+                    if (vol > liftMap[key].bestVol) liftMap[key].bestVol = vol;
+                });
+            }
+
+            const liftsArr = Object.values(liftMap).sort((a, b) => b.bestVol - a.bestVol);
+            if (liftsArr.length === 0) {
+                listEl.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No strength lifts logged yet. Open any day to add sets, reps, and load.</p>`;
+            } else {
+                listEl.innerHTML = liftsArr.slice(0, 6).map(item => `
+                    <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-2">
+                        <div>
+                            <div class="text-xs font-bold text-slate-800 dark:text-slate-100">${item.name}</div>
+                            <div class="text-[11px] text-slate-500 dark:text-slate-400">Best: ${item.bestSetStr} (${item.sessions}×)</div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-bold text-violet-600 dark:text-violet-400">${Math.round(item.bestVol).toLocaleString()}</span>
+                            <span class="text-[10px] text-slate-400 block">${appState.weightUnit} vol</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (totalDryDays > 0 || totalDrinkDays > 0) {
+                const dryRate = totalDryDays > 0 ? Math.round((dryWorkoutDays / totalDryDays) * 100) : 0;
+                const drinkRate = totalDrinkDays > 0 ? Math.round((drinkWorkoutDays / totalDrinkDays) * 100) : 0;
+                insightEl.innerHTML = `<strong>Training Consistency:</strong> You trained on <strong>${dryRate}%</strong> of dry days (${dryWorkoutDays}/${totalDryDays}) vs. <strong>${drinkRate}%</strong> of drinking days (${drinkWorkoutDays}/${totalDrinkDays}).`;
+            }
+        }
+
+        function renderRecoveryComparisonCard() {
+            const listEl = document.getElementById('recovery-comparison-list');
+            const insightEl = document.getElementById('recovery-insight-box');
+            if (!listEl || !insightEl) return;
+
+            const stats = computeRecoveryStats();
+            const fmt = (v, suffix = '') => v !== null ? `${v.toFixed(1)}${suffix}` : '—';
+            const fmtInt = (v, suffix = '') => v !== null ? `${Math.round(v)}${suffix}` : '—';
+
+            listEl.innerHTML = `
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                        <span>❤️ Resting Heart Rate</span>
+                        <span class="text-[11px] font-normal text-slate-400">Lower = better</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
+                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmtInt(stats.dryAvgRhr, ' bpm')}</span>
+                        </div>
+                        <div class="bg-rose-500/10 border border-rose-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-rose-700 dark:text-rose-300 block">After Drinks</span>
+                            <span class="text-sm font-bold text-rose-800 dark:text-rose-200">${fmtInt(stats.drinkAvgRhr, ' bpm')}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                        <span>😴 Sleep Quality (1–5)</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
+                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmt(stats.dryAvgSleep, '/5')}</span>
+                        </div>
+                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-300 block">After Drinks</span>
+                            <span class="text-sm font-bold text-amber-800 dark:text-amber-200">${fmt(stats.drinkAvgSleep, '/5')}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                        <span>⚡ Morning Energy (1–5)</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
+                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmt(stats.dryAvgEnergy, '/5')}</span>
+                        </div>
+                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1.5">
+                            <span class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-300 block">After Drinks</span>
+                            <span class="text-sm font-bold text-amber-800 dark:text-amber-200">${fmt(stats.drinkAvgEnergy, '/5')}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (stats.dryAvgRhr !== null && stats.drinkAvgRhr !== null) {
+                const rhrDiff = Math.round((stats.drinkAvgRhr - stats.dryAvgRhr) * 10) / 10;
+                const sleepDiff = (stats.dryAvgSleep !== null && stats.drinkAvgSleep !== null)
+                    ? Math.round((stats.dryAvgSleep - stats.drinkAvgSleep) * 10) / 10
+                    : null;
+                const rhrPhrase = rhrDiff > 0
+                    ? `<strong>${rhrDiff} bpm lower</strong> RHR`
+                    : `RHR of <strong>${Math.round(stats.dryAvgRhr)} bpm</strong>`;
+                const sleepPhrase = (sleepDiff !== null && sleepDiff > 0)
+                    ? ` and <strong>+${sleepDiff} pts</strong> higher sleep quality`
+                    : '';
+                insightEl.innerHTML = `<strong>Recovery Upside:</strong> Alcohol-free nights give you ${rhrPhrase}${sleepPhrase} the next morning.`;
+            } else {
+                insightEl.innerHTML = `Log morning RHR, sleep, and energy across both dry and drinking days to unlock your personal recovery delta.`;
+            }
+        }
+
+        function renderAnalyticsTable() {
+            const tbody = document.getElementById('analytics-table-body');
+            tbody.innerHTML = '';
+
+            PHASES.forEach(p => {
+                const base = getPhaseBaselineDrinks(p);
+                const target = getPhaseTargetDrinks(p);
+                let loggedDrinks = 0, dryDays = 0, loggedCount = 0, activeMins = 0;
+                const weights = [];
+
+                for (let d = p.daysRange[0]; d <= p.daysRange[1]; d++) {
+                    const entry = appState.logs[d];
+                    if (entry?.logged) {
+                        loggedCount++;
+                        const drk = Number(entry.drinks || 0);
+                        loggedDrinks += drk;
+                        if (drk === 0) dryDays++;
+                        if (entry.weight !== null && entry.weight !== undefined && entry.weight !== '') {
+                            weights.push(Number(entry.weight));
+                        }
+                        activeMins += Number(normalizeWorkout(entry.workout).duration || 0);
+                    }
+                }
+
+                const avgWeightStr = weights.length > 0
+                    ? `${(weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(1)} ${appState.weightUnit}`
+                    : '—';
+
+                const statusColor = loggedCount === 0
+                    ? 'text-slate-400'
+                    : loggedDrinks <= target
+                        ? 'text-emerald-600 dark:text-emerald-400 font-bold'
+                        : 'text-rose-600 dark:text-rose-400 font-bold';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-medium">W${p.week} (D${p.daysRange[0]}–${p.daysRange[1]})</td>
+                    <td class="px-4 py-3 text-slate-500">${base}</td>
+                    <td class="px-4 py-3 font-semibold text-amber-600 dark:text-amber-400">≤${target}</td>
+                    <td class="px-4 py-3 ${statusColor}">${loggedDrinks}</td>
+                    <td class="px-4 py-3 text-slate-600 dark:text-slate-300">${dryDays} / ${getPhaseDaysCount(p)}</td>
+                    <td class="px-4 py-3 font-medium text-indigo-600 dark:text-indigo-400">${avgWeightStr}</td>
+                    <td class="px-4 py-3 font-semibold text-violet-600 dark:text-violet-400">${activeMins}m</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function drawAllCharts() {
+            drawPaceChart();
+            drawWeightCorrelationChart();
+            drawWeeklyComparisonChart();
+            drawRecoveryCorrelationChart();
+            drawTrainingCorrelationChart();
+        }
+
+        // GRAPH 1: 30-Day Pace Chart (Cumulative vs Daily)
+        function drawPaceChart() {
+            const svg = document.getElementById('pace-svg');
+            const tooltip = document.getElementById('pace-tooltip');
+            const legend = document.getElementById('pace-chart-legend');
+            if (!svg) return;
+
+            const rect = svg.parentElement.getBoundingClientRect();
+            const W = Math.max(280, rect.width);
+            const H = Math.max(210, rect.height);
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svg.innerHTML = '';
+
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+
+            const padL = 36, padR = 14, padT = 16, padB = 28;
+            const chartW = W - padL - padR;
+            const chartH = H - padT - padB;
+            const getX = (day) => padL + ((day - 1) / 29) * chartW;
+            const slotW = chartW / 30;
+
+            const dailyData = [];
+            let cumBase = 0, cumTarget = 0, cumActual = 0;
+            let lastLoggedDay = 0;
+
+            for (let d = 1; d <= 30; d++) {
+                const baseDay = appState.baselineWeekly / 7;
+                const targetDay = getDailyCeilingForDay(d);
+                cumBase += baseDay;
+                cumTarget += targetDay;
+
+                const entry = appState.logs[d];
+                const logged = !!(entry && entry.logged);
+                const drk = logged ? Number(entry.drinks || 0) : null;
+                if (logged) {
+                    cumActual += drk;
+                    lastLoggedDay = d;
+                }
+                dailyData.push({
+                    day: d,
+                    logged,
+                    drinks: drk,
+                    targetDay: Math.round(targetDay * 10) / 10,
+                    cumBase: Math.round(cumBase * 10) / 10,
+                    cumTarget: Math.round(cumTarget * 10) / 10,
+                    cumActual: logged ? Math.round(cumActual * 10) / 10 : null
+                });
+            }
+
+            if (paceChartMode === 'cumulative') {
+                legend.innerHTML = `
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 border-t-2 border-dashed border-slate-400 inline-block"></span> Old Baseline Pace</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-amber-400 inline-block"></span> Step-Down Target</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-emerald-500 inline-block"></span> Your Actual Pace</span>
+                `;
+
+                const maxY = Math.max(10, Math.ceil(Math.max(cumBase, cumActual, cumTarget) * 1.1));
+                const getY = (val) => padT + chartH - (val / maxY) * chartH;
+
+                for (let i = 0; i <= 4; i++) {
+                    const y = padT + chartH - (i / 4) * chartH;
+                    svg.appendChild(createSvgEl('line', { x1: padL, y1: y, x2: W - padR, y2: y, stroke: gridColor, 'stroke-width': 1 }));
+                    const lbl = createSvgEl('text', { x: padL - 6, y: y + 4, fill: textColor, 'font-size': 10, 'text-anchor': 'end' });
+                    lbl.textContent = Math.round((maxY / 4) * i);
+                    svg.appendChild(lbl);
+                }
+
+                // Baseline dashed curve
+                const basePath = dailyData.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.cumBase)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: basePath, fill: 'none', stroke: isDark ? '#475569' : '#94a3b8', 'stroke-width': 1.8, 'stroke-dasharray': '5 4' }));
+
+                // Step-down target curve
+                const targetPath = dailyData.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.cumTarget)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: targetPath, fill: 'none', stroke: '#fbbf24', 'stroke-width': 2.2 }));
+
+                // Actual cumulative curve (up to last logged day)
+                const actualPts = [];
+                let running = 0;
+                for (let d = 1; d <= lastLoggedDay; d++) {
+                    if (appState.logs[d]?.logged) running += Number(appState.logs[d].drinks || 0);
+                    actualPts.push({ day: d, val: Math.round(running * 10) / 10 });
+                }
+
+                if (actualPts.length > 0) {
+                    const areaPath = `M ${getX(actualPts[0].day)} ${padT + chartH} ` +
+                        actualPts.map(p => `L ${getX(p.day)} ${getY(p.val)}`).join(' ') +
+                        ` L ${getX(actualPts[actualPts.length - 1].day)} ${padT + chartH} Z`;
+                    svg.appendChild(createSvgEl('path', { d: areaPath, fill: '#10b981', 'fill-opacity': 0.12 }));
+
+                    const actPath = actualPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.val)}`).join(' ');
+                    svg.appendChild(createSvgEl('path', { d: actPath, fill: 'none', stroke: '#10b981', 'stroke-width': 2.8, 'stroke-linecap': 'round' }));
+
+                    const lastP = actualPts[actualPts.length - 1];
+                    svg.appendChild(createSvgEl('circle', { cx: getX(lastP.day), cy: getY(lastP.val), r: 4.5, fill: '#10b981', stroke: isDark ? '#0f172a' : '#fff', 'stroke-width': 2 }));
+                }
+
+                const buildTip = (item) => {
+                    const actText = item.day <= lastLoggedDay
+                        ? `${actualPts[item.day - 1]?.val ?? 0} drinks`
+                        : 'Not yet logged';
+                    return `
+                        <div class="font-bold text-emerald-300 mb-0.5">Day ${item.day} Cumulative</div>
+                        <div>Actual: <strong>${actText}</strong></div>
+                        <div>Target: <strong>${item.cumTarget}</strong> · Baseline: <strong>${item.cumBase}</strong></div>
+                    `;
+                };
+
+                dailyData.forEach(item => {
+                    const cx = getX(item.day);
+                    if (item.day === 1 || item.day % 5 === 0) {
+                        const xLbl = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
+                        xLbl.textContent = `D${item.day}`;
+                        svg.appendChild(xLbl);
+                    }
+                    const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
+                    hit.addEventListener('mouseenter', () => {
+                        tooltip.innerHTML = buildTip(item);
+                        positionTooltip(tooltip, rect, cx, getY(item.cumTarget));
+                    });
+                    svg.appendChild(hit);
+                });
+
+                attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+                    const item = dailyData[idx];
+                    tooltip.innerHTML = buildTip(item);
+                    positionTooltip(tooltip, r, getX(item.day), getY(item.cumTarget));
+                });
+            } else {
+                legend.innerHTML = `
+                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-emerald-500 inline-block"></span> Dry Day (0)</span>
+                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-amber-400 inline-block"></span> Within Pace</span>
+                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-rose-500 inline-block"></span> Over Pace</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 border-t-2 border-dashed border-amber-400 inline-block"></span> Daily Allowance</span>
+                `;
+
+                const maxDrinks = Math.max(4, Math.ceil(Math.max(...dailyData.map(x => Math.max(x.drinks || 0, x.targetDay))) * 1.15));
+                const getY = (val) => padT + chartH - (val / maxDrinks) * chartH;
+
+                for (let i = 0; i <= 4; i++) {
+                    const y = padT + chartH - (i / 4) * chartH;
+                    svg.appendChild(createSvgEl('line', { x1: padL, y1: y, x2: W - padR, y2: y, stroke: gridColor, 'stroke-width': 1 }));
+                    const lbl = createSvgEl('text', { x: padL - 6, y: y + 4, fill: textColor, 'font-size': 10, 'text-anchor': 'end' });
+                    lbl.textContent = ((maxDrinks / 4) * i).toFixed(1).replace(/\.0$/, '');
+                    svg.appendChild(lbl);
+                }
+
+                // Step-down ceiling dashed line
+                const ceilPath = dailyData.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.targetDay)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: ceilPath, fill: 'none', stroke: '#fbbf24', 'stroke-width': 2, 'stroke-dasharray': '4 3' }));
+
+                const buildTip = (item) => `
+                    <div class="font-bold text-emerald-300 mb-0.5">Day ${item.day} Intake</div>
+                    <div>Logged: <strong>${item.logged ? item.drinks + ' drinks' : 'Unlogged'}</strong></div>
+                    <div>Daily Pace Cap: <strong>≤${item.targetDay}</strong></div>
+                `;
+
+                dailyData.forEach(item => {
+                    const cx = getX(item.day);
+                    if (item.day === 1 || item.day % 5 === 0) {
+                        const xLbl = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
+                        xLbl.textContent = `D${item.day}`;
+                        svg.appendChild(xLbl);
+                    }
+                    if (item.logged) {
+                        const barW = Math.max(4, slotW * 0.62);
+                        if (item.drinks === 0) {
+                            svg.appendChild(createSvgEl('circle', { cx, cy: padT + chartH - 4, r: 3.5, fill: '#10b981' }));
+                        } else {
+                            const bH = Math.max(4, (item.drinks / maxDrinks) * chartH);
+                            const col = item.drinks <= Math.ceil(item.targetDay) ? '#fbbf24' : '#f43f5e';
+                            svg.appendChild(createSvgEl('rect', { x: cx - barW / 2, y: padT + chartH - bH, width: barW, height: bH, rx: 2, fill: col }));
+                        }
+                    }
+                    const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
+                    hit.addEventListener('mouseenter', () => {
+                        tooltip.innerHTML = buildTip(item);
+                        positionTooltip(tooltip, rect, cx, getY(item.drinks || item.targetDay));
+                    });
+                    svg.appendChild(hit);
+                });
+
+                attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+                    const item = dailyData[idx];
+                    tooltip.innerHTML = buildTip(item);
+                    positionTooltip(tooltip, r, getX(item.day), getY(item.drinks || item.targetDay));
+                });
+            }
+
+            svg.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
+        }
+
+        // GRAPH 2: Weight Trend vs Alcohol Intake
+        function drawWeightCorrelationChart() {
+            const svg = document.getElementById('weight-svg');
+            const tooltip = document.getElementById('weight-tooltip');
+            if (!svg) return;
+
+            const rect = svg.parentElement.getBoundingClientRect();
+            const W = Math.max(280, rect.width);
+            const H = Math.max(210, rect.height);
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svg.innerHTML = '';
+
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+
+            const series = computeWeightSeries().map(item => ({
+                ...item,
+                drinks: appState.logs[item.day]?.logged ? Number(appState.logs[item.day].drinks || 0) : null
+            }));
+
+            const validWeights = series.map(x => x.rawWeight).filter(v => v !== null);
+            if (validWeights.length === 0) {
+                const msg = createSvgEl('text', { x: W / 2, y: H / 2, fill: textColor, 'font-size': 12, 'text-anchor': 'middle' });
+                msg.textContent = 'Log morning scale weight on any day to see your 7-day trend';
+                svg.appendChild(msg);
+                return;
+            }
+
+            const padL = 42, padR = 14, padT = 16, padB = 28;
+            const chartW = W - padL - padR;
+            const chartH = H - padT - padB;
+
+            const allW = [...validWeights];
+            if (appState.goalWeight !== null) allW.push(Number(appState.goalWeight));
+            const minW = Math.floor(Math.min(...allW) - 1.5);
+            const maxW = Math.ceil(Math.max(...allW) + 1.5);
+            const spanW = Math.max(4, maxW - minW);
+            const maxDrinks = Math.max(4, ...series.map(x => x.drinks || 0));
+
+            const getX = (day) => padL + ((day - 1) / 29) * chartW;
+            const getY = (val) => padT + chartH - ((val - minW) / spanW) * chartH;
+            const slotW = chartW / 30;
+
+            for (let i = 0; i <= 4; i++) {
+                const y = padT + chartH - (i / 4) * chartH;
+                svg.appendChild(createSvgEl('line', { x1: padL, y1: y, x2: W - padR, y2: y, stroke: gridColor, 'stroke-width': 1 }));
+                const lbl = createSvgEl('text', { x: padL - 6, y: y + 4, fill: textColor, 'font-size': 10, 'text-anchor': 'end' });
+                lbl.textContent = (minW + (spanW / 4) * i).toFixed(1).replace(/\.0$/, '');
+                svg.appendChild(lbl);
+            }
+
+            // Optional Goal Weight Line
+            if (appState.goalWeight !== null && appState.goalWeight >= minW && appState.goalWeight <= maxW) {
+                const gy = getY(appState.goalWeight);
+                svg.appendChild(createSvgEl('line', { x1: padL, y1: gy, x2: W - padR, y2: gy, stroke: '#10b981', 'stroke-width': 1.2, 'stroke-dasharray': '4 3', opacity: 0.7 }));
+            }
+
+            // Alcohol Bars in background
+            series.forEach(item => {
+                if (item.drinks !== null && item.drinks > 0) {
+                    const bH = (item.drinks / maxDrinks) * (chartH * 0.38);
+                    svg.appendChild(createSvgEl('rect', {
+                        x: getX(item.day) - slotW * 0.3,
+                        y: padT + chartH - bH,
+                        width: slotW * 0.6,
+                        height: bH,
+                        rx: 2,
+                        fill: '#fb7185',
+                        'fill-opacity': 0.35
+                    }));
+                }
+            });
+
+            // 7-Day EMA Trend Line
+            const trendPts = series.filter(x => x.trendWeight !== null && x.day <= Math.max(...series.filter(s => s.rawWeight !== null).map(s => s.day)));
+            if (trendPts.length > 1) {
+                const pathD = trendPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.trendWeight)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: pathD, fill: 'none', stroke: '#6366f1', 'stroke-width': 2.6, 'stroke-linecap': 'round' }));
+            }
+
+            const buildTip = (item) => `
+                <div class="font-bold text-indigo-300 mb-0.5">Day ${item.day} Weight</div>
+                <div>Scale: <strong>${item.rawWeight !== null ? item.rawWeight.toFixed(1) + ' ' + appState.weightUnit : '—'}</strong></div>
+                <div>Trend: <strong>${item.trendWeight !== null ? item.trendWeight.toFixed(1) : '—'}</strong> · Drinks: <strong>${item.drinks !== null ? item.drinks : '—'}</strong></div>
+            `;
+
+            series.forEach(item => {
+                const cx = getX(item.day);
+                if (item.day === 1 || item.day % 5 === 0) {
+                    const xLbl = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
+                    xLbl.textContent = `D${item.day}`;
+                    svg.appendChild(xLbl);
+                }
+                if (item.rawWeight !== null) {
+                    svg.appendChild(createSvgEl('circle', { cx, cy: getY(item.rawWeight), r: 3.3, fill: '#818cf8', stroke: isDark ? '#0f172a' : '#fff', 'stroke-width': 1.3 }));
+                }
+                const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
+                hit.addEventListener('mouseenter', () => {
+                    tooltip.innerHTML = buildTip(item);
+                    const ty = item.rawWeight !== null ? getY(item.rawWeight) : (item.trendWeight !== null ? getY(item.trendWeight) : padT + chartH * 0.5);
+                    positionTooltip(tooltip, rect, cx, ty);
+                });
+                svg.appendChild(hit);
+            });
+
+            attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+                const item = series[idx];
+                tooltip.innerHTML = buildTip(item);
+                const ty = item.rawWeight !== null ? getY(item.rawWeight) : (item.trendWeight !== null ? getY(item.trendWeight) : padT + chartH * 0.5);
+                positionTooltip(tooltip, r, getX(item.day), ty);
+            });
+
+            svg.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
+        }
+
+        // GRAPH 3: Weekly Step-Down Comparison
+        function drawWeeklyComparisonChart() {
+            const svg = document.getElementById('weekly-svg');
+            const tooltip = document.getElementById('weekly-tooltip');
+            if (!svg) return;
+
+            const rect = svg.parentElement.getBoundingClientRect();
+            const W = Math.max(280, rect.width);
+            const H = Math.max(210, rect.height);
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svg.innerHTML = '';
+
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+
+            const padL = 34, padR = 14, padT = 16, padB = 28;
+            const chartW = W - padL - padR;
+            const chartH = H - padT - padB;
+
+            const weeks = PHASES.map(p => {
+                let actual = 0;
+                for (let d = p.daysRange[0]; d <= p.daysRange[1]; d++) {
+                    if (appState.logs[d]?.logged) actual += Number(appState.logs[d].drinks || 0);
+                }
+                return {
+                    label: `W${p.week}`,
+                    span: `Days ${p.daysRange[0]}–${p.daysRange[1]}`,
+                    baseline: getPhaseBaselineDrinks(p),
+                    target: getPhaseTargetDrinks(p),
+                    actual: Math.round(actual * 10) / 10
+                };
+            });
+
+            const maxVal = Math.max(8, Math.ceil(Math.max(...weeks.map(w => Math.max(w.baseline, w.target, w.actual))) * 1.15));
+            const getY = (val) => padT + chartH - (val / maxVal) * chartH;
+
+            for (let i = 0; i <= 4; i++) {
+                const y = padT + chartH - (i / 4) * chartH;
+                svg.appendChild(createSvgEl('line', { x1: padL, y1: y, x2: W - padR, y2: y, stroke: gridColor, 'stroke-width': 1 }));
+                const lbl = createSvgEl('text', { x: padL - 6, y: y + 4, fill: textColor, 'font-size': 10, 'text-anchor': 'end' });
+                lbl.textContent = Math.round((maxVal / 4) * i);
+                svg.appendChild(lbl);
+            }
+
+            const groupW = chartW / 4;
+            const barW = Math.min(22, groupW * 0.22);
+
+            const buildTip = (w) => `
+                <div class="font-bold text-emerald-300 mb-0.5">${w.label} (${w.span})</div>
+                <div>Baseline: <strong>${w.baseline}</strong> · Target: <strong>≤${w.target}</strong></div>
+                <div>Actual Logged: <strong>${w.actual} drinks</strong></div>
+            `;
+
+            weeks.forEach((w, idx) => {
+                const center = padL + groupW * idx + groupW / 2;
+
+                const bars = [
+                    { val: w.baseline, x: center - barW * 1.55, col: isDark ? '#334155' : '#cbd5e1' },
+                    { val: w.target, x: center - barW * 0.5, col: '#fbbf24' },
+                    { val: w.actual, x: center + barW * 0.55, col: w.actual > w.target ? '#f43f5e' : '#10b981' }
+                ];
+
+                bars.forEach(b => {
+                    const bH = Math.max(2, (b.val / maxVal) * chartH);
+                    svg.appendChild(createSvgEl('rect', { x: b.x, y: padT + chartH - bH, width: barW, height: bH, rx: 3, fill: b.col }));
+                });
+
+                const xLbl = createSvgEl('text', { x: center, y: H - 8, fill: textColor, 'font-size': 11, 'font-weight': '600', 'text-anchor': 'middle' });
+                xLbl.textContent = w.label;
+                svg.appendChild(xLbl);
+
+                const hit = createSvgEl('rect', { x: padL + groupW * idx, y: padT, width: groupW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
+                hit.addEventListener('mouseenter', () => {
+                    tooltip.innerHTML = buildTip(w);
+                    positionTooltip(tooltip, rect, center, getY(Math.max(w.baseline, w.actual)));
+                });
+                svg.appendChild(hit);
+            });
+
+            attachTouchScrub(svg, tooltip, 4, padL, chartW, (idx, r) => {
+                const w = weeks[idx];
+                const center = padL + groupW * idx + groupW / 2;
+                tooltip.innerHTML = buildTip(w);
+                positionTooltip(tooltip, r, center, getY(Math.max(w.baseline, w.actual)));
+            });
+
+            svg.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
+        }
+
+        // GRAPH 3.5: Resting Heart Rate, Sleep & Energy vs Alcohol Intake
+        function drawRecoveryCorrelationChart() {
+            const svg = document.getElementById('recovery-svg');
+            const tooltip = document.getElementById('recovery-tooltip');
+            if (!svg) return;
+
+            const rect = svg.parentElement.getBoundingClientRect();
+            const W = Math.max(280, rect.width);
+            const H = Math.max(210, rect.height);
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svg.innerHTML = '';
+
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+
+            const daysData = [];
+            for (let d = 1; d <= 30; d++) {
+                const entry = appState.logs[d];
+                const rhr = entry?.logged && entry.rhr !== null && entry.rhr !== undefined && entry.rhr !== '' ? Number(entry.rhr) : null;
+                const sleep = entry?.logged && entry.sleepQuality ? Number(entry.sleepQuality) : null;
+                const energy = entry?.logged && entry.energyLevel ? Number(entry.energyLevel) : null;
+                const drinks = entry?.logged ? Number(entry.drinks || 0) : null;
+
+                let wellnessAvg = null;
+                if (sleep !== null && energy !== null) wellnessAvg = (sleep + energy) / 2;
+                else if (sleep !== null) wellnessAvg = sleep;
+                else if (energy !== null) wellnessAvg = energy;
+
+                daysData.push({ day: d, rhr, sleep, energy, wellnessAvg, drinks });
+            }
+
+            const validRhrs = daysData.map(x => x.rhr).filter(v => v !== null);
+            const validScores = daysData.map(x => x.wellnessAvg).filter(v => v !== null);
+
+            if (validRhrs.length === 0 && validScores.length === 0) {
+                const msg = createSvgEl('text', { x: W / 2, y: H / 2, fill: textColor, 'font-size': 12, 'text-anchor': 'middle' });
+                msg.textContent = 'Log morning RHR, sleep, or energy on any day to unlock recovery trends';
+                svg.appendChild(msg);
+                return;
+            }
+
+            const padL = 38, padR = 26, padT = 16, padB = 28;
+            const chartW = W - padL - padR;
+            const chartH = H - padT - padB;
+
+            const minRhr = validRhrs.length ? Math.floor(Math.min(...validRhrs) - 3) : 45;
+            const maxRhr = validRhrs.length ? Math.ceil(Math.max(...validRhrs) + 3) : 70;
+            const spanRhr = Math.max(6, maxRhr - minRhr);
+            const maxDrinks = Math.max(4, ...daysData.map(x => x.drinks || 0));
+
+            for (let i = 0; i <= 4; i++) {
+                const y = padT + chartH - (i / 4) * chartH;
+                svg.appendChild(createSvgEl('line', { x1: padL, y1: y, x2: W - padR, y2: y, stroke: gridColor, 'stroke-width': 1 }));
+
+                const rhrTick = Math.round(minRhr + (spanRhr / 4) * i);
+                const lTxt = createSvgEl('text', { x: padL - 6, y: y + 4, fill: textColor, 'font-size': 10, 'text-anchor': 'end' });
+                lTxt.textContent = rhrTick;
+                svg.appendChild(lTxt);
+
+                const rTxt = createSvgEl('text', { x: W - padR + 6, y: y + 4, fill: '#38bdf8', 'font-size': 10, 'text-anchor': 'start' });
+                rTxt.textContent = `${1 + i}`;
+                svg.appendChild(rTxt);
+            }
+
+            const getX = (day) => padL + ((day - 1) / 29) * chartW;
+            const getYRhr = (val) => padT + chartH - ((val - minRhr) / spanRhr) * chartH;
+            const getYScore = (val) => padT + chartH - ((val - 1) / 4) * chartH;
+            const slotW = chartW / 30;
+
+            daysData.forEach(item => {
+                if (item.drinks !== null && item.drinks > 0) {
+                    const bH = (item.drinks / maxDrinks) * (chartH * 0.4);
+                    svg.appendChild(createSvgEl('rect', {
+                        x: getX(item.day) - slotW * 0.3,
+                        y: padT + chartH - bH,
+                        width: slotW * 0.6,
+                        height: bH,
+                        rx: 2,
+                        fill: '#fbbf24',
+                        'fill-opacity': 0.32
+                    }));
+                }
+            });
+
+            const scorePts = daysData.filter(x => x.wellnessAvg !== null);
+            if (scorePts.length > 1) {
+                const scorePath = scorePts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getYScore(p.wellnessAvg)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: scorePath, fill: 'none', stroke: '#38bdf8', 'stroke-width': 2, 'stroke-dasharray': '4 3', 'stroke-linecap': 'round' }));
+            }
+
+            const rhrPts = daysData.filter(x => x.rhr !== null);
+            if (rhrPts.length > 1) {
+                const rhrPath = rhrPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getYRhr(p.rhr)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: rhrPath, fill: 'none', stroke: '#f43f5e', 'stroke-width': 2.5, 'stroke-linecap': 'round' }));
+            }
+
+            const buildTipHtml = (item) => `
+                <div class="font-bold text-rose-300 mb-0.5">Day ${item.day} Recovery</div>
+                <div>RHR: <strong>${item.rhr !== null ? item.rhr + ' bpm' : '—'}</strong> · Drinks: <strong>${item.drinks !== null ? item.drinks : 'Unlogged'}</strong></div>
+                <div>Sleep: <strong>${item.sleep !== null ? item.sleep + '/5' : '—'}</strong> · Energy: <strong>${item.energy !== null ? item.energy + '/5' : '—'}</strong></div>
+            `;
+
+            daysData.forEach(item => {
+                const cx = getX(item.day);
+                if (item.day === 1 || item.day % 5 === 0) {
+                    const xLbl = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
+                    xLbl.textContent = `D${item.day}`;
+                    svg.appendChild(xLbl);
+                }
+                if (item.wellnessAvg !== null) {
+                    svg.appendChild(createSvgEl('circle', { cx, cy: getYScore(item.wellnessAvg), r: 3, fill: '#38bdf8', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.2 }));
+                }
+                if (item.rhr !== null) {
+                    svg.appendChild(createSvgEl('circle', { cx, cy: getYRhr(item.rhr), r: 3.5, fill: '#f43f5e', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.5 }));
+                }
+                const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
+                hit.addEventListener('mouseenter', () => {
+                    tooltip.innerHTML = buildTipHtml(item);
+                    const targetY = item.rhr !== null ? getYRhr(item.rhr) : (item.wellnessAvg !== null ? getYScore(item.wellnessAvg) : padT + chartH * 0.5);
+                    positionTooltip(tooltip, rect, cx, targetY);
+                });
+                svg.appendChild(hit);
+            });
+
+            attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+                const item = daysData[idx];
+                tooltip.innerHTML = buildTipHtml(item);
+                const targetY = item.rhr !== null ? getYRhr(item.rhr) : (item.wellnessAvg !== null ? getYScore(item.wellnessAvg) : padT + chartH * 0.5);
+                positionTooltip(tooltip, r, getX(item.day), targetY);
+            });
+
+            svg.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
+        }
+
+        // GRAPH 4: Exercise Minutes & Alcohol Alignment
+        function drawTrainingCorrelationChart() {
+            const svg = document.getElementById('training-svg');
+            const tooltip = document.getElementById('training-tooltip');
+            if (!svg) return;
+
+            const rect = svg.parentElement.getBoundingClientRect();
+            const W = Math.max(280, rect.width);
+            const H = Math.max(210, rect.height);
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svg.innerHTML = '';
+
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+
+            const data = [];
+            for (let d = 1; d <= 30; d++) {
+                const entry = appState.logs[d];
+                const w = entry?.logged ? normalizeWorkout(entry.workout) : null;
+                const mins = w ? Number(w.duration || 0) : 0;
+                const vol = w ? calcWorkoutVolume(w) : 0;
+                const drinks = entry?.logged ? Number(entry.drinks || 0) : null;
+
+                let color = '#8b5cf6';
+                if (w && w.modalities.length) {
+                    if (w.modalities.includes('strength')) color = '#8b5cf6';
+                    else if (w.modalities.includes('cycling') || w.modalities.includes('cardio')) color = '#06b6d4';
+                    else color = '#2dd4bf';
+                }
+                data.push({ day: d, mins, vol, drinks, color, mods: w ? w.modalities : [] });
+            }
+
+            const hasWorkouts = data.some(x => x.mins > 0);
+            if (!hasWorkouts) {
+                const msg = createSvgEl('text', { x: W / 2, y: H / 2, fill: textColor, 'font-size': 12, 'text-anchor': 'middle' });
+                msg.textContent = 'Log workouts on any day to visualize training minutes vs. alcohol intake';
+                svg.appendChild(msg);
+                return;
+            }
+
+            const padL = 36, padR = 14, padT = 16, padB = 28;
+            const chartW = W - padL - padR;
+            const chartH = H - padT - padB;
+            const maxMins = Math.max(60, Math.ceil(Math.max(...data.map(x => x.mins)) / 15) * 15);
+            const maxDrinks = Math.max(4, ...data.map(x => x.drinks || 0));
+
+            const getX = (day) => padL + ((day - 1) / 29) * chartW;
+            const getYMin = (val) => padT + chartH - (val / maxMins) * chartH;
+            const getYDrk = (val) => padT + chartH - (val / maxDrinks) * (chartH * 0.85);
+            const slotW = chartW / 30;
+
+            for (let i = 0; i <= 4; i++) {
+                const y = padT + chartH - (i / 4) * chartH;
+                svg.appendChild(createSvgEl('line', { x1: padL, y1: y, x2: W - padR, y2: y, stroke: gridColor, 'stroke-width': 1 }));
+                const lbl = createSvgEl('text', { x: padL - 6, y: y + 4, fill: textColor, 'font-size': 10, 'text-anchor': 'end' });
+                lbl.textContent = `${Math.round((maxMins / 4) * i)}m`;
+                svg.appendChild(lbl);
+            }
+
+            const buildTip = (item) => `
+                <div class="font-bold text-violet-300 mb-0.5">Day ${item.day} Training</div>
+                <div>Active: <strong>${item.mins} min</strong> ${item.vol > 0 ? `· <strong>${Math.round(item.vol).toLocaleString()} ${appState.weightUnit}</strong>` : ''}</div>
+                <div>Drinks: <strong>${item.drinks !== null ? item.drinks : 'Unlogged'}</strong></div>
+            `;
+
+            data.forEach(item => {
+                const cx = getX(item.day);
+                if (item.day === 1 || item.day % 5 === 0) {
+                    const xLbl = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
+                    xLbl.textContent = `D${item.day}`;
+                    svg.appendChild(xLbl);
+                }
+                if (item.mins > 0) {
+                    const barW = Math.max(4, slotW * 0.62);
+                    const bH = Math.max(3, (item.mins / maxMins) * chartH);
+                    svg.appendChild(createSvgEl('rect', { x: cx - barW / 2, y: padT + chartH - bH, width: barW, height: bH, rx: 2, fill: item.color, 'fill-opacity': 0.88 }));
+                }
+                if (item.drinks !== null && item.drinks > 0) {
+                    svg.appendChild(createSvgEl('circle', { cx, cy: getYDrk(item.drinks), r: 3.5, fill: '#f43f5e', stroke: isDark ? '#0f172a' : '#fff', 'stroke-width': 1.3 }));
+                }
+                const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
+                hit.addEventListener('mouseenter', () => {
+                    tooltip.innerHTML = buildTip(item);
+                    positionTooltip(tooltip, rect, cx, item.mins > 0 ? getYMin(item.mins) : padT + chartH * 0.6);
+                });
+                svg.appendChild(hit);
+            });
+
+            attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+                const item = data[idx];
+                tooltip.innerHTML = buildTip(item);
+                positionTooltip(tooltip, r, getX(item.day), item.mins > 0 ? getYMin(item.mins) : padT + chartH * 0.6);
+            });
+
+            svg.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
+        }
+
+        // ==========================================
+        // 7. DEMO DATA, EXPORT/IMPORT & RESET
+        // ==========================================
+        function loadDemoData() {
+            const start = new Date();
+            start.setDate(start.getDate() - 17);
+            appState.startDate = start.toISOString().split('T')[0];
+            appState.baselineWeekly = 14;
+            appState.weightUnit = 'lbs';
+            appState.startingWeight = 240.0;
+            appState.goalWeight = 232.0;
+
+            const sampleDays = [
+                {
+                    d: 1, drinks: 2, na: 1, w: 240.0, rhr: 58, sleep: 3, energy: 3, note: '60-min buffer worked; had Athletic IPA first',
+                    workout: {
+                        modalities: ['strength'], duration: 55, rpe: '7',
+                        lifts: [
+                            { name: 'Squat / Split Squat', sets: 3, reps: 8, weight: 185 },
+                            { name: 'Bench Press', sets: 3, reps: 8, weight: 155 }
+                        ],
+                        notes: 'Solid lower/push opener'
+                    }
+                },
+                {
+                    d: 2, drinks: 0, na: 2, w: 239.6, rhr: 59, sleep: 3, energy: 3, note: 'Dry Tuesday — sparkling water + bitters',
+                    workout: { modalities: ['cycling'], duration: 45, rpe: '6', lifts: [], notes: '45m Zwift Zone 2 ride' }
+                },
+                {
+                    d: 3, drinks: 2, na: 1, w: 239.4, rhr: 53, sleep: 4, energy: 4, note: 'Dinner out, delayed first glass of wine',
+                    workout: {
+                        modalities: ['strength'], duration: 50, rpe: '7',
+                        lifts: [
+                            { name: 'Deadlift / RDL', sets: 3, reps: 8, weight: 205 },
+                            { name: 'Pull-ups / Rows', sets: 3, reps: 10, weight: 135 }
+                        ],
+                        notes: 'Posterior chain & upper pull'
+                    }
+                },
+                {
+                    d: 4, drinks: 0, na: 2, w: 238.9, rhr: 57, sleep: 3, energy: 3, note: 'Great deep sleep, resting HR down 4 bpm',
+                    workout: { modalities: ['mobility'], duration: 25, rpe: '3', lifts: [], notes: 'Hip & thoracic mobility' }
+                },
+                {
+                    d: 5, drinks: 3, na: 2, w: 238.8, rhr: 52, sleep: 5, energy: 4, note: 'Friday social, alternated with club soda',
+                    workout: {
+                        modalities: ['strength'], duration: 50, rpe: '8',
+                        lifts: [
+                            { name: 'Overhead Press', sets: 3, reps: 8, weight: 105 },
+                            { name: 'Squat / Split Squat', sets: 3, reps: 8, weight: 195 }
+                        ],
+                        notes: 'Moved up 10 lbs on squats'
+                    }
+                },
+                {
+                    d: 6, drinks: 3, na: 1, w: 239.3, rhr: 61, sleep: 2, energy: 2, note: 'Slight water retention bump after Saturday',
+                    workout: { modalities: ['cycling'], duration: 75, rpe: '7', lifts: [], notes: '75m weekend endurance ride' }
+                },
+                {
+                    d: 7, drinks: 1, na: 2, w: 239.0, rhr: 60, sleep: 2, energy: 3, note: 'Week 1 finished at 11/12 drinks!',
+                    workout: { modalities: ['recovery'], duration: 30, rpe: '3', lifts: [], notes: 'Active recovery walk' }
+                },
+                {
+                    d: 8, drinks: 0, na: 2, w: 238.4, rhr: 55, sleep: 4, energy: 4, note: 'Monday dry guardrail locked in',
+                    workout: {
+                        modalities: ['strength'], duration: 60, rpe: '8',
+                        lifts: [
+                            { name: 'Squat / Split Squat', sets: 4, reps: 6, weight: 205 },
+                            { name: 'Bench Press', sets: 3, reps: 8, weight: 165 }
+                        ],
+                        notes: 'High energy after dry Sunday/Monday'
+                    }
+                },
+                {
+                    d: 9, drinks: 0, na: 2, w: 237.8, rhr: 52, sleep: 5, energy: 5, note: 'Dry Tuesday — energy noticeably higher',
+                    workout: { modalities: ['cycling'], duration: 50, rpe: '6', lifts: [], notes: 'Tempo intervals on trainer' }
+                },
+                {
+                    d: 10, drinks: 0, na: 1, w: 237.3, rhr: 51, sleep: 5, energy: 5, note: '3-day dry streak, morning clarity great',
+                    workout: {
+                        modalities: ['strength'], duration: 55, rpe: '8',
+                        lifts: [
+                            { name: 'Deadlift / RDL', sets: 3, reps: 6, weight: 225 },
+                            { name: 'Pull-ups / Rows', sets: 4, reps: 8, weight: 145 }
+                        ],
+                        notes: 'RDL felt super crisp'
+                    }
+                },
+                {
+                    d: 11, drinks: 2, na: 2, w: 237.1, rhr: 51, sleep: 4, energy: 4, note: 'Work dinner — ordered NA beer first',
+                    workout: { modalities: ['mobility'], duration: 20, rpe: '3', lifts: [], notes: 'Morning core & stretch' }
+                },
+                {
+                    d: 12, drinks: 3, na: 2, w: 237.5, rhr: 57, sleep: 3, energy: 3, note: 'Friday night, kept to 3 drinks',
+                    workout: {
+                        modalities: ['strength'], duration: 50, rpe: '7',
+                        lifts: [
+                            { name: 'Overhead Press', sets: 4, reps: 6, weight: 115 },
+                            { name: 'Core / Plyometrics', sets: 3, reps: 12, weight: 25 }
+                        ],
+                        notes: 'Upper press & explosive work'
+                    }
+                },
+                {
+                    d: 13, drinks: 2.5, na: 2, w: 237.2, rhr: 60, sleep: 2, energy: 3, note: 'Switched to light lagers',
+                    workout: { modalities: ['cycling'], duration: 90, rpe: '7', lifts: [], notes: '90m outdoor gravel ride' }
+                },
+                {
+                    d: 14, drinks: 0, na: 2, w: 236.7, rhr: 58, sleep: 3, energy: 3, note: 'Week 2 finished at 7.5/10 drinks!',
+                    workout: { modalities: ['recovery'], duration: 30, rpe: '3', lifts: [], notes: 'Foam rolling & walk' }
+                },
+                {
+                    d: 15, drinks: 0, na: 2, w: 236.1, rhr: 52, sleep: 5, energy: 5, note: 'Week 3 started dry',
+                    workout: {
+                        modalities: ['strength'], duration: 60, rpe: '8',
+                        lifts: [
+                            { name: 'Squat / Split Squat', sets: 4, reps: 6, weight: 215 },
+                            { name: 'Bench Press', sets: 4, reps: 6, weight: 175 }
+                        ],
+                        notes: 'New 30-day squat & bench PRs!'
+                    }
+                },
+                {
+                    d: 16, drinks: 0, na: 2, w: 235.8, rhr: 50, sleep: 5, energy: 5, note: 'Hop water in chilled pint glass',
+                    workout: { modalities: ['cycling'], duration: 50, rpe: '6', lifts: [], notes: '50m Zone 2 spin, low HR drift' }
+                },
+                {
+                    d: 17, drinks: 1.5, na: 2, w: 235.5, rhr: 50, sleep: 5, energy: 5, note: '1-for-1 sparkling water rule, low ABV spritz',
+                    workout: {
+                        modalities: ['strength'], duration: 55, rpe: '8',
+                        lifts: [
+                            { name: 'Deadlift / RDL', sets: 4, reps: 6, weight: 235 },
+                            { name: 'Pull-ups / Rows', sets: 4, reps: 8, weight: 150 }
+                        ],
+                        notes: '235 lbs RDL PR'
+                    }
+                },
+                {
+                    d: 18, drinks: 0, na: 2, w: 235.1, rhr: 55, sleep: 4, energy: 4, note: 'Down nearly 5 lbs & sleeping soundly',
+                    workout: { modalities: ['mobility', 'cardio'], duration: 35, rpe: '5', lifts: [], notes: 'Core + easy run' }
+                }
+            ];
+
+            appState.logs = {};
+            sampleDays.forEach(item => {
+                appState.logs[item.d] = {
+                    logged: true,
+                    drinks: item.drinks,
+                    naDrinks: item.na,
+                    weight: item.w,
+                    rhr: item.rhr,
+                    sleepQuality: item.sleep,
+                    energyLevel: item.energy,
+                    workout: normalizeWorkout(item.workout),
+                    habits: { buffer60: true, recovery: true },
+                    notes: item.note
+                };
+            });
+
+            saveState();
+            renderAll();
+            showToast('Loaded 18-day sample progress with recovery & training');
+        }
+
+        function exportData() {
+            const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stepdown30-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('JSON backup downloaded');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && typeof imported === 'object' && imported.logs) {
+                        const normalizedLogs = {};
+                        for (const [k, v] of Object.entries(imported.logs)) {
+                            normalizedLogs[k] = {
+                                ...v,
+                                rhr: v.rhr !== undefined && v.rhr !== null && v.rhr !== '' ? Number(v.rhr) : null,
+                                sleepQuality: v.sleepQuality !== undefined && v.sleepQuality !== null && v.sleepQuality !== '' ? Number(v.sleepQuality) : null,
+                                energyLevel: v.energyLevel !== undefined && v.energyLevel !== null && v.energyLevel !== '' ? Number(v.energyLevel) : null,
+                                workout: normalizeWorkout(v.workout)
+                            };
+                        }
+                        appState = {
+                            baselineWeekly: Number(imported.baselineWeekly) || 14,
+                            startDate: imported.startDate || new Date().toISOString().split('T')[0],
+                            weightUnit: imported.weightUnit === 'kg' ? 'kg' : 'lbs',
+                            startingWeight: imported.startingWeight !== undefined ? imported.startingWeight : null,
+                            goalWeight: imported.goalWeight !== undefined ? imported.goalWeight : null,
+                            logs: normalizedLogs
+                        };
+                        saveState();
+                        renderAll();
+                        showToast('Backup imported successfully');
+                    } else {
+                        showToast('Invalid backup file format');
+                    }
+                } catch (err) {
+                    showToast('Could not read JSON file');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function confirmReset() {
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        function executeReset() {
+            appState.logs = {};
+            saveState();
+            closeConfirmModal();
+            renderAll();
+            showToast('All logs reset');
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const banner = document.getElementById('toast-banner');
+            document.getElementById('toast-message').textContent = msg;
+            banner.classList.remove('hidden');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                banner.classList.add('hidden');
+            }, 2400);
+        }
+
+        // Boot App & Resize Listener
+        window.addEventListener('DOMContentLoaded', () => {
+            const baselineInput = document.getElementById('setup-baseline');
+            if (baselineInput) {
+                baselineInput.addEventListener('input', updateSetupPreview);
+            }
+            loadState();
+            renderAll();
+            setTimeout(drawAllCharts, 40);
+        });
+
+        let resizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (!document.getElementById('view-analytics').classList.contains('hidden')) {
+                    drawAllCharts();
+                }
+            }, 120);
+        });
+    </script>
+</body>
+</html>
