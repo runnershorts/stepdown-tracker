@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Peak Health 30">
+    <meta name="apple-mobile-web-app-title" content="Peak Health">
     <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-    <title>Peak Health 30 · Full Health & Performance Tracker</title>
+    <title>Peak Health · Unlimited Health & Performance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -82,16 +82,16 @@
         <div class="max-w-5xl mx-auto px-4 pb-3 flex items-center justify-between gap-2">
             <div class="flex items-center gap-2.5 min-w-0">
                 <div class="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 flex items-center justify-center text-white font-bold shadow-sm text-sm tracking-tight">
-                    H30
+                    PH
                 </div>
                 <div class="min-w-0">
-                    <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight truncate">Peak Health 30</h1>
-                    <p id="header-subtitle" class="text-xs text-slate-500 dark:text-slate-400 truncate">30-Day Body, Recovery, Training & Habits</p>
+                    <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight truncate">Peak Health</h1>
+                    <p id="header-subtitle" class="text-xs text-slate-500 dark:text-slate-400 truncate">Unlimited Body, Recovery, Training & Habits</p>
                 </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
                 <button type="button" onclick="loadDemoData()" class="min-h-[44px] px-3 py-2 text-xs font-semibold rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 transition flex items-center gap-1.5 active:scale-95">
-                    <span>✨ Demo</span>
+                    <span>✨ 90D Demo</span>
                 </button>
                 <button type="button" onclick="openSetupModal()" class="hidden md:flex min-h-[44px] px-3.5 py-2 text-xs sm:text-sm font-medium rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition items-center gap-1.5 active:scale-95">
                     <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -110,9 +110,23 @@
             <span id="toast-message">Saved</span>
         </div>
 
-        <!-- KPI Summary Grid (Health-First Order) -->
+        <!-- Short / Medium / Long Term Horizon Bar -->
+        <section class="bg-white dark:bg-slate-900 p-3 sm:p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 shrink-0">Progress Horizon</span>
+                <span id="range-date-span" class="text-xs text-slate-500 dark:text-slate-400 truncate">Last 30 Days</span>
+            </div>
+            <div class="grid grid-cols-4 p-1 bg-slate-100 dark:bg-slate-850 rounded-xl border border-slate-200/70 dark:border-slate-800 gap-1">
+                <button type="button" onclick="setTimeRange('7d')" id="range-btn-7d" class="min-h-[38px] px-2.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 transition whitespace-nowrap">Short · 7D</button>
+                <button type="button" onclick="setTimeRange('30d')" id="range-btn-30d" class="min-h-[38px] px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition whitespace-nowrap">Med · 30D</button>
+                <button type="button" onclick="setTimeRange('90d')" id="range-btn-90d" class="min-h-[38px] px-2.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 transition whitespace-nowrap">Long · 90D</button>
+                <button type="button" onclick="setTimeRange('all')" id="range-btn-all" class="min-h-[38px] px-2.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 transition whitespace-nowrap">All-Time</button>
+            </div>
+        </section>
+
+        <!-- KPI Summary Grid (Adapts to Selected Horizon) -->
         <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
-            <!-- Body Weight & 7-Day Trend -->
+            <!-- Body Weight & Trend -->
             <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                 <div class="flex items-center justify-between mb-1">
                     <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Weight & Delta</span>
@@ -151,15 +165,15 @@
                 <p id="kpi-lift-volume" class="text-[11px] text-slate-400 mt-1">0 lbs · 0 str / 0 endur</p>
             </div>
 
-            <!-- Active Week Alcohol Budget -->
+            <!-- Rolling 7-Day Alcohol Budget -->
             <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                 <div class="flex items-center justify-between mb-1">
-                    <span id="kpi-week-label" class="text-xs font-medium text-slate-500 dark:text-slate-400">W1 Alcohol Budget</span>
+                    <span id="kpi-week-label" class="text-xs font-medium text-slate-500 dark:text-slate-400">7D Alcohol Pace</span>
                     <span id="kpi-week-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">On Track</span>
                 </div>
                 <div class="flex items-baseline gap-1.5">
                     <span id="kpi-week-actual" class="text-2xl sm:text-3xl font-bold">0</span>
-                    <span id="kpi-week-target" class="text-xs text-slate-500 dark:text-slate-400">/ 12 max</span>
+                    <span id="kpi-week-target" class="text-xs text-slate-500 dark:text-slate-400">/ 7 max</span>
                 </div>
                 <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
                     <div id="kpi-week-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -174,7 +188,7 @@
                 </div>
                 <div class="flex items-baseline gap-1.5">
                     <span id="kpi-dry-days" class="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">0</span>
-                    <span class="text-xs text-slate-500 dark:text-slate-400">dry · <strong id="kpi-streak" class="text-slate-700 dark:text-slate-200">0d</strong> streak</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">dry · <strong id="kpi-streak" class="text-slate-700 dark:text-slate-200">0d</strong> best</span>
                 </div>
                 <p id="kpi-na-swaps" class="text-[11px] text-slate-400 mt-1">0 NA drinks swapped</p>
             </div>
@@ -198,8 +212,8 @@
             <button type="button" onclick="switchTab('analytics')" id="tab-btn-analytics" class="flex-1 min-w-[118px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm transition whitespace-nowrap">
                 Health Dashboard
             </button>
-            <button type="button" onclick="switchTab('tracker')" id="tab-btn-tracker" class="flex-1 min-w-[105px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap">
-                30-Day Health Log
+            <button type="button" onclick="switchTab('tracker')" id="tab-btn-tracker" class="flex-1 min-w-[115px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap">
+                Health Calendar
             </button>
             <button type="button" onclick="switchTab('playbook')" id="tab-btn-playbook" class="flex-1 min-w-[115px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap">
                 Health Playbook
@@ -212,24 +226,24 @@
             <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800">
                 <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
                     <span class="inline-block w-2 h-2 shrink-0 rounded-full bg-emerald-500"></span>
-                    <span>Touch & slide across any chart to inspect exact daily metrics.</span>
+                    <span>Switch between <strong>7D / 30D / 90D / All-Time</strong> above; touch & slide any chart to inspect exact dates.</span>
                 </div>
                 <div class="hidden md:flex items-center gap-2">
                     <button type="button" onclick="quickLogDryToday()" class="min-h-[44px] px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold rounded-xl transition">
-                        ✓ 0-Drink Quick Log
+                        ✓ 0-Drink Today
                     </button>
                     <button type="button" onclick="openTodayModal()" class="min-h-[44px] px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition">
-                        + Log Active Day
+                        + Log Today
                     </button>
                 </div>
             </div>
 
-            <!-- GRAPH 1: 30-DAY ALCOHOL BUDGET VS TARGET CURVE -->
+            <!-- GRAPH 1: ALCOHOL BUDGET VS TARGET CURVE -->
             <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
-                        <h2 id="pace-chart-title" class="text-base font-bold">30-Day Alcohol Budget vs. Target Curve</h2>
-                        <p id="pace-chart-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Tracks your cumulative drinks against your baseline and 30-day reduction target</p>
+                        <h2 id="pace-chart-title" class="text-base font-bold">Alcohol Budget vs. Target Curve</h2>
+                        <p id="pace-chart-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Tracks cumulative drinks against your baseline and target pace</p>
                     </div>
                     <div class="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800 self-start">
                         <button type="button" onclick="setPaceChartMode('cumulative')" id="pace-btn-cumulative" class="min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition">
@@ -266,11 +280,11 @@
                     </div>
                 </div>
 
-                <!-- GRAPH 3: WEEKLY ALCOHOL BUDGET COMPARISON -->
+                <!-- GRAPH 3: PERIOD ALCOHOL BUDGET COMPARISON -->
                 <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
                     <div>
-                        <h2 class="text-base font-bold">Weekly Alcohol Budget Comparison</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Baseline vs. weekly target ceiling vs. actual drinks logged</p>
+                        <h2 id="period-chart-title" class="text-base font-bold">Weekly Alcohol Budget Comparison</h2>
+                        <p id="period-chart-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Baseline vs. target ceiling vs. actual drinks logged</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
                         <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-xs bg-slate-300 dark:bg-slate-700"></span> Baseline</span>
@@ -308,7 +322,7 @@
                     <div class="space-y-3">
                         <div>
                             <h2 class="text-base font-bold">Dry vs. Drinking Recovery</h2>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Next-morning biometrics after 0-drink vs. drinking days</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Next-morning biometrics in the selected horizon</p>
                         </div>
                         <div id="recovery-comparison-list" class="space-y-2.5"></div>
                     </div>
@@ -352,21 +366,51 @@
                 </div>
             </div>
 
-            <!-- Phase Breakdown Table -->
+            <!-- WEEKLY MUSCLE GROUP BALANCE & SMART WORKOUT SUGGESTIONS -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm grid grid-cols-1 lg:grid-cols-5 gap-5">
+                <div class="lg:col-span-3 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h2 class="text-base font-bold">Weekly Body Part Focus (Last 7 Days)</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Auto-tracked from your logged lifts & manual body-part tags</p>
+                        </div>
+                        <span id="muscle-coverage-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 dark:bg-violet-950/70 dark:text-violet-300">0 / 7 hit</span>
+                    </div>
+                    <div id="muscle-group-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
+                </div>
+
+                <div class="lg:col-span-2 bg-gradient-to-br from-violet-50/90 to-indigo-50/70 dark:from-violet-950/40 dark:to-indigo-950/30 border border-violet-200/70 dark:border-violet-800/50 rounded-2xl p-4 flex flex-col justify-between gap-3">
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-violet-700 dark:text-violet-300">Next Suggested Workout</span>
+                            <span id="suggested-workout-tag" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/80 dark:bg-slate-900/70 text-violet-700 dark:text-violet-300">Balanced</span>
+                        </div>
+                        <h3 id="suggested-workout-title" class="text-sm font-bold text-slate-900 dark:text-white">Full Body Foundation</h3>
+                        <p id="suggested-workout-reason" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+                        <div id="suggested-workout-exercises" class="space-y-1.5 pt-1"></div>
+                    </div>
+                    <button type="button" onclick="startSuggestedWorkoutToday()" class="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold shadow-xs transition active:scale-[0.99]">
+                        + Load Suggested Workout Into Today
+                    </button>
+                </div>
+            </div>
+
+            <!-- Period Breakdown Table (Weeks for Short/Med, Months for Long/All-Time) -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm">
-                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
-                    <h3 class="text-sm font-bold">Weekly Health, Weight, Training & Habit Summary</h3>
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                    <h3 id="summary-table-title" class="text-sm font-bold">Weekly Health, Weight, Training & Habit Summary</h3>
+                    <span id="summary-table-badge" class="text-[11px] font-semibold text-slate-400">Grouped by Week</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs sm:text-sm">
                         <thead class="bg-slate-50 dark:bg-slate-850 text-slate-500 dark:text-slate-400">
                             <tr>
-                                <th class="px-4 py-3 font-semibold">Phase</th>
-                                <th class="px-4 py-3 font-semibold">Baseline</th>
-                                <th class="px-4 py-3 font-semibold">Target</th>
-                                <th class="px-4 py-3 font-semibold">Logged</th>
+                                <th class="px-4 py-3 font-semibold">Period</th>
+                                <th class="px-4 py-3 font-semibold">Drinks / Cap</th>
                                 <th class="px-4 py-3 font-semibold">Dry Days</th>
                                 <th class="px-4 py-3 font-semibold">Avg Weight</th>
+                                <th class="px-4 py-3 font-semibold">Avg Sleep</th>
+                                <th class="px-4 py-3 font-semibold">Avg RHR</th>
                                 <th class="px-4 py-3 font-semibold">Active Min</th>
                             </tr>
                         </thead>
@@ -379,11 +423,11 @@
             <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h3 class="text-sm font-bold">Data & Backup</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Saved locally in your browser. Export JSON anytime or test charts with demo data.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Saved locally in your browser across unlimited dates. Export JSON anytime to back up your history.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                     <button type="button" onclick="loadDemoData()" class="min-h-[44px] flex-1 sm:flex-none px-3.5 py-2 text-xs font-semibold rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 transition">
-                        Load Demo
+                        Load 90D Demo
                     </button>
                     <button type="button" onclick="exportData()" class="min-h-[44px] flex-1 sm:flex-none px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition">
                         Export JSON
@@ -399,8 +443,30 @@
             </div>
         </section>
 
-        <!-- TAB 2: 30-DAY HEALTH LOG GRID -->
+        <!-- TAB 2: UNLIMITED MONTHLY HEALTH CALENDAR -->
         <section id="view-tracker" class="hidden space-y-5">
+            <!-- Month Navigation Bar -->
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center justify-between sm:justify-start gap-2">
+                    <button type="button" onclick="changeCalendarMonth(-1)" aria-label="Previous Month" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold active:scale-95 transition">←</button>
+                    <div class="text-center sm:text-left px-2 min-w-[140px]">
+                        <h2 id="calendar-month-title" class="text-base font-bold leading-tight">Month Year</h2>
+                        <p id="calendar-month-summary" class="text-[11px] text-slate-500 dark:text-slate-400">0 dry days · 0 workouts</p>
+                    </div>
+                    <button type="button" onclick="changeCalendarMonth(1)" aria-label="Next Month" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold active:scale-95 transition">→</button>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="jumpCalendarToToday()" class="min-h-[40px] px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold transition active:scale-95">
+                        Jump to Today
+                    </button>
+                    <button type="button" onclick="openTodayModal()" class="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition active:scale-95">
+                        + Log Today
+                    </button>
+                </div>
+            </div>
+
+            <!-- Legend -->
             <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800">
                 <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
                     <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Dry Day (0)</span>
@@ -408,69 +474,51 @@
                     <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Over Pace</span>
                     <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full border-2 border-slate-300 dark:border-slate-600 inline-block"></span> Unlogged</span>
                 </div>
-                <div class="hidden md:flex items-center gap-2">
-                    <button type="button" onclick="quickLogDryToday()" class="min-h-[44px] px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold rounded-xl transition">
-                        ✓ 0-Drink Quick Log
-                    </button>
-                    <button type="button" onclick="openTodayModal()" class="min-h-[44px] px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
-                        <span>+ Log Active Day</span>
-                    </button>
-                </div>
+                <span class="text-xs text-slate-400">Tap any date card or use quick buttons</span>
             </div>
 
-            <!-- Weeks Container -->
-            <div id="weeks-container" class="space-y-5"></div>
+            <!-- Calendar Weeks Container -->
+            <div id="calendar-container" class="space-y-4"></div>
         </section>
 
-        <!-- TAB 3: HEALTH PLAYBOOK -->
+        <!-- TAB 3: LONG-TERM HEALTH PLAYBOOK -->
         <section id="view-playbook" class="hidden space-y-4">
             <div class="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 text-white p-5 rounded-2xl shadow-sm">
-                <h2 class="text-lg font-bold mb-1">The 30-Day Peak Health Playbook</h2>
-                <p class="text-xs sm:text-sm text-emerald-100">Build lasting momentum across sleep, body composition, strength training, and mindful drinking—one week at a time.</p>
+                <h2 class="text-lg font-bold mb-1">The Long-Term Peak Health Playbook</h2>
+                <p class="text-xs sm:text-sm text-emerald-100">Use Short (7D), Medium (30D), and Long (90D+) horizons to connect daily habits with lasting strength, sleep, and mental clarity.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Week 1 (Days 1–7)</span>
-                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">Baseline & Rhythm</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Short-Term · 7 Days</span>
+                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">Execution</span>
                     </div>
-                    <h3 class="font-bold text-base">Lock In Daily Signals</h3>
+                    <h3 class="font-bold text-base">Protect Weekly Rhythm</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        <strong>Measure What Matters:</strong> Log morning weight, Garmin sleep score, RHR, and mental clarity every day. Use the 60-minute evening buffer with a cold NA drink first to calm end-of-day transition urges.
+                        Focus on your rolling 7-day alcohol budget, 3–4 alcohol-free weeknights, and hitting your scheduled strength & cardio sessions. Watch immediate next-morning Garmin sleep and RHR shifts.
                     </p>
                 </div>
 
                 <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Week 2 (Days 8–14)</span>
-                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">Protect Recovery</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Medium-Term · 30 Days</span>
+                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">Momentum</span>
                     </div>
-                    <h3 class="font-bold text-base">Stack Deep Sleep & Training</h3>
+                    <h3 class="font-bold text-base">Trend Over Noise</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        <strong>Sun–Thu Recovery Guardrail:</strong> Keep 3–4 weeknights alcohol-free so your RHR drops and Garmin sleep climbs into the 80s–90s. Pair dry nights with morning strength sessions or Zone 2 cardio.
+                        Daily scale weight fluctuates with water and glycogen—use the 30-day smoothed weight trend, monthly lift volume, and Dry vs. Drinking recovery deltas to verify real progress.
                     </p>
                 </div>
 
                 <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Week 3 (Days 15–21)</span>
-                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">Strength & Pacing</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">Long-Term · 90D & All</span>
+                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">Identity</span>
                     </div>
-                    <h3 class="font-bold text-base">Progressive Overload & Lower ABV</h3>
+                    <h3 class="font-bold text-base">Compound Health Gains</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        <strong>Fuel Performance:</strong> Push for small load or rep progressions on your key lifts while keeping hydration high. On social nights, alternate 1-for-1 with sparkling water and shift to lower-ABV choices.
-                    </p>
-                </div>
-
-                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Week 4 (Days 22–30)</span>
-                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full font-medium">Peak Consistency</span>
-                    </div>
-                    <h3 class="font-bold text-base">Sustainable High-Clarity Lifestyle</h3>
-                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        <strong>Intentional Living:</strong> Set pre-decided caps before dinners or events, start with an NA drink in hand, and let your 30-day weight trend, lifting PRs, and mental clarity reinforce your new normal.
+                        Over quarters and seasons, compare month-over-month RHR drops, Garmin sleep consistency, strength PRs, and thousands of alcohol calories avoided. Export a JSON backup monthly to keep your history safe.
                     </p>
                 </div>
             </div>
@@ -488,7 +536,7 @@
                     </li>
                     <li class="flex items-start gap-2">
                         <span class="text-emerald-500 font-bold">✓</span>
-                        <span><strong>Track the full feedback loop:</strong> Watch how dry nights directly improve Resting HR, workout consistency, and your 7-day weight trend.</span>
+                        <span><strong>Track the full feedback loop:</strong> Watch how dry nights directly improve Resting HR, workout consistency, and your smoothed weight trend.</span>
                     </li>
                 </ul>
             </div>
@@ -507,9 +555,9 @@
                 <span class="text-sm leading-none mb-0.5">✓</span>
                 <span class="text-[11px] leading-tight">0-Drink Log</span>
             </button>
-            <button type="button" onclick="switchTab('analytics')" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1">
-                <span class="text-sm leading-none mb-0.5">📊</span>
-                <span class="text-[11px] leading-tight">Charts</span>
+            <button type="button" onclick="switchTab('tracker')" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1">
+                <span class="text-sm leading-none mb-0.5">📅</span>
+                <span class="text-[11px] leading-tight">Calendar</span>
             </button>
             <button type="button" onclick="openSetupModal()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1">
                 <span class="text-sm leading-none mb-0.5">⚙️</span>
@@ -521,17 +569,17 @@
     <!-- DAILY LOGGING MODAL / BOTTOM SHEET -->
     <div id="day-modal" onclick="if(event.target===this) closeDayModal()" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-end md:items-center justify-center p-0 md:p-4">
         <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-t-3xl md:rounded-3xl border-t md:border border-slate-200 dark:border-slate-800 shadow-2xl animate-slide-up max-h-[92dvh] flex flex-col overflow-hidden">
-            <!-- Sticky Modal Header with Prev/Next Day Arrows & Quick-Jump Pills -->
+            <!-- Sticky Modal Header with Unlimited Prev/Next Day Arrows & Quick-Jump Pills -->
             <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-4 sm:px-5 pt-2.5 pb-3 border-b border-slate-100 dark:border-slate-800 z-10 space-y-2.5">
                 <div class="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto md:hidden"></div>
                 <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-1.5 min-w-0">
-                        <button type="button" id="modal-prev-btn" onclick="navigateModalDay(-1)" aria-label="Previous Day" class="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition">←</button>
+                        <button type="button" onclick="navigateModalDay(-1)" aria-label="Previous Day" class="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition">←</button>
                         <div class="min-w-0 px-1">
-                            <span id="modal-week-badge" class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block truncate">Week 1 · Baseline & Rhythm</span>
-                            <h2 id="modal-day-title" class="text-base sm:text-lg font-bold truncate">Day 1</h2>
+                            <span id="modal-weekday-badge" class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block truncate">Today</span>
+                            <h2 id="modal-day-title" class="text-base sm:text-lg font-bold truncate">Date</h2>
                         </div>
-                        <button type="button" id="modal-next-btn" onclick="navigateModalDay(1)" aria-label="Next Day" class="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition">→</button>
+                        <button type="button" onclick="navigateModalDay(1)" aria-label="Next Day" class="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition">→</button>
                     </div>
                     <button type="button" onclick="closeDayModal()" aria-label="Close modal" class="w-10 h-10 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition active:scale-95">
                         ✕
@@ -548,12 +596,6 @@
 
             <!-- Scrollable Modal Body -->
             <div id="modal-scroll-body" class="flex-1 overflow-y-auto overscroll-contain p-5 space-y-5">
-                <!-- Phase Daily Rule Reminder -->
-                <div class="bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-800/60 p-3.5 rounded-2xl">
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 mb-0.5">Today's Health Focus</p>
-                    <p id="modal-daily-rule" class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed"></p>
-                </div>
-
                 <!-- Steppers: Alcoholic Drinks & NA Swaps -->
                 <div id="section-drinks" class="grid grid-cols-1 min-[380px]:grid-cols-2 gap-3 scroll-mt-3">
                     <div class="bg-slate-50 dark:bg-slate-850 p-3.5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center">
@@ -658,6 +700,14 @@
                         <div id="modal-modality-pills" class="flex flex-wrap gap-2"></div>
                     </div>
 
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Body Parts Worked</span>
+                            <span class="text-[10px] text-slate-400">Auto-tagged from lifts + tap to add</span>
+                        </div>
+                        <div id="modal-muscle-pills" class="flex flex-wrap gap-1.5"></div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label for="modal-workout-duration" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Duration (min)</label>
@@ -697,7 +747,10 @@
                             <button type="button" onclick="addPresetLift('Deadlift / RDL')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Deadlift/RDL</button>
                             <button type="button" onclick="addPresetLift('Bench Press')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Bench</button>
                             <button type="button" onclick="addPresetLift('Overhead Press')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ OHP</button>
+                            <button type="button" onclick="addPresetLift('Lateral Raises')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Lat Raises</button>
                             <button type="button" onclick="addPresetLift('Pull-ups / Rows')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Pull/Row</button>
+                            <button type="button" onclick="addPresetLift('Bicep Curls')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Bicep Curls</button>
+                            <button type="button" onclick="addPresetLift('Tricep Pushdown / Dips')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Triceps</button>
                             <button type="button" onclick="addPresetLift('Core / Plyometrics')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Core/Plyo</button>
                         </div>
                         <div id="modal-lifts-container" class="space-y-2"></div>
@@ -709,7 +762,7 @@
                     </div>
                 </div>
 
-                <!-- Daily Tactical Checklist -->
+                <!-- Daily Health Checklist -->
                 <div>
                     <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2.5">Daily Health Habits</label>
                     <div id="modal-habits-list" class="space-y-2"></div>
@@ -745,11 +798,17 @@
                 </div>
             </div>
             <div class="flex-1 overflow-y-auto overscroll-contain p-5 space-y-4">
-                <div>
-                    <label for="setup-baseline" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Alcohol Baseline (Drinks/Week)</label>
-                    <input type="number" inputmode="numeric" id="setup-baseline" min="1" max="100" value="14" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3.5 py-2.5 text-base font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                    <p class="text-[11px] text-slate-400 mt-1">1 standard drink = 12 oz beer (5%), 5 oz wine (12%), or 1.5 oz spirits (40%).</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label for="setup-baseline" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Old Baseline / Wk</label>
+                        <input type="number" inputmode="numeric" id="setup-baseline" min="1" max="100" value="14" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3 py-2 text-base font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label for="setup-weeklytarget" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Weekly Cap Goal</label>
+                        <input type="number" inputmode="numeric" id="setup-weeklytarget" min="0" max="100" value="7" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3 py-2 text-base font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
                 </div>
+                <p class="text-[11px] text-slate-400 -mt-2">Used to calculate drinks avoided, calories saved, and target curves across 7D, 30D, 90D, and All-Time.</p>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -771,14 +830,9 @@
                         <input type="number" inputmode="decimal" id="setup-goalweight" step="0.1" placeholder="230.0" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
-                        <label for="setup-startdate" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Day 1 Start Date</label>
+                        <label for="setup-startdate" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Journey Start Date</label>
                         <input type="date" id="setup-startdate" class="w-full h-12 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     </div>
-                </div>
-
-                <div class="bg-slate-50 dark:bg-slate-850 p-3.5 rounded-2xl border border-slate-200/70 dark:border-slate-800 space-y-1.5">
-                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">Weekly Alcohol Budget Targets:</p>
-                    <div id="setup-preview-list" class="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400"></div>
                 </div>
             </div>
             <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 px-5 pt-3 border-t border-slate-100 dark:border-slate-800 safe-bottom">
@@ -793,7 +847,7 @@
     <div id="confirm-modal" onclick="if(event.target===this) closeConfirmModal()" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl border border-slate-200 dark:border-slate-800 p-5 shadow-2xl space-y-4">
             <h3 class="text-base font-bold">Reset All Health Data?</h3>
-            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">This will erase all 30 days of logged weight, Garmin sleep, RHR, clarity, workouts, and drinks from this browser. Consider exporting a JSON backup first.</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">This will erase all logged weight, Garmin sleep, RHR, clarity, workouts, and drinks from this browser. Consider exporting a JSON backup first.</p>
             <div class="flex items-center gap-2.5 pt-1">
                 <button type="button" onclick="closeConfirmModal()" class="flex-1 min-h-[44px] py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold">Cancel</button>
                 <button type="button" onclick="executeReset()" class="flex-1 min-h-[44px] py-2.5 rounded-xl bg-rose-600 text-white text-xs font-semibold">Yes, Reset</button>
@@ -805,57 +859,13 @@
         // ==========================================
         // 1. CONSTANTS & CONFIGURATION
         // ==========================================
-        const STORAGE_KEY = 'stepdown_30day_tracker_v2';
+        const STORAGE_KEY = 'stepdown_30day_tracker_v2'; // Preserved so existing browser logs migrate automatically
 
-        const PHASES = [
-            {
-                week: 1,
-                title: 'Week 1 · Baseline & Rhythm',
-                daysRange: [1, 7],
-                targetRatio: 0.85,
-                dailyRule: 'Log morning weight, Garmin sleep, RHR & clarity daily; use a 60-minute evening NA buffer before any alcohol.',
-                habits: [
-                    { id: 'buffer60', label: 'Honored 60-Minute Buffer with NA drink first' },
-                    { id: 'measured', label: 'Hit hydration & nutrition targets' },
-                    { id: 'recovery', label: 'Logged morning weight, RHR & Garmin sleep' }
-                ]
-            },
-            {
-                week: 2,
-                title: 'Week 2 · Protect Recovery',
-                daysRange: [8, 14],
-                targetRatio: 0.70,
-                dailyRule: 'Protect 3–4 alcohol-free weeknights to drive down RHR, boost Garmin sleep score, and fuel training.',
-                habits: [
-                    { id: 'weeknightDry', label: 'Protected weeknight recovery guardrail' },
-                    { id: 'naStocked', label: 'Used NA swap (hop water / NA IPA / bitters)' },
-                    { id: 'recovery', label: 'Logged morning recovery & training' }
-                ]
-            },
-            {
-                week: 3,
-                title: 'Week 3 · Strength & Pacing',
-                daysRange: [15, 21],
-                targetRatio: 0.50,
-                dailyRule: 'Focus on progressive overload in workouts, 1-for-1 hydration, and lower-ABV pacing on social nights.',
-                habits: [
-                    { id: 'oneForOne', label: 'Alternated 1-for-1 with sparkling water' },
-                    { id: 'lowAbv', label: 'Chose lower-ABV option or stayed dry' },
-                    { id: 'recovery', label: 'Tracked sleep score & mental clarity' }
-                ]
-            },
-            {
-                week: 4,
-                title: 'Week 4 · Peak Consistency',
-                daysRange: [22, 30],
-                targetRatio: 0.35,
-                dailyRule: 'Lock in sustainable habits: pre-decided social caps, consistent training, and high-clarity mornings.',
-                habits: [
-                    { id: 'preCap', label: 'Set & honored pre-decided drink cap' },
-                    { id: 'naFirst', label: 'Ordered NA drink first at dinner/event' },
-                    { id: 'recovery', label: 'Locked in high-clarity recovery routine' }
-                ]
-            }
+        const DAILY_HABITS = [
+            { id: 'buffer60', label: 'Honored evening NA buffer / hydration first' },
+            { id: 'sleepWindow', label: 'Protected 3-hour pre-sleep wind-down window' },
+            { id: 'recovery', label: 'Logged morning weight, RHR & Garmin sleep' },
+            { id: 'training', label: 'Completed planned movement or strength session' }
         ];
 
         const MODALITIES = [
@@ -866,33 +876,75 @@
             { id: 'recovery', label: 'Walk / Recovery', short: 'Rec', icon: '🚶', group: 'mobility', color: '#2dd4bf' }
         ];
 
-        const CLARITY_SCALE = [
-            { val: 1, label: 'Foggy' },
-            { val: 2, label: 'Hazy' },
-            { val: 3, label: 'Clear' },
-            { val: 4, label: 'Sharp' },
-            { val: 5, label: 'Laser' }
+        const MUSCLE_GROUPS = [
+            {
+                id: 'chest', label: 'Chest', icon: '🫁', targetSets: 8,
+                primaryKeys: ['bench', 'chest', 'pec', 'fly', 'pushup', 'push-up', 'incline press', 'decline press', 'dip'],
+                secondaryKeys: [],
+                suggestions: [
+                    { name: 'Bench Press / Incline DB Press', sets: 4, reps: 8, weight: 135 },
+                    { name: 'Cable Fly / Push-Ups', sets: 3, reps: 12, weight: 40 }
+                ]
+            },
+            {
+                id: 'legs', label: 'Legs', icon: '🦵', targetSets: 10,
+                primaryKeys: ['squat', 'deadlift', 'rdl', 'lunge', 'leg press', 'leg curl', 'leg ext', 'calf', 'hip thrust', 'split squat', 'hamstring', 'quad', 'glute'],
+                secondaryKeys: [],
+                suggestions: [
+                    { name: 'Squat / Split Squat', sets: 4, reps: 8, weight: 185 },
+                    { name: 'Deadlift / RDL', sets: 3, reps: 8, weight: 185 }
+                ]
+            },
+            {
+                id: 'back', label: 'Back', icon: '🦅', targetSets: 8,
+                primaryKeys: ['pull-up', 'pullup', 'chin-up', 'row', 'lat pulldown', 'pulldown', 'back', 'face pull', 'shrug'],
+                secondaryKeys: ['deadlift', 'rdl'],
+                suggestions: [
+                    { name: 'Pull-ups / Lat Pulldown', sets: 3, reps: 8, weight: 140 },
+                    { name: 'Barbell / Dumbbell Row', sets: 3, reps: 10, weight: 135 }
+                ]
+            },
+            {
+                id: 'shoulders', label: 'Shoulders', icon: '⛰️', targetSets: 6,
+                primaryKeys: ['overhead', 'ohp', 'shoulder', 'military', 'lateral raise', 'lat raise', 'delt', 'arnold', 'upright row', 'face pull'],
+                secondaryKeys: ['incline press', 'bench'],
+                suggestions: [
+                    { name: 'Overhead Press', sets: 3, reps: 8, weight: 95 },
+                    { name: 'Lateral Raises', sets: 3, reps: 15, weight: 20 }
+                ]
+            },
+            {
+                id: 'biceps', label: 'Biceps', icon: '💪', targetSets: 6,
+                primaryKeys: ['bicep', 'curl', 'hammer', 'preacher', 'chin-up'],
+                secondaryKeys: ['pull-up', 'pullup', 'row', 'pulldown'],
+                suggestions: [
+                    { name: 'Incline DB / Barbell Bicep Curls', sets: 3, reps: 10, weight: 35 },
+                    { name: 'Hammer Curls', sets: 3, reps: 12, weight: 30 }
+                ]
+            },
+            {
+                id: 'triceps', label: 'Triceps', icon: '🔱', targetSets: 6,
+                primaryKeys: ['tricep', 'pushdown', 'skull', 'overhead ext', 'close grip', 'dip', 'kickback'],
+                secondaryKeys: ['bench', 'overhead', 'ohp', 'pushup', 'push-up'],
+                suggestions: [
+                    { name: 'Tricep Rope Pushdown', sets: 3, reps: 12, weight: 50 },
+                    { name: 'Overhead Tricep Extension / Dips', sets: 3, reps: 10, weight: 40 }
+                ]
+            },
+            {
+                id: 'core', label: 'Core', icon: '🛡️', targetSets: 4,
+                primaryKeys: ['core', 'ab', 'plank', 'crunch', 'pallof', 'hanging leg', 'plyo', 'carry'],
+                secondaryKeys: [],
+                suggestions: [
+                    { name: 'Hanging Leg Raise / Cable Crunch', sets: 3, reps: 12, weight: 25 },
+                    { name: 'Weighted Plank / Pallof Press', sets: 3, reps: 10, weight: 25 }
+                ]
+            }
         ];
 
-        const ENERGY_SCALE = [
-            { val: 1, label: 'Drained' },
-            { val: 2, label: 'Low' },
-            { val: 3, label: 'Steady' },
-            { val: 4, label: 'High' },
-            { val: 5, label: 'Peak' }
-        ];
+        let currentSuggestedWorkout = null;
 
-        // Default Application State
-        let appState = {
-            baselineWeekly: 14,
-            startDate: new Date().toISOString().split('T')[0],
-            weightUnit: 'lbs',
-            startingWeight: null,
-            goalWeight: null,
-            logs: {}
-        };
-
-        let activeModalDay = 1;
+        let activeModalDate = getTodayKey();
         let tempDayDraft = null;
         let modalDirty = false;
         let lastFocusedModalSection = null;
@@ -900,13 +952,12 @@
         let setupUnitTemp = 'lbs';
 
         // ==========================================
-        // 2. HELPERS & DATA NORMALIZATION
+        // 3. NORMALIZATION & AUTO-MIGRATION
         // ==========================================
         function normalizeSleepScore(rawVal) {
             if (rawVal === undefined || rawVal === null || rawVal === '') return null;
             const num = Number(rawVal);
             if (isNaN(num)) return null;
-            // Auto-migrate legacy 1-5 sleep ratings to Garmin 0-100 scale
             if (num >= 1 && num <= 5) {
                 const legacyMap = { 1: 45, 2: 60, 3: 75, 4: 85, 5: 93 };
                 return legacyMap[Math.round(num)] || 75;
@@ -916,10 +967,11 @@
 
         function normalizeWorkout(rawWorkout) {
             if (!rawWorkout || typeof rawWorkout !== 'object') {
-                return { modalities: [], duration: 0, rpe: '', lifts: [], notes: '' };
+                return { modalities: [], muscleGroups: [], duration: 0, rpe: '', lifts: [], notes: '' };
             }
             return {
                 modalities: Array.isArray(rawWorkout.modalities) ? rawWorkout.modalities : [],
+                muscleGroups: Array.isArray(rawWorkout.muscleGroups) ? rawWorkout.muscleGroups : [],
                 duration: Number(rawWorkout.duration) || 0,
                 rpe: rawWorkout.rpe !== undefined && rawWorkout.rpe !== null ? String(rawWorkout.rpe) : '',
                 lifts: Array.isArray(rawWorkout.lifts) ? rawWorkout.lifts.map(l => ({
@@ -932,6 +984,42 @@
             };
         }
 
+        function inferMuscleGroupsFromWorkout(workout) {
+            const w = normalizeWorkout(workout);
+            const primarySets = {};
+            const secondarySets = {};
+            MUSCLE_GROUPS.forEach(mg => {
+                primarySets[mg.id] = 0;
+                secondarySets[mg.id] = 0;
+            });
+
+            w.lifts.forEach(l => {
+                const name = String(l.name || '').toLowerCase();
+                const sets = Math.max(1, Number(l.sets) || 0);
+                if (!name) return;
+                MUSCLE_GROUPS.forEach(mg => {
+                    if (mg.primaryKeys.some(k => name.includes(k))) {
+                        primarySets[mg.id] += sets;
+                    } else if (mg.secondaryKeys.some(k => name.includes(k))) {
+                        secondarySets[mg.id] += sets * 0.5;
+                    }
+                });
+            });
+
+            // Include manually selected muscle group tags (counts as at least 3 direct sets if no lift matched)
+            const inferredSet = new Set();
+            MUSCLE_GROUPS.forEach(mg => {
+                if (primarySets[mg.id] > 0) inferredSet.add(mg.id);
+            });
+            w.muscleGroups.forEach(id => {
+                if (primarySets[id] !== undefined && primarySets[id] === 0) {
+                    primarySets[id] += 3;
+                }
+            });
+
+            return { primarySets, secondarySets, inferredIds: Array.from(inferredSet) };
+        }
+
         function calcWorkoutVolume(workout) {
             if (!workout || !Array.isArray(workout.lifts)) return 0;
             return workout.lifts.reduce((sum, l) => {
@@ -942,6 +1030,7 @@
         function isActiveWorkout(workout) {
             if (!workout) return false;
             return (workout.modalities && workout.modalities.length > 0) ||
+                   (workout.muscleGroups && workout.muscleGroups.length > 0) ||
                    (Number(workout.duration) > 0) ||
                    (workout.lifts && workout.lifts.length > 0);
         }
@@ -951,27 +1040,23 @@
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
-                    const normalizedLogs = {};
-                    if (parsed.logs && typeof parsed.logs === 'object') {
-                        for (const [k, v] of Object.entries(parsed.logs)) {
-                            normalizedLogs[k] = {
-                                ...v,
-                                rhr: v.rhr !== undefined && v.rhr !== null && v.rhr !== '' ? Number(v.rhr) : null,
-                                sleepQuality: normalizeSleepScore(v.sleepQuality),
-                                mentalClarity: v.mentalClarity !== undefined && v.mentalClarity !== null && v.mentalClarity !== '' ? Number(v.mentalClarity) : null,
-                                energyLevel: v.energyLevel !== undefined && v.energyLevel !== null && v.energyLevel !== '' ? Number(v.energyLevel) : null,
-                                workout: normalizeWorkout(v.workout)
-                            };
-                        }
-                    }
+                    const startDate = isIsoDateKey(parsed.startDate) ? parsed.startDate : getTodayKey();
+                    const baseline = Number(parsed.baselineWeekly) || 14;
+                    const weeklyTarget = parsed.weeklyTarget !== undefined && parsed.weeklyTarget !== null
+                        ? Math.max(0, Number(parsed.weeklyTarget))
+                        : Math.max(1, Math.round(baseline * 0.5));
+                    const migratedLogs = normalizeLogsObject(parsed.logs, startDate);
+
                     appState = {
-                        baselineWeekly: Number(parsed.baselineWeekly) || 14,
-                        startDate: parsed.startDate || new Date().toISOString().split('T')[0],
+                        baselineWeekly: baseline,
+                        weeklyTarget,
+                        startDate,
                         weightUnit: parsed.weightUnit === 'kg' ? 'kg' : 'lbs',
                         startingWeight: parsed.startingWeight !== null && parsed.startingWeight !== undefined ? Number(parsed.startingWeight) : null,
                         goalWeight: parsed.goalWeight !== null && parsed.goalWeight !== undefined ? Number(parsed.goalWeight) : null,
-                        logs: normalizedLogs
+                        logs: migratedLogs
                     };
+                    saveState();
                 }
             } catch (e) {
                 console.error('Failed to load state from localStorage:', e);
@@ -986,54 +1071,58 @@
             }
         }
 
-        function getPhaseForDay(dayNum) {
-            return PHASES.find(p => dayNum >= p.daysRange[0] && dayNum <= p.daysRange[1]) || PHASES[0];
+        function getDailyTarget() {
+            return (Number(appState.weeklyTarget) || 0) / 7;
         }
 
-        function getPhaseDaysCount(phase) {
-            return phase.daysRange[1] - phase.daysRange[0] + 1;
+        function getAllLoggedDateKeysSorted() {
+            return Object.keys(appState.logs)
+                .filter(k => isIsoDateKey(k) && appState.logs[k]?.logged)
+                .sort();
         }
 
-        function getPhaseBaselineDrinks(phase) {
-            const days = getPhaseDaysCount(phase);
-            return Math.round((appState.baselineWeekly / 7) * days);
+        function getRangeDateKeys(rangeKey = activeTimeRange) {
+            const todayKey = getTodayKey();
+            let startKey;
+
+            if (rangeKey === '7d') {
+                startKey = addDaysToKey(todayKey, -6);
+            } else if (rangeKey === '30d') {
+                startKey = addDaysToKey(todayKey, -29);
+            } else if (rangeKey === '90d') {
+                startKey = addDaysToKey(todayKey, -89);
+            } else {
+                // All-Time: earliest logged date or startDate (minimum 14-day span ending today)
+                const loggedKeys = getAllLoggedDateKeysSorted();
+                const earliestLog = loggedKeys.length ? loggedKeys[0] : todayKey;
+                const candidate = (isIsoDateKey(appState.startDate) && appState.startDate < earliestLog)
+                    ? appState.startDate
+                    : earliestLog;
+                const minStart = addDaysToKey(todayKey, -13);
+                startKey = candidate < minStart ? candidate : minStart;
+            }
+
+            const endKey = todayKey;
+            const keys = [];
+            let cursor = startKey;
+            let guard = 0;
+            while (cursor <= endKey && guard < 2000) {
+                keys.push(cursor);
+                cursor = addDaysToKey(cursor, 1);
+                guard++;
+            }
+            return keys;
         }
 
-        function getPhaseTargetDrinks(phase) {
-            const days = getPhaseDaysCount(phase);
-            return Math.max(1, Math.round(((appState.baselineWeekly * phase.targetRatio) / 7) * days));
-        }
-
-        function getDailyTargetForDay(dayNum) {
-            const p = getPhaseForDay(dayNum);
-            return (appState.baselineWeekly * p.targetRatio) / 7;
-        }
-
-        function getDateForDay(dayNum) {
-            const parts = (appState.startDate || new Date().toISOString().split('T')[0]).split('-');
-            const dt = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-            dt.setDate(dt.getDate() + (dayNum - 1));
-            return dt;
-        }
-
-        function formatShortDate(dateObj) {
-            return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
-
-        function getActiveDayNumber() {
-            const parts = (appState.startDate || new Date().toISOString().split('T')[0]).split('-');
-            const start = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-            const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
-            return Math.max(1, Math.min(30, diffDays));
-        }
-
-        function getSuggestedDefaultWeight(dayNum) {
-            for (let d = dayNum - 1; d >= 1; d--) {
-                const entry = appState.logs[d];
-                if (entry && entry.logged && entry.weight !== null && entry.weight !== undefined && entry.weight !== '') {
-                    return Number(entry.weight);
+        function getSuggestedDefaultWeight(dateKey) {
+            const loggedKeys = getAllLoggedDateKeysSorted();
+            for (let i = loggedKeys.length - 1; i >= 0; i--) {
+                const k = loggedKeys[i];
+                if (k < dateKey) {
+                    const entry = appState.logs[k];
+                    if (entry && entry.weight !== null && entry.weight !== undefined && entry.weight !== '') {
+                        return Number(entry.weight);
+                    }
                 }
             }
             return appState.startingWeight !== null ? Number(appState.startingWeight) : null;
@@ -1048,9 +1137,23 @@
         }
 
         // ==========================================
-        // 3. COMPUTATIONS & DASHBOARD RENDERING
+        // 4. TIMEFRAME COMPUTATIONS
         // ==========================================
-        function computeRecoveryStats() {
+        function setTimeRange(rangeKey) {
+            activeTimeRange = rangeKey;
+            ['7d', '30d', '90d', 'all'].forEach(k => {
+                const btn = document.getElementById(`range-btn-${k}`);
+                if (!btn) return;
+                if (k === rangeKey) {
+                    btn.className = 'min-h-[38px] px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition whitespace-nowrap';
+                } else {
+                    btn.className = 'min-h-[38px] px-2.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap';
+                }
+            });
+            renderAll();
+        }
+
+        function computeRecoveryStatsForKeys(dateKeys) {
             const rhrEntries = [];
             const sleepEntries = [];
             const clarityEntries = [];
@@ -1061,11 +1164,12 @@
             const dryClarity = [], drinkClarity = [];
             const dryEnergy = [], drinkEnergy = [];
 
-            for (let d = 1; d <= 30; d++) {
-                const entry = appState.logs[d];
-                if (!entry || !entry.logged) continue;
+            dateKeys.forEach(dateKey => {
+                const entry = appState.logs[dateKey];
+                if (!entry || !entry.logged) return;
 
-                const priorEntry = d > 1 ? appState.logs[d - 1] : entry;
+                const prevKey = addDaysToKey(dateKey, -1);
+                const priorEntry = appState.logs[prevKey];
                 const priorDrinks = priorEntry && priorEntry.logged ? Number(priorEntry.drinks || 0) : Number(entry.drinks || 0);
                 const wasDryNight = priorDrinks === 0;
 
@@ -1075,34 +1179,30 @@
                 const energy = entry.energyLevel ? Number(entry.energyLevel) : null;
 
                 if (rhr !== null && !isNaN(rhr)) {
-                    rhrEntries.push({ day: d, val: rhr });
-                    if (wasDryNight) dryRhr.push(rhr);
-                    else drinkRhr.push(rhr);
+                    rhrEntries.push(rhr);
+                    if (wasDryNight) dryRhr.push(rhr); else drinkRhr.push(rhr);
                 }
                 if (sleep !== null && !isNaN(sleep)) {
-                    sleepEntries.push({ day: d, val: sleep });
-                    if (wasDryNight) drySleep.push(sleep);
-                    else drinkSleep.push(sleep);
+                    sleepEntries.push(sleep);
+                    if (wasDryNight) drySleep.push(sleep); else drinkSleep.push(sleep);
                 }
                 if (clarity !== null && !isNaN(clarity)) {
-                    clarityEntries.push({ day: d, val: clarity });
-                    if (wasDryNight) dryClarity.push(clarity);
-                    else drinkClarity.push(clarity);
+                    clarityEntries.push(clarity);
+                    if (wasDryNight) dryClarity.push(clarity); else drinkClarity.push(clarity);
                 }
                 if (energy !== null && !isNaN(energy)) {
-                    energyEntries.push({ day: d, val: energy });
-                    if (wasDryNight) dryEnergy.push(energy);
-                    else drinkEnergy.push(energy);
+                    energyEntries.push(energy);
+                    if (wasDryNight) dryEnergy.push(energy); else drinkEnergy.push(energy);
                 }
-            }
+            });
 
             const avg = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
 
             return {
-                avgRhr: avg(rhrEntries.map(x => x.val)),
-                avgSleep: avg(sleepEntries.map(x => x.val)),
-                avgClarity: avg(clarityEntries.map(x => x.val)),
-                avgEnergy: avg(energyEntries.map(x => x.val)),
+                avgRhr: avg(rhrEntries),
+                avgSleep: avg(sleepEntries),
+                avgClarity: avg(clarityEntries),
+                avgEnergy: avg(energyEntries),
                 dryAvgRhr: avg(dryRhr),
                 drinkAvgRhr: avg(drinkRhr),
                 dryAvgSleep: avg(drySleep),
@@ -1114,65 +1214,166 @@
             };
         }
 
-        function computeWeightSeries() {
-            const series = [];
+        function computeFullWeightTrendMap() {
+            // Compute continuous EMA across ALL logged dates chronologically so any sliced window is smooth
+            const allLogged = getAllLoggedDateKeysSorted();
+            const map = {};
             let ema = appState.startingWeight !== null ? Number(appState.startingWeight) : null;
             const alpha = 0.25;
 
-            for (let d = 1; d <= 30; d++) {
-                const entry = appState.logs[d];
-                const raw = (entry && entry.logged && entry.weight !== null && entry.weight !== undefined && entry.weight !== '')
+            allLogged.forEach(dateKey => {
+                const entry = appState.logs[dateKey];
+                const raw = (entry && entry.weight !== null && entry.weight !== undefined && entry.weight !== '')
                     ? Number(entry.weight)
                     : null;
-
                 if (raw !== null && !isNaN(raw)) {
-                    if (ema === null) {
-                        ema = raw;
-                    } else {
-                        ema = alpha * raw + (1 - alpha) * ema;
-                    }
+                    ema = ema === null ? raw : (alpha * raw + (1 - alpha) * ema);
                 }
-                series.push({
-                    day: d,
+                map[dateKey] = {
                     rawWeight: raw,
                     trendWeight: ema !== null ? Math.round(ema * 10) / 10 : null
-                });
-            }
-            return series;
+                };
+            });
+            return map;
         }
 
+        function computeWeightSeriesForKeys(dateKeys) {
+            const fullMap = computeFullWeightTrendMap();
+            const allKeys = Object.keys(fullMap).sort();
+            let lastTrend = appState.startingWeight !== null ? Number(appState.startingWeight) : null;
+
+            // Carry forward last known trend prior to window start
+            if (dateKeys.length > 0) {
+                for (let i = 0; i < allKeys.length; i++) {
+                    if (allKeys[i] < dateKeys[0] && fullMap[allKeys[i]].trendWeight !== null) {
+                        lastTrend = fullMap[allKeys[i]].trendWeight;
+                    }
+                }
+            }
+
+            return dateKeys.map(dateKey => {
+                const hit = fullMap[dateKey];
+                if (hit && hit.trendWeight !== null) lastTrend = hit.trendWeight;
+                return {
+                    dateKey,
+                    rawWeight: hit ? hit.rawWeight : null,
+                    trendWeight: lastTrend
+                };
+            });
+        }
+
+        // Group date keys into Weeks (Short/Med) or Months (Long/All) for Period Chart & Table
+        function buildPeriodBuckets(dateKeys) {
+            const useMonths = dateKeys.length > 45;
+            const bucketsMap = {};
+            const order = [];
+
+            dateKeys.forEach(dateKey => {
+                const dt = parseDateKey(dateKey);
+                let bucketKey, label;
+                if (useMonths) {
+                    bucketKey = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}`;
+                    label = dt.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+                } else {
+                    // ISO week starting Monday
+                    const dayIdx = (dt.getDay() + 6) % 7;
+                    const mon = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - dayIdx);
+                    bucketKey = toDateKey(mon);
+                    label = `Wk ${mon.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+                }
+
+                if (!bucketsMap[bucketKey]) {
+                    bucketsMap[bucketKey] = { key: bucketKey, label, dateKeys: [] };
+                    order.push(bucketKey);
+                }
+                bucketsMap[bucketKey].dateKeys.push(dateKey);
+            });
+
+            return {
+                mode: useMonths ? 'month' : 'week',
+                buckets: order.map(k => {
+                    const b = bucketsMap[k];
+                    const spanDays = b.dateKeys.length;
+                    let loggedDays = 0, drinks = 0, dryDays = 0, activeMins = 0;
+                    const weights = [], sleeps = [], rhrs = [];
+
+                    b.dateKeys.forEach(dk => {
+                        const e = appState.logs[dk];
+                        if (e?.logged) {
+                            loggedDays++;
+                            const dVal = Number(e.drinks || 0);
+                            drinks += dVal;
+                            if (dVal === 0) dryDays++;
+                            if (e.weight !== null && e.weight !== undefined && e.weight !== '') weights.push(Number(e.weight));
+                            if (e.sleepQuality !== null && e.sleepQuality !== undefined && e.sleepQuality !== '') sleeps.push(Number(e.sleepQuality));
+                            if (e.rhr !== null && e.rhr !== undefined && e.rhr !== '') rhrs.push(Number(e.rhr));
+                            activeMins += Number(normalizeWorkout(e.workout).duration || 0);
+                        }
+                    });
+
+                    const avg = arr => arr.length ? arr.reduce((a, c) => a + c, 0) / arr.length : null;
+                    return {
+                        label: b.label,
+                        spanDays,
+                        loggedDays,
+                        baseline: Math.round(((appState.baselineWeekly / 7) * spanDays) * 10) / 10,
+                        target: Math.round(((appState.weeklyTarget / 7) * spanDays) * 10) / 10,
+                        actual: Math.round(drinks * 10) / 10,
+                        dryDays,
+                        avgWeight: avg(weights),
+                        avgSleep: avg(sleeps),
+                        avgRhr: avg(rhrs),
+                        activeMins
+                    };
+                })
+            };
+        }
+
+        // ==========================================
+        // 5. MAIN RENDER ORCHESTRATION
+        // ==========================================
         function renderAll() {
-            renderHeaderAndKPIs();
-            renderWeeksGrid();
-            renderAnalyticsTable();
-            renderTopLiftsSummary();
-            renderRecoveryComparisonCard();
+            const dateKeys = getRangeDateKeys(activeTimeRange);
+            renderHeaderAndKPIs(dateKeys);
+            renderCalendarMonth();
+            renderAnalyticsTable(dateKeys);
+            renderTopLiftsSummary(dateKeys);
+            renderMuscleGroupCoach();
+            renderRecoveryComparisonCard(dateKeys);
             if (!document.getElementById('view-analytics').classList.contains('hidden')) {
-                drawAllCharts();
+                drawAllCharts(dateKeys);
             }
         }
 
-        function renderHeaderAndKPIs() {
-            const activeDay = getActiveDayNumber();
-            const activePhase = getPhaseForDay(activeDay);
-            document.getElementById('header-subtitle').textContent = `Day ${activeDay} of 30 · Body, Recovery & Training`;
+        function renderHeaderAndKPIs(dateKeys) {
+            const totalLoggedAllTime = getAllLoggedDateKeysSorted().length;
+            const todayLabel = formatShortDateKey(getTodayKey());
+            document.getElementById('header-subtitle').textContent = `${todayLabel} · ${totalLoggedAllTime} total days logged`;
 
-            // Active week alcohol budget
-            let weekActual = 0;
-            for (let d = activePhase.daysRange[0]; d <= activePhase.daysRange[1]; d++) {
-                if (appState.logs[d]?.logged) weekActual += Number(appState.logs[d].drinks || 0);
+            if (dateKeys.length > 0) {
+                const startLbl = formatShortDateKey(dateKeys[0]);
+                const endLbl = formatShortDateKey(dateKeys[dateKeys.length - 1]);
+                document.getElementById('range-date-span').textContent = `${startLbl} – ${endLbl} (${dateKeys.length}d)`;
             }
-            const weekTarget = getPhaseTargetDrinks(activePhase);
-            document.getElementById('kpi-week-label').textContent = `W${activePhase.week} Alcohol Budget`;
-            document.getElementById('kpi-week-actual').textContent = Math.round(weekActual * 10) / 10;
+
+            // Rolling 7-Day Alcohol Pace KPI (always last 7 days ending today)
+            const last7Keys = getRangeDateKeys('7d');
+            let last7Drinks = 0;
+            last7Keys.forEach(k => {
+                if (appState.logs[k]?.logged) last7Drinks += Number(appState.logs[k].drinks || 0);
+            });
+            const weekTarget = Math.max(0, Number(appState.weeklyTarget) || 0);
+            document.getElementById('kpi-week-actual').textContent = Math.round(last7Drinks * 10) / 10;
             document.getElementById('kpi-week-target').textContent = `/ ${weekTarget} max`;
 
-            const pct = Math.min(100, (weekActual / Math.max(1, weekTarget)) * 100);
+            const pct = weekTarget === 0
+                ? (last7Drinks > 0 ? 100 : 0)
+                : Math.min(100, (last7Drinks / weekTarget) * 100);
             const bar = document.getElementById('kpi-week-bar');
             const badge = document.getElementById('kpi-week-badge');
             bar.style.width = `${pct}%`;
 
-            if (weekActual <= weekTarget) {
+            if (last7Drinks <= weekTarget) {
                 bar.className = 'bg-emerald-500 h-full rounded-full transition-all duration-300';
                 badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300';
                 badge.textContent = 'On Track';
@@ -1182,7 +1383,7 @@
                 badge.textContent = 'Over Cap';
             }
 
-            // Cumulative metrics
+            // Selected Horizon Metrics
             let loggedDaysCount = 0;
             let totalDrinks = 0;
             let totalNa = 0;
@@ -1195,10 +1396,12 @@
             let strengthSessions = 0;
             let cardioSessions = 0;
 
-            for (let d = 1; d <= 30; d++) {
-                const entry = appState.logs[d];
-                if (!entry || !entry.logged) continue;
-
+            dateKeys.forEach(dk => {
+                const entry = appState.logs[dk];
+                if (!entry || !entry.logged) {
+                    currentStreak = 0;
+                    return;
+                }
                 loggedDaysCount++;
                 const drk = Number(entry.drinks || 0);
                 totalDrinks += drk;
@@ -1220,7 +1423,7 @@
                     if (w.modalities.includes('strength') || w.lifts.length > 0) strengthSessions++;
                     if (w.modalities.includes('cycling') || w.modalities.includes('cardio')) cardioSessions++;
                 }
-            }
+            });
 
             const expectedBaseline = (appState.baselineWeekly / 7) * loggedDaysCount;
             const savedDrinks = Math.max(0, Math.round((expectedBaseline - totalDrinks) * 10) / 10);
@@ -1233,16 +1436,19 @@
             document.getElementById('kpi-streak').textContent = `${bestStreak}d`;
             document.getElementById('kpi-na-swaps').textContent = `${totalNa} NA drinks swapped`;
 
-            // Weight KPI
-            const weightSeries = computeWeightSeries();
+            // Weight KPI (Delta over selected horizon)
+            const weightSeries = computeWeightSeriesForKeys(dateKeys);
             const loggedWeights = weightSeries.filter(x => x.rawWeight !== null);
             const weightEl = document.getElementById('kpi-weight');
             const weightDeltaEl = document.getElementById('kpi-weight-delta');
             const weightTrendEl = document.getElementById('kpi-weight-trend');
 
             if (loggedWeights.length > 0) {
+                const firstInRange = loggedWeights[0];
                 const latest = loggedWeights[loggedWeights.length - 1];
-                const startRef = appState.startingWeight !== null ? Number(appState.startingWeight) : loggedWeights[0].rawWeight;
+                const startRef = activeTimeRange === 'all' && appState.startingWeight !== null
+                    ? Number(appState.startingWeight)
+                    : firstInRange.rawWeight;
                 const delta = Math.round((latest.rawWeight - startRef) * 10) / 10;
 
                 weightEl.textContent = latest.rawWeight.toFixed(1);
@@ -1255,7 +1461,7 @@
                 weightEl.textContent = Number(appState.startingWeight).toFixed(1);
                 weightDeltaEl.textContent = appState.weightUnit;
                 weightDeltaEl.className = 'text-xs font-semibold text-slate-400';
-                weightTrendEl.textContent = 'Log daily weight to track trend';
+                weightTrendEl.textContent = 'Log weight in this window';
             } else {
                 weightEl.textContent = '—';
                 weightDeltaEl.textContent = appState.weightUnit;
@@ -1272,7 +1478,7 @@
             document.getElementById('kpi-lift-volume').textContent = `${volFormatted} ${appState.weightUnit} · ${strengthSessions} str / ${cardioSessions} endur`;
 
             // Recovery & Clarity KPI
-            const recStats = computeRecoveryStats();
+            const recStats = computeRecoveryStatsForKeys(dateKeys);
             const rhrEl = document.getElementById('kpi-rhr');
             const rhrDeltaEl = document.getElementById('kpi-rhr-delta');
             const recScoresEl = document.getElementById('kpi-recovery-scores');
@@ -1306,47 +1512,96 @@
             recScoresEl.textContent = `Sleep ${sleepStr} · Clarity ${clarityStr}`;
         }
 
-        function renderWeeksGrid() {
-            const container = document.getElementById('weeks-container');
-            container.innerHTML = '';
-            const activeDay = getActiveDayNumber();
+        // ==========================================
+        // 6. UNLIMITED MONTHLY CALENDAR VIEW
+        // ==========================================
+        function changeCalendarMonth(delta) {
+            const dt = new Date(calendarViewYear, calendarViewMonth + delta, 1);
+            calendarViewYear = dt.getFullYear();
+            calendarViewMonth = dt.getMonth();
+            renderCalendarMonth();
+        }
 
-            PHASES.forEach(phase => {
-                const targetTotal = getPhaseTargetDrinks(phase);
-                const dailyPaceLimit = getDailyTargetForDay(phase.daysRange[0]);
-                let phaseLoggedDrinks = 0;
+        function jumpCalendarToToday() {
+            const now = new Date();
+            calendarViewYear = now.getFullYear();
+            calendarViewMonth = now.getMonth();
+            renderCalendarMonth();
+        }
 
-                for (let d = phase.daysRange[0]; d <= phase.daysRange[1]; d++) {
-                    if (appState.logs[d]?.logged) phaseLoggedDrinks += Number(appState.logs[d].drinks || 0);
+        function renderCalendarMonth() {
+            const container = document.getElementById('calendar-container');
+            const titleEl = document.getElementById('calendar-month-title');
+            const summaryEl = document.getElementById('calendar-month-summary');
+            if (!container) return;
+
+            const monthStart = new Date(calendarViewYear, calendarViewMonth, 1);
+            const daysInMonth = new Date(calendarViewYear, calendarViewMonth + 1, 0).getDate();
+            titleEl.textContent = monthStart.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            const todayKey = getTodayKey();
+            const dailyPaceLimit = getDailyTarget();
+
+            let monthDry = 0, monthDrinks = 0, monthWorkouts = 0;
+            const monthDateKeys = [];
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dk = toDateKey(new Date(calendarViewYear, calendarViewMonth, d));
+                monthDateKeys.push(dk);
+                const e = appState.logs[dk];
+                if (e?.logged) {
+                    const drk = Number(e.drinks || 0);
+                    monthDrinks += drk;
+                    if (drk === 0) monthDry++;
+                    if (isActiveWorkout(normalizeWorkout(e.workout))) monthWorkouts++;
                 }
+            }
+            summaryEl.textContent = `${monthDry} dry days · ${Math.round(monthDrinks * 10) / 10} drinks · ${monthWorkouts} workouts`;
 
-                const phaseCard = document.createElement('div');
-                phaseCard.className = 'bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3.5';
+            // Group days of the month into calendar weeks (Sun-Sat) for clean readability
+            const weeks = [];
+            let currentWeek = [];
+            monthDateKeys.forEach((dk, idx) => {
+                const dt = parseDateKey(dk);
+                currentWeek.push(dk);
+                if (dt.getDay() === 6 || idx === monthDateKeys.length - 1) {
+                    weeks.push(currentWeek);
+                    currentWeek = [];
+                }
+            });
 
-                const statusCls = phaseLoggedDrinks <= targetTotal
+            container.innerHTML = '';
+            weeks.forEach((wkKeys, wkIdx) => {
+                let wkDrinks = 0;
+                wkKeys.forEach(dk => {
+                    if (appState.logs[dk]?.logged) wkDrinks += Number(appState.logs[dk].drinks || 0);
+                });
+                const wkCap = Math.round(((appState.weeklyTarget / 7) * wkKeys.length) * 10) / 10;
+                const statusCls = wkDrinks <= wkCap
                     ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-300'
                     : 'bg-rose-50 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300';
 
+                const wkCard = document.createElement('div');
+                wkCard.className = 'bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3';
+
                 const headerHtml = `
                     <div class="flex flex-wrap items-center justify-between gap-2">
-                        <div>
-                            <h3 class="text-sm sm:text-base font-bold">${phase.title}</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Days ${phase.daysRange[0]}–${phase.daysRange[1]} · Budget ≤${targetTotal} drinks</p>
-                        </div>
-                        <span class="text-xs font-bold px-2.5 py-1 rounded-full ${statusCls}">
-                            ${Math.round(phaseLoggedDrinks * 10) / 10} / ${targetTotal} drinks
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                            Week ${wkIdx + 1} · ${formatShortDateKey(wkKeys[0])} – ${formatShortDateKey(wkKeys[wkKeys.length - 1])}
+                        </span>
+                        <span class="text-xs font-bold px-2.5 py-0.5 rounded-full ${statusCls}">
+                            ${Math.round(wkDrinks * 10) / 10} / ${wkCap} drinks
                         </span>
                     </div>
                 `;
 
                 let gridHtml = `<div class="grid grid-cols-2 min-[420px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2.5">`;
 
-                for (let d = phase.daysRange[0]; d <= phase.daysRange[1]; d++) {
-                    const entry = appState.logs[d];
-                    const dateObj = getDateForDay(d);
-                    const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
-                    const dateLabel = formatShortDate(dateObj);
-                    const isToday = d === activeDay;
+                wkKeys.forEach(dk => {
+                    const entry = appState.logs[dk];
+                    const dt = parseDateKey(dk);
+                    const dayNum = dt.getDate();
+                    const dayName = dt.toLocaleDateString('en-US', { weekday: 'short' });
+                    const isToday = dk === todayKey;
 
                     let cardStyle = 'bg-slate-50 dark:bg-slate-850 border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300';
                     let statusBadge = `<span class="text-xs text-slate-400 font-medium">Tap to log</span>`;
@@ -1366,7 +1621,7 @@
                         if (drinks === 0) {
                             cardStyle = 'bg-emerald-500/12 dark:bg-emerald-500/15 border-emerald-500/50 text-emerald-900 dark:text-emerald-100';
                             statusBadge = `<span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">0 Dry ✓</span>`;
-                        } else if (drinks <= Math.ceil(dailyPaceLimit)) {
+                        } else if (drinks <= Math.max(1, Math.ceil(dailyPaceLimit))) {
                             cardStyle = 'bg-amber-400/15 dark:bg-amber-400/15 border-amber-400/60 text-amber-950 dark:text-amber-100';
                             statusBadge = `<span class="text-xs font-bold text-amber-600 dark:text-amber-400">${drinks} drk</span>`;
                         } else {
@@ -1405,10 +1660,10 @@
 
                     gridHtml += `
                         <div class="relative rounded-2xl border ${cardStyle} ${todayRing} flex flex-col justify-between min-h-[120px] transition hover:shadow-xs">
-                            <button type="button" onclick="openDayModal(${d})" class="flex-1 w-full p-2.5 pb-1.5 text-left flex flex-col justify-between active:opacity-80">
+                            <button type="button" onclick="openDayModal('${dk}')" class="flex-1 w-full p-2.5 pb-1.5 text-left flex flex-col justify-between active:opacity-80">
                                 <div class="w-full flex items-center justify-between gap-1">
-                                    <span class="text-xs font-bold">D${d}</span>
-                                    <span class="text-[10px] opacity-70 truncate">${dayName} · ${dateLabel}</span>
+                                    <span class="text-xs font-bold">${dayName} ${dayNum}</span>
+                                    ${isToday ? '<span class="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-600 text-white">Today</span>' : ''}
                                 </div>
                                 <div class="my-1.5 leading-tight">
                                     ${statusBadge}
@@ -1417,28 +1672,28 @@
                                 </div>
                             </button>
                             <div class="px-2 pb-2 pt-0.5 grid grid-cols-2 gap-1">
-                                <button type="button" onclick="event.stopPropagation(); quickToggleDryDay(${d})" class="min-h-[30px] px-1.5 py-1 rounded-lg text-[10px] font-semibold transition active:scale-95 truncate ${isDryLogged ? 'bg-emerald-600 text-white' : 'bg-white/80 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700'}">
+                                <button type="button" onclick="event.stopPropagation(); quickToggleDryDay('${dk}')" class="min-h-[30px] px-1.5 py-1 rounded-lg text-[10px] font-semibold transition active:scale-95 truncate ${isDryLogged ? 'bg-emerald-600 text-white' : 'bg-white/80 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700'}">
                                     ${isDryLogged ? '✓ Dry' : '0-Drink'}
                                 </button>
-                                <button type="button" onclick="event.stopPropagation(); openDayModal(${d}, 'section-recovery')" class="min-h-[30px] px-1.5 py-1 rounded-lg text-[10px] font-semibold transition active:scale-95 truncate bg-rose-50/90 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60">
+                                <button type="button" onclick="event.stopPropagation(); openDayModal('${dk}', 'section-recovery')" class="min-h-[30px] px-1.5 py-1 rounded-lg text-[10px] font-semibold transition active:scale-95 truncate bg-rose-50/90 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60">
                                     ❤️ Sleep/HR
                                 </button>
                             </div>
                         </div>
                     `;
-                }
+                });
 
                 gridHtml += `</div>`;
-                phaseCard.innerHTML = headerHtml + gridHtml;
-                container.appendChild(phaseCard);
+                wkCard.innerHTML = headerHtml + gridHtml;
+                container.appendChild(wkCard);
             });
         }
 
         // ==========================================
-        // 4. DAILY LOGGING MODAL INTERACTIONS
+        // 7. DAILY LOGGING MODAL INTERACTIONS
         // ==========================================
         function openTodayModal() {
-            openDayModal(getActiveDayNumber());
+            openDayModal(getTodayKey());
         }
 
         function markModalDirty() {
@@ -1456,19 +1711,17 @@
             }, 900);
         }
 
-        function openDayModal(dayNum, focusSection = null) {
-            activeModalDay = Math.max(1, Math.min(30, dayNum));
+        function openDayModal(dateKey, focusSection = null) {
+            activeModalDate = isIsoDateKey(dateKey) ? dateKey : getTodayKey();
             modalDirty = false;
             lastFocusedModalSection = focusSection;
 
-            const phase = getPhaseForDay(activeModalDay);
-            const dateStr = formatShortDate(getDateForDay(activeModalDay));
-
-            const existing = appState.logs[activeModalDay] || {
+            const isToday = activeModalDate === getTodayKey();
+            const existing = appState.logs[activeModalDate] || {
                 logged: false,
                 drinks: 0,
                 naDrinks: 1,
-                weight: getSuggestedDefaultWeight(activeModalDay),
+                weight: getSuggestedDefaultWeight(activeModalDate),
                 rhr: null,
                 sleepQuality: null,
                 mentalClarity: null,
@@ -1485,9 +1738,10 @@
             tempDayDraft.mentalClarity = existing.mentalClarity ? Number(existing.mentalClarity) : null;
             tempDayDraft.energyLevel = existing.energyLevel ? Number(existing.energyLevel) : null;
 
-            document.getElementById('modal-week-badge').textContent = phase.title;
-            document.getElementById('modal-day-title').textContent = `Day ${activeModalDay} · ${dateStr}`;
-            document.getElementById('modal-daily-rule').textContent = phase.dailyRule;
+            document.getElementById('modal-weekday-badge').textContent = isToday
+                ? 'Today · Daily Health Log'
+                : parseDateKey(activeModalDate).toLocaleDateString('en-US', { weekday: 'long' });
+            document.getElementById('modal-day-title').textContent = formatFullDateKey(activeModalDate);
             document.getElementById('modal-drinks-val').textContent = tempDayDraft.drinks;
             document.getElementById('modal-na-val').textContent = tempDayDraft.naDrinks;
             document.getElementById('modal-weight-unit').textContent = appState.weightUnit;
@@ -1503,18 +1757,11 @@
             document.getElementById('modal-workout-rpe').value = tempDayDraft.workout.rpe || '';
             document.getElementById('modal-workout-notes').value = tempDayDraft.workout.notes || '';
 
-            // Prev/Next button states
-            const prevBtn = document.getElementById('modal-prev-btn');
-            const nextBtn = document.getElementById('modal-next-btn');
-            prevBtn.disabled = activeModalDay <= 1;
-            nextBtn.disabled = activeModalDay >= 30;
-            prevBtn.classList.toggle('opacity-40', activeModalDay <= 1);
-            nextBtn.classList.toggle('opacity-40', activeModalDay >= 30);
-
             renderModalRecoveryScales();
             renderModalModalities();
+            renderModalMuscleGroups();
             renderModalLifts();
-            renderModalHabits(phase);
+            renderModalHabits();
             document.getElementById('day-modal').classList.remove('hidden');
 
             const scrollBody = document.getElementById('modal-scroll-body');
@@ -1550,24 +1797,24 @@
                 appState.startingWeight = tempDayDraft.weight;
             }
 
-            appState.logs[activeModalDay] = tempDayDraft;
+            appState.logs[activeModalDate] = tempDayDraft;
             saveState();
             modalDirty = false;
         }
 
         function navigateModalDay(delta) {
-            const targetDay = activeModalDay + delta;
-            if (targetDay < 1 || targetDay > 30) return;
+            const targetKey = addDaysToKey(activeModalDate, delta);
             if (modalDirty) {
+                const prevLabel = formatShortDateKey(activeModalDate);
                 persistModalDraftSilently();
                 renderAll();
-                showToast(`Day ${activeModalDay} auto-saved`);
+                showToast(`${prevLabel} auto-saved`);
             }
-            openDayModal(targetDay, lastFocusedModalSection);
+            openDayModal(targetKey, lastFocusedModalSection);
         }
 
-        function quickToggleDryDay(dayNum) {
-            const existing = appState.logs[dayNum];
+        function quickToggleDryDay(dateKey) {
+            const existing = appState.logs[dateKey];
             const hasExtraData = existing && (
                 isActiveWorkout(normalizeWorkout(existing.workout)) ||
                 existing.weight !== null && existing.weight !== undefined ||
@@ -1578,10 +1825,10 @@
                 existing.energyLevel
             );
             if (existing && existing.logged && Number(existing.drinks || 0) === 0 && !hasExtraData) {
-                delete appState.logs[dayNum];
+                delete appState.logs[dateKey];
                 saveState();
                 renderAll();
-                showToast(`Day ${dayNum} unlogged`);
+                showToast(`${formatShortDateKey(dateKey)} unlogged`);
                 return;
             }
             const base = existing || {
@@ -1600,14 +1847,14 @@
             base.logged = true;
             base.drinks = 0;
             base.naDrinks = Math.max(1, Number(base.naDrinks || 0));
-            appState.logs[dayNum] = base;
+            appState.logs[dateKey] = base;
             saveState();
             renderAll();
-            showToast(`Day ${dayNum}: 0-Drink Dry Day logged ✓`);
+            showToast(`${formatShortDateKey(dateKey)}: 0-Drink Dry Day logged ✓`);
         }
 
         function quickLogDryToday() {
-            quickToggleDryDay(getActiveDayNumber());
+            quickToggleDryDay(getTodayKey());
         }
 
         function adjustCount(field, delta) {
@@ -1629,7 +1876,7 @@
             const input = document.getElementById('modal-weight-input');
             let current = parseFloat(input.value);
             if (isNaN(current)) {
-                current = getSuggestedDefaultWeight(activeModalDay) || (appState.weightUnit === 'kg' ? 100.0 : 220.0);
+                current = getSuggestedDefaultWeight(activeModalDate) || (appState.weightUnit === 'kg' ? 100.0 : 220.0);
             }
             input.value = Math.max(0, Math.round((current + delta) * 10) / 10).toFixed(1);
             modalDirty = true;
@@ -1736,10 +1983,44 @@
             renderModalModalities();
         }
 
-        function updateDurationDraft(val) {
+        function renderModalMuscleGroups() {
+            const container = document.getElementById('modal-muscle-pills');
+            if (!container || !tempDayDraft) return;
+            const { inferredIds } = inferMuscleGroupsFromWorkout(tempDayDraft.workout);
+            const manual = tempDayDraft.workout.muscleGroups || [];
+
+            container.innerHTML = MUSCLE_GROUPS.map(mg => {
+                const isManual = manual.includes(mg.id);
+                const isAuto = inferredIds.includes(mg.id);
+                let cls = 'bg-white dark:bg-slate-850 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-violet-400';
+                if (isManual) {
+                    cls = 'bg-violet-600 text-white border-violet-600 shadow-xs';
+                } else if (isAuto) {
+                    cls = 'bg-violet-100 dark:bg-violet-900/60 text-violet-800 dark:text-violet-200 border-violet-300 dark:border-violet-700';
+                }
+                return `
+                    <button type="button" onclick="toggleMuscleGroup('${mg.id}')" class="min-h-[34px] px-2.5 py-1 rounded-lg border text-[11px] font-semibold transition active:scale-95 ${cls}">
+                        ${mg.icon} ${mg.label}${isAuto && !isManual ? ' · auto' : ''}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function toggleMuscleGroup(mgId) {
             if (!tempDayDraft) return;
-            tempDayDraft.workout.duration = Math.max(0, Number(val) || 0);
+            if (!Array.isArray(tempDayDraft.workout.muscleGroups)) tempDayDraft.workout.muscleGroups = [];
+            const list = tempDayDraft.workout.muscleGroups;
+            const idx = list.indexOf(mgId);
+            if (idx >= 0) list.splice(idx, 1);
+            else {
+                list.push(mgId);
+                if (!tempDayDraft.workout.modalities.includes('strength')) {
+                    tempDayDraft.workout.modalities.push('strength');
+                    renderModalModalities();
+                }
+            }
             modalDirty = true;
+            renderModalMuscleGroups();
         }
 
         function setDurationPreset(mins) {
@@ -1762,6 +2043,38 @@
             tempDayDraft.workout.lifts.push({ name, sets, reps, weight });
             modalDirty = true;
             renderModalLifts();
+            renderModalMuscleGroups();
+        }
+
+        function addPresetLift(name) {
+            const lower = name.toLowerCase();
+            let defaultWeight = 135;
+            if (lower.includes('lateral')) defaultWeight = 20;
+            else if (lower.includes('bicep') || lower.includes('curl')) defaultWeight = 35;
+            else if (lower.includes('tricep')) defaultWeight = 50;
+            else if (lower.includes('core')) defaultWeight = 25;
+            else if (lower.includes('overhead')) defaultWeight = 95;
+            addLiftRow(name, 3, lower.includes('lateral') ? 15 : 8, defaultWeight);
+        }
+
+        function updateLiftField(idx, field, val) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[idx]) return;
+            if (field === 'name') {
+                tempDayDraft.workout.lifts[idx].name = val;
+                renderModalMuscleGroups();
+            } else {
+                tempDayDraft.workout.lifts[idx][field] = Math.max(0, Number(val) || 0);
+            }
+            modalDirty = true;
+            updateSessionVolumeBadge();
+        }
+
+        function removeLiftRow(idx) {
+            if (!tempDayDraft) return;
+            tempDayDraft.workout.lifts.splice(idx, 1);
+            modalDirty = true;
+            renderModalLifts();
+            renderModalMuscleGroups();
         }
 
         function addPresetLift(name) {
@@ -1827,10 +2140,10 @@
             `).join('');
         }
 
-        function renderModalHabits(phase) {
+        function renderModalHabits() {
             const container = document.getElementById('modal-habits-list');
             if (!container || !tempDayDraft) return;
-            container.innerHTML = phase.habits.map(h => {
+            container.innerHTML = DAILY_HABITS.map(h => {
                 const checked = !!(tempDayDraft.habits && tempDayDraft.habits[h.id]);
                 const cls = checked
                     ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200'
@@ -1849,22 +2162,24 @@
             if (!tempDayDraft.habits) tempDayDraft.habits = {};
             tempDayDraft.habits[habitId] = !tempDayDraft.habits[habitId];
             modalDirty = true;
-            renderModalHabits(getPhaseForDay(activeModalDay));
+            renderModalHabits();
         }
 
         function saveCurrentDayLog() {
             persistModalDraftSilently();
+            const savedLabel = formatShortDateKey(activeModalDate);
             closeDayModal();
             renderAll();
-            showToast(`Day ${activeModalDay} saved`);
+            showToast(`${savedLabel} saved`);
         }
 
         function clearCurrentDayLog() {
-            delete appState.logs[activeModalDay];
+            const clearedLabel = formatShortDateKey(activeModalDate);
+            delete appState.logs[activeModalDate];
             saveState();
             closeDayModal();
             renderAll();
-            showToast(`Day ${activeModalDay} cleared`);
+            showToast(`${clearedLabel} cleared`);
         }
 
         function closeDayModal() {
@@ -1874,7 +2189,7 @@
         }
 
         // ==========================================
-        // 5. SETUP MODAL & TAB SWITCHING
+        // 8. SETUP MODAL & TAB SWITCHING
         // ==========================================
         function setSetupUnit(unit) {
             setupUnitTemp = unit;
@@ -1895,11 +2210,11 @@
 
         function openSetupModal() {
             document.getElementById('setup-baseline').value = appState.baselineWeekly;
+            document.getElementById('setup-weeklytarget').value = appState.weeklyTarget;
             document.getElementById('setup-startdate').value = appState.startDate;
             document.getElementById('setup-startweight').value = appState.startingWeight !== null ? appState.startingWeight : '';
             document.getElementById('setup-goalweight').value = appState.goalWeight !== null ? appState.goalWeight : '';
             setSetupUnit(appState.weightUnit);
-            updateSetupPreview();
             document.getElementById('setup-modal').classList.remove('hidden');
         }
 
@@ -1907,27 +2222,15 @@
             document.getElementById('setup-modal').classList.add('hidden');
         }
 
-        function updateSetupPreview() {
-            const val = Math.max(1, Number(document.getElementById('setup-baseline').value) || 14);
-            const list = document.getElementById('setup-preview-list');
-            list.innerHTML = PHASES.map(p => {
-                const target = p.week === 4
-                    ? Math.max(1, Math.round(((val * p.targetRatio) / 7) * 9))
-                    : Math.max(1, Math.round(val * p.targetRatio));
-                const spanLabel = p.week === 4 ? 'Days 22–30' : `Week ${p.week}`;
-                return `<div class="bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-200/60 dark:border-slate-800">
-                    <span class="font-semibold text-slate-800 dark:text-slate-200">${spanLabel}:</span> ≤${target} drinks
-                </div>`;
-            }).join('');
-        }
-
         function saveSetup() {
             const baseline = Math.max(1, Number(document.getElementById('setup-baseline').value) || 14);
-            const startDate = document.getElementById('setup-startdate').value || new Date().toISOString().split('T')[0];
+            const weeklyTarget = Math.max(0, Number(document.getElementById('setup-weeklytarget').value));
+            const startDate = document.getElementById('setup-startdate').value || getTodayKey();
             const sw = document.getElementById('setup-startweight').value.trim();
             const gw = document.getElementById('setup-goalweight').value.trim();
 
             appState.baselineWeekly = baseline;
+            appState.weeklyTarget = isNaN(weeklyTarget) ? 7 : weeklyTarget;
             appState.startDate = startDate;
             appState.weightUnit = setupUnitTemp;
             appState.startingWeight = sw !== '' && !isNaN(Number(sw)) ? Number(sw) : null;
@@ -1952,7 +2255,7 @@
                 }
             });
             if (tabName === 'analytics') {
-                setTimeout(drawAllCharts, 25);
+                setTimeout(() => drawAllCharts(getRangeDateKeys(activeTimeRange)), 25);
             }
         }
 
@@ -1964,34 +2267,31 @@
             if (mode === 'cumulative') {
                 cumBtn.className = 'min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition';
                 dayBtn.className = 'min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition';
-                document.getElementById('pace-chart-title').textContent = '30-Day Alcohol Budget vs. Target Curve';
-                document.getElementById('pace-chart-subtitle').textContent = 'Tracks your cumulative drinks against your baseline and 30-day reduction target';
+                document.getElementById('pace-chart-title').textContent = 'Alcohol Budget vs. Target Curve';
+                document.getElementById('pace-chart-subtitle').textContent = 'Tracks cumulative drinks against your baseline and target pace';
             } else {
                 dayBtn.className = 'min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition';
                 cumBtn.className = 'min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition';
                 document.getElementById('pace-chart-title').textContent = 'Daily Alcohol vs. Target Ceiling';
-                document.getElementById('pace-chart-subtitle').textContent = 'Daily drinks logged compared to your daily budget across Weeks 1–4';
+                document.getElementById('pace-chart-subtitle').textContent = 'Daily drinks logged compared to your daily budget ceiling';
             }
-            drawPaceChart();
+            drawPaceChart(getRangeDateKeys(activeTimeRange));
         }
 
         // ==========================================
-        // 6. ANALYTICS TABLES & SUMMARY CARDS
+        // 9. ANALYTICS TABLES & SUMMARY CARDS
         // ==========================================
-        function renderTopLiftsSummary() {
+        function renderTopLiftsSummary(dateKeys) {
             const listEl = document.getElementById('top-lifts-list');
             const insightEl = document.getElementById('training-alignment-insight');
             if (!listEl) return;
 
             const liftMap = {};
-            let dryWorkoutDays = 0;
-            let drinkWorkoutDays = 0;
-            let totalDryDays = 0;
-            let totalDrinkDays = 0;
+            let dryWorkoutDays = 0, drinkWorkoutDays = 0, totalDryDays = 0, totalDrinkDays = 0;
 
-            for (let d = 1; d <= 30; d++) {
-                const entry = appState.logs[d];
-                if (!entry?.logged) continue;
+            dateKeys.forEach(dk => {
+                const entry = appState.logs[dk];
+                if (!entry?.logged) return;
 
                 const drinks = Number(entry.drinks || 0);
                 const w = normalizeWorkout(entry.workout);
@@ -2021,11 +2321,11 @@
                         liftMap[key].bestVol = vol;
                     }
                 });
-            }
+            });
 
             const liftsArr = Object.values(liftMap).sort((a, b) => b.bestVol - a.bestVol);
             if (liftsArr.length === 0) {
-                listEl.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No strength lifts logged yet. Open any day to add sets, reps, and load.</p>`;
+                listEl.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No strength lifts logged in this horizon. Open any date to add sets, reps, and load.</p>`;
             } else {
                 listEl.innerHTML = liftsArr.slice(0, 6).map(item => `
                     <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-2">
@@ -2050,71 +2350,171 @@
             }
         }
 
-        function renderRecoveryComparisonCard() {
-            const listEl = document.getElementById('recovery-comparison-list');
-            const insightEl = document.getElementById('recovery-insight-box');
-            if (!listEl || !insightEl) return;
+        function renderMuscleGroupCoach() {
+            const gridEl = document.getElementById('muscle-group-grid');
+            const badgeEl = document.getElementById('muscle-coverage-badge');
+            const titleEl = document.getElementById('suggested-workout-title');
+            const tagEl = document.getElementById('suggested-workout-tag');
+            const reasonEl = document.getElementById('suggested-workout-reason');
+            const exListEl = document.getElementById('suggested-workout-exercises');
+            if (!gridEl || !titleEl) return;
 
-            const stats = computeRecoveryStats();
-            const fmt = (v, suffix = '') => v !== null ? `${v.toFixed(1)}${suffix}` : '—';
-            const fmtInt = (v, suffix = '') => v !== null ? `${Math.round(v)}${suffix}` : '—';
+            // Always evaluate the rolling 7-day week for weekly body-part balance
+            const weekKeys = getRangeDateKeys('7d');
+            const totals = {};
+            MUSCLE_GROUPS.forEach(mg => {
+                totals[mg.id] = { directSets: 0, indirectSets: 0, sessions: 0, lastHit: null };
+            });
 
-            listEl.innerHTML = `
-                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
-                        <span>❤️ Resting Heart Rate</span>
-                        <span class="text-[11px] font-normal text-slate-400">Lower = better</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
-                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
-                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmtInt(stats.dryAvgRhr, ' bpm')}</span>
-                        </div>
-                        <div class="bg-rose-500/10 border border-rose-500/30 rounded-lg px-2.5 py-1.5">
-                            <span class="text-[10px] uppercase font-bold text-rose-700 dark:text-rose-300 block">After Drinks</span>
-                            <span class="text-sm font-bold text-rose-800 dark:text-rose-200">${fmtInt(stats.drinkAvgRhr, ' bpm')}</span>
-                        </div>
-                    </div>
-                </div>
+            weekKeys.forEach(dk => {
+                const entry = appState.logs[dk];
+                if (!entry?.logged) return;
+                const { primarySets, secondarySets } = inferMuscleGroupsFromWorkout(entry.workout);
+                MUSCLE_GROUPS.forEach(mg => {
+                    if (primarySets[mg.id] > 0) {
+                        totals[mg.id].directSets += primarySets[mg.id];
+                        totals[mg.id].sessions += 1;
+                        totals[mg.id].lastHit = dk;
+                    }
+                    if (secondarySets[mg.id] > 0) {
+                        totals[mg.id].indirectSets += secondarySets[mg.id];
+                    }
+                });
+            });
 
-                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
-                        <span>😴 Garmin Sleep Score (0–100)</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
-                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
-                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmtInt(stats.dryAvgSleep, '/100')}</span>
-                        </div>
-                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1.5">
-                            <span class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-300 block">After Drinks</span>
-                            <span class="text-sm font-bold text-amber-800 dark:text-amber-200">${fmtInt(stats.drinkAvgSleep, '/100')}</span>
-                        </div>
-                    </div>
-                </div>
+            let hitCount = 0;
+            gridEl.innerHTML = MUSCLE_GROUPS.map(mg => {
+                const st = totals[mg.id];
+                const effectiveSets = Math.round((st.directSets + st.indirectSets) * 10) / 10;
+                const isDirectHit = st.directSets > 0;
+                const isSecondaryOnly = !isDirectHit && st.indirectSets > 0;
+                if (isDirectHit) hitCount++;
 
-                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
-                        <span>🧠 Mental Clarity (1–5)</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
-                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">After Dry Night</span>
-                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200">${fmt(stats.dryAvgClarity, '/5')}</span>
-                        </div>
-                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1.5">
-                            <span class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-300 block">After Drinks</span>
-                            <span class="text-sm font-bold text-amber-800 dark:text-amber-200">${fmt(stats.drinkAvgClarity, '/5')}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
+                const pct = Math.min(100, Math.round((effectiveSets / mg.targetSets) * 100));
+                const cardCls = isDirectHit
+                    ? 'bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-200/80 dark:border-emerald-800/60'
+                    : isSecondaryOnly
+                        ? 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-200/80 dark:border-amber-800/60'
+                        : 'bg-slate-50 dark:bg-slate-850 border-slate-200/80 dark:border-slate-800';
+                const statusBadge = isDirectHit
+                    ? `<span class="text-[10px] font-bold text-emerald-700 dark:text-emerald-300">Hit ✓</span>`
+                    : isSecondaryOnly
+                        ? `<span class="text-[10px] font-bold text-amber-700 dark:text-amber-300">Indirect</span>`
+                        : `<span class="text-[10px] font-bold text-rose-600 dark:text-rose-400">Due</span>`;
+                const barColor = isDirectHit ? 'bg-emerald-500' : isSecondaryOnly ? 'bg-amber-400' : 'bg-slate-300 dark:bg-slate-700';
 
-            const insights = [];
-            if (stats.dryAvgRhr !== null && stats.drinkAvgRhr !== null) {
-                const rhrDiff = Math.round((stats.drinkAvgRhr - stats.dryAvgRhr) * 10) / 10;
-                if (rhrDiff > 0) insights.push(`<strong>${rhrDiff} bpm lower</strong> RHR`);
+                return `
+                    <div class="p-3 rounded-xl border ${cardCls} space-y-1.5">
+                        <div class="flex items-center justify-between gap-1">
+                            <span class="text-xs font-bold">${mg.icon} ${mg.label}</span>
+                            ${statusBadge}
+                        </div>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400">
+                            <strong class="text-slate-800 dark:text-slate-100">${st.directSets}</strong> direct${st.indirectSets > 0 ? ` (+${st.indirectSets} sec)` : ''} sets
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-slate-800 overflow-hidden">
+                            <div class="${barColor} h-full rounded-full transition-all" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            badgeEl.textContent = `${hitCount} / ${MUSCLE_GROUPS.length} hit this week`;
+
+            // Identify unworked (0 direct sets) body parts and prioritize the top 2-3 for a cohesive workout
+            const missingGroups = MUSCLE_GROUPS
+                .filter(mg => totals[mg.id].directSets === 0)
+                .sort((a, b) => totals[a.id].indirectSets - totals[b.id].indirectSets);
+
+            let chosen = [];
+            let suggestionTitle = '';
+            let suggestionTag = '';
+            let reasonText = '';
+
+            if (missingGroups.length === 0) {
+                // All 7 hit! Suggest the 2 lowest-volume groups
+                chosen = [...MUSCLE_GROUPS]
+                    .sort((a, b) => totals[a.id].directSets - totals[b.id].directSets)
+                    .slice(0, 2);
+                suggestionTitle = `${chosen.map(c => c.label).join(' & ')} Top-Up`;
+                suggestionTag = 'All Hit ✓';
+                reasonText = `You've worked every major body part in the last 7 days! Next up, add volume to ${chosen.map(c => c.label).join(' and ')}.`;
+            } else {
+                const missingIds = new Set(missingGroups.map(m => m.id));
+                // Smart pairing: Push (Chest/Shoulders/Triceps), Pull (Back/Biceps), Legs/Core, or Arms/Shoulders
+                if (missingIds.has('chest') && (missingIds.has('shoulders') || missingIds.has('triceps'))) {
+                    chosen = ['chest', 'shoulders', 'triceps'].filter(id => missingIds.has(id)).map(id => MUSCLE_GROUPS.find(m => m.id === id));
+                    suggestionTitle = 'Upper Push Focus';
+                    suggestionTag = 'Unworked Push';
+                } else if (missingIds.has('back') && missingIds.has('biceps')) {
+                    chosen = [MUSCLE_GROUPS.find(m => m.id === 'back'), MUSCLE_GROUPS.find(m => m.id === 'biceps')];
+                    if (missingIds.has('core')) chosen.push(MUSCLE_GROUPS.find(m => m.id === 'core'));
+                    suggestionTitle = 'Upper Pull Focus';
+                    suggestionTag = 'Unworked Pull';
+                } else if (missingIds.has('legs')) {
+                    chosen = [MUSCLE_GROUPS.find(m => m.id === 'legs')];
+                    if (missingIds.has('core')) chosen.push(MUSCLE_GROUPS.find(m => m.id === 'core'));
+                    else if (missingIds.has('shoulders')) chosen.push(MUSCLE_GROUPS.find(m => m.id === 'shoulders'));
+                    suggestionTitle = chosen.length > 1 ? `Lower Body & ${chosen[1].label}` : 'Lower Body Strength';
+                    suggestionTag = 'Legs Due';
+                } else {
+                    chosen = missingGroups.slice(0, 3);
+                    suggestionTitle = `${chosen.map(c => c.label).join(' & ')} Session`;
+                    suggestionTag = `${missingGroups.length} Due`;
+                }
+                const missingNames = missingGroups.map(m => m.label).join(', ');
+                reasonText = `Not directly worked in the last 7 days: ${missingNames}. This session targets ${chosen.map(c => c.label).join(' + ')}.`;
             }
+
+            // Build 3-4 suggested exercises from the chosen groups
+            const suggestedLifts = [];
+            chosen.forEach((mg, idx) => {
+                const count = chosen.length === 1 ? 2 : (idx === 0 && chosen.length === 2 ? 2 : 1);
+                mg.suggestions.slice(0, count).forEach(ex => suggestedLifts.push({ ...ex, groupId: mg.id }));
+            });
+
+            currentSuggestedWorkout = {
+                title: suggestionTitle,
+                muscleGroups: chosen.map(c => c.id),
+                lifts: suggestedLifts.map(l => ({ name: l.name, sets: l.sets, reps: l.reps, weight: l.weight }))
+            };
+
+            titleEl.textContent = suggestionTitle;
+            tagEl.textContent = suggestionTag;
+            reasonEl.textContent = reasonText;
+            exListEl.innerHTML = suggestedLifts.map(ex => `
+                <div class="flex items-center justify-between gap-2 text-xs bg-white/80 dark:bg-slate-900/70 px-2.5 py-1.5 rounded-lg border border-violet-200/50 dark:border-violet-800/40">
+                    <span class="font-semibold text-slate-800 dark:text-slate-100 truncate">${escapeHtml(ex.name)}</span>
+                    <span class="text-[11px] font-bold text-violet-600 dark:text-violet-400 shrink-0">${ex.sets}×${ex.reps}</span>
+                </div>
+            `).join('');
+        }
+
+        function startSuggestedWorkoutToday() {
+            if (!currentSuggestedWorkout) return;
+            openDayModal(getTodayKey(), 'section-training');
+            if (!tempDayDraft) return;
+            if (!tempDayDraft.workout.modalities.includes('strength')) {
+                tempDayDraft.workout.modalities.push('strength');
+            }
+            currentSuggestedWorkout.muscleGroups.forEach(id => {
+                if (!tempDayDraft.workout.muscleGroups.includes(id)) {
+                    tempDayDraft.workout.muscleGroups.push(id);
+                }
+            });
+            currentSuggestedWorkout.lifts.forEach(l => {
+                tempDayDraft.workout.lifts.push({ ...l });
+            });
+            if (!tempDayDraft.workout.duration) {
+                tempDayDraft.workout.duration = 45;
+                document.getElementById('modal-workout-duration').value = 45;
+            }
+            modalDirty = true;
+            renderModalModalities();
+            renderModalMuscleGroups();
+            renderModalLifts();
+            showToast(`Loaded "${currentSuggestedWorkout.title}" into today's log`);
+        }
             if (stats.dryAvgSleep !== null && stats.drinkAvgSleep !== null) {
                 const sleepDiff = Math.round(stats.dryAvgSleep - stats.drinkAvgSleep);
                 if (sleepDiff > 0) insights.push(`<strong>+${sleepDiff} pts</strong> Garmin sleep`);
@@ -2131,60 +2531,41 @@
             }
         }
 
-        function renderAnalyticsTable() {
+        function renderAnalyticsTable(dateKeys) {
             const tbody = document.getElementById('analytics-table-body');
+            const titleEl = document.getElementById('summary-table-title');
+            const badgeEl = document.getElementById('summary-table-badge');
             tbody.innerHTML = '';
 
-            PHASES.forEach(p => {
-                const base = getPhaseBaselineDrinks(p);
-                const target = getPhaseTargetDrinks(p);
-                let loggedDrinks = 0;
-                let dryDays = 0;
-                let loggedCount = 0;
-                const weights = [];
-                let activeMins = 0;
+            const { mode, buckets } = buildPeriodBuckets(dateKeys);
+            titleEl.textContent = mode === 'month'
+                ? 'Monthly Health, Weight, Training & Recovery Summary'
+                : 'Weekly Health, Weight, Training & Recovery Summary';
+            badgeEl.textContent = mode === 'month' ? 'Grouped by Month' : 'Grouped by Week';
 
-                for (let d = p.daysRange[0]; d <= p.daysRange[1]; d++) {
-                    const entry = appState.logs[d];
-                    if (entry?.logged) {
-                        loggedCount++;
-                        const drk = Number(entry.drinks || 0);
-                        loggedDrinks += drk;
-                        if (drk === 0) dryDays++;
-                        if (entry.weight !== null && entry.weight !== undefined && entry.weight !== '') {
-                            weights.push(Number(entry.weight));
-                        }
-                        const w = normalizeWorkout(entry.workout);
-                        activeMins += Number(w.duration || 0);
-                    }
-                }
-
-                const avgWeightStr = weights.length > 0
-                    ? `${(weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(1)} ${appState.weightUnit}`
-                    : '—';
-
-                const statusColor = loggedCount === 0
+            buckets.slice().reverse().forEach(b => {
+                const statusColor = b.loggedDays === 0
                     ? 'text-slate-400'
-                    : loggedDrinks <= target
+                    : b.actual <= b.target
                         ? 'text-emerald-600 dark:text-emerald-400 font-bold'
                         : 'text-rose-600 dark:text-rose-400 font-bold';
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium">W${p.week} (D${p.daysRange[0]}–${p.daysRange[1]})</td>
-                    <td class="px-4 py-3 text-slate-500">${base}</td>
-                    <td class="px-4 py-3 font-semibold text-amber-600 dark:text-amber-400">≤${target}</td>
-                    <td class="px-4 py-3 ${statusColor}">${Math.round(loggedDrinks * 10) / 10}</td>
-                    <td class="px-4 py-3 text-slate-600 dark:text-slate-300">${dryDays} / ${getPhaseDaysCount(p)}</td>
-                    <td class="px-4 py-3 font-medium text-indigo-600 dark:text-indigo-400">${avgWeightStr}</td>
-                    <td class="px-4 py-3 font-semibold text-violet-600 dark:text-violet-400">${activeMins}m</td>
+                    <td class="px-4 py-3 font-medium whitespace-nowrap">${b.label}</td>
+                    <td class="px-4 py-3 ${statusColor}">${b.actual} <span class="text-slate-400 font-normal">/ ≤${b.target}</span></td>
+                    <td class="px-4 py-3 text-slate-600 dark:text-slate-300">${b.dryDays} / ${b.spanDays}</td>
+                    <td class="px-4 py-3 font-medium text-indigo-600 dark:text-indigo-400">${b.avgWeight !== null ? b.avgWeight.toFixed(1) + ' ' + appState.weightUnit : '—'}</td>
+                    <td class="px-4 py-3 font-medium text-sky-600 dark:text-sky-400">${b.avgSleep !== null ? Math.round(b.avgSleep) : '—'}</td>
+                    <td class="px-4 py-3 font-medium text-rose-600 dark:text-rose-400">${b.avgRhr !== null ? Math.round(b.avgRhr) + ' bpm' : '—'}</td>
+                    <td class="px-4 py-3 font-semibold text-violet-600 dark:text-violet-400">${b.activeMins}m</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
         // ==========================================
-        // 7. INTERACTIVE SVG CHART ENGINE
+        // 10. INTERACTIVE SVG CHART ENGINE (DYNAMIC HORIZON)
         // ==========================================
         function createSvgEl(tag, attrs = {}) {
             const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -2196,7 +2577,7 @@
 
         function positionTooltip(tooltip, containerRect, cx, cy) {
             tooltip.classList.remove('hidden');
-            const tipW = tooltip.offsetWidth || 150;
+            const tipW = tooltip.offsetWidth || 155;
             const tipH = tooltip.offsetHeight || 48;
             let left = cx - tipW / 2;
             left = Math.max(4, Math.min(containerRect.width - tipW - 4, left));
@@ -2208,10 +2589,11 @@
 
         function attachTouchScrub(svg, tooltip, count, padL, chartW, onIndex) {
             const handleTouch = (evt) => {
-                if (!evt.touches || !evt.touches.length) return;
+                if (!evt.touches || !evt.touches.length || count <= 0) return;
                 const r = svg.parentElement.getBoundingClientRect();
                 const relX = evt.touches[0].clientX - r.left - padL;
-                const idx = Math.max(0, Math.min(count - 1, Math.round((relX / Math.max(1, chartW)) * (count - 1))));
+                const denom = Math.max(1, count - 1);
+                const idx = Math.max(0, Math.min(count - 1, Math.round((relX / Math.max(1, chartW)) * denom)));
                 onIndex(idx, r);
             };
             svg.ontouchstart = handleTouch;
@@ -2219,20 +2601,26 @@
             svg.ontouchend = () => setTimeout(() => tooltip.classList.add('hidden'), 1400);
         }
 
-        function drawAllCharts() {
-            drawPaceChart();
-            drawWeightCorrelationChart();
-            drawWeeklyComparisonChart();
-            drawRecoveryCorrelationChart();
-            drawTrainingCorrelationChart();
+        function shouldShowXTick(idx, total) {
+            if (total <= 8) return true;
+            const step = Math.max(1, Math.ceil(total / 6));
+            return idx === 0 || idx === total - 1 || idx % step === 0;
         }
 
-        // GRAPH 1: 30-Day Alcohol Budget vs Target Curve
-        function drawPaceChart() {
+        function drawAllCharts(dateKeys = getRangeDateKeys(activeTimeRange)) {
+            drawPaceChart(dateKeys);
+            drawWeightCorrelationChart(dateKeys);
+            drawWeeklyComparisonChart(dateKeys);
+            drawRecoveryCorrelationChart(dateKeys);
+            drawTrainingCorrelationChart(dateKeys);
+        }
+
+        // GRAPH 1: Alcohol Budget vs Target Curve
+        function drawPaceChart(dateKeys) {
             const svg = document.getElementById('pace-svg');
             const tooltip = document.getElementById('pace-tooltip');
             const legend = document.getElementById('pace-chart-legend');
-            if (!svg) return;
+            if (!svg || dateKeys.length === 0) return;
 
             const rect = svg.parentElement.getBoundingClientRect();
             const W = Math.max(280, rect.width);
@@ -2243,39 +2631,41 @@
             const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
-            const padL = 36, padR = 16, padT = 16, padB = 28;
+            const padL = 38, padR = 16, padT = 16, padB = 28;
             const chartW = W - padL - padR;
             const chartH = H - padT - padB;
             const dailyBase = appState.baselineWeekly / 7;
+            const dailyTgt = getDailyTarget();
+            const n = dateKeys.length;
+            const showDots = n <= 35;
 
             const points = [];
             let cumBase = 0, cumTarget = 0, cumActual = 0;
-            let lastLoggedDay = 0;
+            let lastLoggedIdx = -1;
 
-            for (let d = 1; d <= 30; d++) {
-                const dailyTgt = getDailyTargetForDay(d);
+            dateKeys.forEach((dk, idx) => {
                 cumBase += dailyBase;
                 cumTarget += dailyTgt;
-                const entry = appState.logs[d];
+                const entry = appState.logs[dk];
                 const isLogged = !!(entry && entry.logged);
                 const drk = isLogged ? Number(entry.drinks || 0) : null;
                 if (isLogged) {
                     cumActual += drk;
-                    lastLoggedDay = d;
+                    lastLoggedIdx = idx;
                 }
                 points.push({
-                    day: d,
-                    dailyBase,
+                    idx,
+                    dateKey: dk,
                     dailyTarget: dailyTgt,
                     dailyActual: drk,
                     cumBase: Math.round(cumBase * 10) / 10,
                     cumTarget: Math.round(cumTarget * 10) / 10,
                     cumActual: isLogged ? Math.round(cumActual * 10) / 10 : null
                 });
-            }
+            });
 
-            const getX = (day) => padL + ((day - 1) / 29) * chartW;
-            const slotW = chartW / 30;
+            const getX = (idx) => n <= 1 ? padL + chartW / 2 : padL + (idx / (n - 1)) * chartW;
+            const slotW = chartW / Math.max(1, n);
 
             if (paceChartMode === 'cumulative') {
                 legend.innerHTML = `
@@ -2284,7 +2674,7 @@
                     <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-emerald-500 inline-block"></span> Actual Cumulative</span>
                 `;
 
-                const maxY = Math.max(10, points[29].cumBase, ...points.map(p => p.cumActual || 0)) * 1.08;
+                const maxY = Math.max(6, points[n - 1].cumBase, ...points.map(p => p.cumActual || 0)) * 1.08;
                 const getY = (val) => padT + chartH - (val / maxY) * chartH;
 
                 for (let i = 0; i <= 4; i++) {
@@ -2295,63 +2685,62 @@
                     svg.appendChild(lbl);
                 }
 
-                // Baseline dashed line
-                const basePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.cumBase)}`).join(' ');
+                const basePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(i)} ${getY(p.cumBase)}`).join(' ');
                 svg.appendChild(createSvgEl('path', { d: basePath, fill: 'none', stroke: '#94a3b8', 'stroke-width': 1.75, 'stroke-dasharray': '5 4' }));
 
-                // Target curve
-                const tgtPath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.cumTarget)}`).join(' ');
+                const tgtPath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(i)} ${getY(p.cumTarget)}`).join(' ');
                 svg.appendChild(createSvgEl('path', { d: tgtPath, fill: 'none', stroke: '#f59e0b', 'stroke-width': 2.25, 'stroke-linecap': 'round' }));
 
-                // Actual cumulative line
                 const actualPts = [];
                 let running = 0;
-                for (let d = 1; d <= lastLoggedDay; d++) {
-                    const e = appState.logs[d];
+                for (let i = 0; i <= lastLoggedIdx; i++) {
+                    const e = appState.logs[dateKeys[i]];
                     if (e?.logged) running += Number(e.drinks || 0);
-                    actualPts.push({ day: d, val: Math.round(running * 10) / 10 });
+                    actualPts.push({ idx: i, val: Math.round(running * 10) / 10 });
                 }
                 if (actualPts.length > 0) {
-                    const actPath = actualPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.val)}`).join(' ');
-                    svg.appendChild(createSvgEl('path', { d: actPath, fill: 'none', stroke: '#10b981', 'stroke-width': 3, 'stroke-linecap': 'round' }));
-                    actualPts.forEach(p => {
-                        svg.appendChild(createSvgEl('circle', {
-                            cx: getX(p.day), cy: getY(p.val), r: 3,
-                            fill: '#10b981', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.2
-                        }));
-                    });
+                    const actPath = actualPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.idx)} ${getY(p.val)}`).join(' ');
+                    svg.appendChild(createSvgEl('path', { d: actPath, fill: 'none', stroke: '#10b981', 'stroke-width': 2.8, 'stroke-linecap': 'round' }));
+                    if (showDots) {
+                        actualPts.forEach(p => {
+                            svg.appendChild(createSvgEl('circle', {
+                                cx: getX(p.idx), cy: getY(p.val), r: 2.8,
+                                fill: '#10b981', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.1
+                            }));
+                        });
+                    }
                 }
 
                 const buildTip = (p) => {
-                    const actObj = actualPts.find(a => a.day === p.day);
+                    const actObj = actualPts.find(a => a.idx === p.idx);
                     return `
-                        <div class="font-bold text-emerald-300 mb-0.5">Day ${p.day} Cumulative</div>
+                        <div class="font-bold text-emerald-300 mb-0.5">${formatShortDateKey(p.dateKey)} Cumulative</div>
                         <div>Actual: <strong>${actObj ? actObj.val : '—'}</strong> · Target: <strong>${p.cumTarget}</strong></div>
                         <div class="text-slate-300">Baseline Pace: ${p.cumBase}</div>
                     `;
                 };
 
-                points.forEach(p => {
-                    const cx = getX(p.day);
-                    if (p.day === 1 || p.day % 5 === 0) {
+                points.forEach((p, idx) => {
+                    const cx = getX(idx);
+                    if (shouldShowXTick(idx, n)) {
                         const t = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
-                        t.textContent = `D${p.day}`;
+                        t.textContent = formatShortDateKey(p.dateKey);
                         svg.appendChild(t);
                     }
                     const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
                     hit.addEventListener('mouseenter', () => {
-                        const actObj = actualPts.find(a => a.day === p.day);
+                        const actObj = actualPts.find(a => a.idx === idx);
                         tooltip.innerHTML = buildTip(p);
                         positionTooltip(tooltip, rect, cx, getY(actObj ? actObj.val : p.cumTarget));
                     });
                     svg.appendChild(hit);
                 });
 
-                attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+                attachTouchScrub(svg, tooltip, n, padL, chartW, (idx, r) => {
                     const p = points[idx];
-                    const actObj = actualPts.find(a => a.day === p.day);
+                    const actObj = actualPts.find(a => a.idx === idx);
                     tooltip.innerHTML = buildTip(p);
-                    positionTooltip(tooltip, r, getX(p.day), getY(actObj ? actObj.val : p.cumTarget));
+                    positionTooltip(tooltip, r, getX(idx), getY(actObj ? actObj.val : p.cumTarget));
                 });
             } else {
                 legend.innerHTML = `
@@ -2371,42 +2760,41 @@
                     svg.appendChild(lbl);
                 }
 
-                // Daily bars
-                points.forEach(p => {
-                    const cx = getX(p.day);
+                const barW = Math.max(2, Math.min(20, slotW * 0.68));
+                points.forEach((p, idx) => {
+                    const cx = getX(idx);
                     if (p.dailyActual !== null) {
                         const barH = Math.max(3, (p.dailyActual / maxY) * chartH);
                         const barColor = p.dailyActual === 0
                             ? '#10b981'
-                            : (p.dailyActual <= Math.ceil(p.dailyTarget) ? '#f59e0b' : '#f43f5e');
+                            : (p.dailyActual <= Math.max(1, Math.ceil(p.dailyTarget)) ? '#f59e0b' : '#f43f5e');
                         svg.appendChild(createSvgEl('rect', {
-                            x: cx - slotW * 0.32,
+                            x: cx - barW / 2,
                             y: padT + chartH - barH,
-                            width: slotW * 0.64,
+                            width: barW,
                             height: barH,
-                            rx: 3,
+                            rx: Math.min(3, barW / 2),
                             fill: barColor
                         }));
                     }
-                    if (p.day === 1 || p.day % 5 === 0) {
+                    if (shouldShowXTick(idx, n)) {
                         const t = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
-                        t.textContent = `D${p.day}`;
+                        t.textContent = formatShortDateKey(p.dateKey);
                         svg.appendChild(t);
                     }
                 });
 
-                // Daily ceiling stepped line
-                const ceilPath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.dailyTarget)}`).join(' ');
-                svg.appendChild(createSvgEl('path', { d: ceilPath, fill: 'none', stroke: '#f59e0b', 'stroke-width': 2, 'stroke-dasharray': '4 3' }));
+                const ceilY = getY(dailyTgt);
+                svg.appendChild(createSvgEl('line', { x1: padL, y1: ceilY, x2: W - padR, y2: ceilY, stroke: '#f59e0b', 'stroke-width': 2, 'stroke-dasharray': '4 3' }));
 
                 const buildTip = (p) => `
-                    <div class="font-bold text-amber-300 mb-0.5">Day ${p.day} Daily Intake</div>
+                    <div class="font-bold text-amber-300 mb-0.5">${formatShortDateKey(p.dateKey)}</div>
                     <div>Logged: <strong>${p.dailyActual !== null ? p.dailyActual + ' drinks' : 'Unlogged'}</strong></div>
                     <div class="text-slate-300">Daily Target: ≤${p.dailyTarget.toFixed(1)} drinks</div>
                 `;
 
-                points.forEach(p => {
-                    const cx = getX(p.day);
+                points.forEach((p, idx) => {
+                    const cx = getX(idx);
                     const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
                     hit.addEventListener('mouseenter', () => {
                         tooltip.innerHTML = buildTip(p);
@@ -2415,10 +2803,10 @@
                     svg.appendChild(hit);
                 });
 
-                attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+                attachTouchScrub(svg, tooltip, n, padL, chartW, (idx, r) => {
                     const p = points[idx];
                     tooltip.innerHTML = buildTip(p);
-                    positionTooltip(tooltip, r, getX(p.day), getY(p.dailyActual !== null ? p.dailyActual : p.dailyTarget));
+                    positionTooltip(tooltip, r, getX(idx), getY(p.dailyActual !== null ? p.dailyActual : p.dailyTarget));
                 });
             }
 
@@ -2426,10 +2814,10 @@
         }
 
         // GRAPH 2: Weight Trend vs Alcohol Intake
-        function drawWeightCorrelationChart() {
+        function drawWeightCorrelationChart(dateKeys) {
             const svg = document.getElementById('weight-svg');
             const tooltip = document.getElementById('weight-tooltip');
-            if (!svg) return;
+            if (!svg || dateKeys.length === 0) return;
 
             const rect = svg.parentElement.getBoundingClientRect();
             const W = Math.max(280, rect.width);
@@ -2441,11 +2829,11 @@
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
 
-            const series = computeWeightSeries();
+            const series = computeWeightSeriesForKeys(dateKeys);
             const validWeights = series.map(s => s.rawWeight).filter(v => v !== null);
             if (validWeights.length === 0) {
                 const msg = createSvgEl('text', { x: W / 2, y: H / 2, fill: textColor, 'font-size': 12, 'text-anchor': 'middle' });
-                msg.textContent = 'Log morning weight on any day to unlock weight trend';
+                msg.textContent = 'Log morning weight to unlock weight trend';
                 svg.appendChild(msg);
                 return;
             }
@@ -2453,6 +2841,8 @@
             const padL = 42, padR = 14, padT = 16, padB = 28;
             const chartW = W - padL - padR;
             const chartH = H - padT - padB;
+            const n = series.length;
+            const showDots = n <= 45;
 
             const allW = [...validWeights, ...series.map(s => s.trendWeight).filter(v => v !== null)];
             const minW = Math.floor(Math.min(...allW) - 1.5);
@@ -2460,14 +2850,15 @@
             const spanW = Math.max(3, maxW - minW);
 
             const drinksArr = series.map(s => {
-                const e = appState.logs[s.day];
+                const e = appState.logs[s.dateKey];
                 return e?.logged ? Number(e.drinks || 0) : 0;
             });
             const maxDrinks = Math.max(4, ...drinksArr);
 
-            const getX = (day) => padL + ((day - 1) / 29) * chartW;
+            const getX = (idx) => n <= 1 ? padL + chartW / 2 : padL + (idx / (n - 1)) * chartW;
             const getY = (w) => padT + chartH - ((w - minW) / spanW) * chartH;
-            const slotW = chartW / 30;
+            const slotW = chartW / Math.max(1, n);
+            const barW = Math.max(1.5, Math.min(14, slotW * 0.6));
 
             for (let i = 0; i <= 4; i++) {
                 const y = padT + chartH - (i / 4) * chartH;
@@ -2477,15 +2868,14 @@
                 svg.appendChild(lbl);
             }
 
-            // Alcohol bars in background
             series.forEach((s, idx) => {
                 const drk = drinksArr[idx];
                 if (drk > 0) {
                     const bH = (drk / maxDrinks) * (chartH * 0.38);
                     svg.appendChild(createSvgEl('rect', {
-                        x: getX(s.day) - slotW * 0.3,
+                        x: getX(idx) - barW / 2,
                         y: padT + chartH - bH,
-                        width: slotW * 0.6,
+                        width: barW,
                         height: bH,
                         rx: 2,
                         fill: '#fb7185',
@@ -2494,30 +2884,30 @@
                 }
             });
 
-            // 7-day trend line
-            const trendPts = series.filter(s => s.trendWeight !== null && s.day <= series.reduce((m, x) => x.rawWeight !== null ? x.day : m, 0));
+            const lastRawIdx = series.reduce((m, x, i) => x.rawWeight !== null ? i : m, -1);
+            const trendPts = series.map((s, idx) => ({ ...s, idx })).filter(s => s.trendWeight !== null && s.idx <= lastRawIdx);
             if (trendPts.length > 1) {
-                const pathD = trendPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getY(p.trendWeight)}`).join(' ');
+                const pathD = trendPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.idx)} ${getY(p.trendWeight)}`).join(' ');
                 svg.appendChild(createSvgEl('path', { d: pathD, fill: 'none', stroke: '#6366f1', 'stroke-width': 2.5, 'stroke-linecap': 'round' }));
             }
 
             const buildTip = (s, idx) => `
-                <div class="font-bold text-indigo-300 mb-0.5">Day ${s.day} Body Weight</div>
+                <div class="font-bold text-indigo-300 mb-0.5">${formatShortDateKey(s.dateKey)} Weight</div>
                 <div>Scale: <strong>${s.rawWeight !== null ? s.rawWeight.toFixed(1) + ' ' + appState.weightUnit : '—'}</strong></div>
                 <div>Trend: <strong>${s.trendWeight !== null ? s.trendWeight.toFixed(1) + ' ' + appState.weightUnit : '—'}</strong> · Drinks: <strong>${drinksArr[idx]}</strong></div>
             `;
 
             series.forEach((s, idx) => {
-                const cx = getX(s.day);
-                if (s.day === 1 || s.day % 5 === 0) {
+                const cx = getX(idx);
+                if (shouldShowXTick(idx, n)) {
                     const t = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
-                    t.textContent = `D${s.day}`;
+                    t.textContent = formatShortDateKey(s.dateKey);
                     svg.appendChild(t);
                 }
-                if (s.rawWeight !== null) {
+                if (s.rawWeight !== null && showDots) {
                     svg.appendChild(createSvgEl('circle', {
-                        cx, cy: getY(s.rawWeight), r: 3.5,
-                        fill: '#818cf8', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.2
+                        cx, cy: getY(s.rawWeight), r: 3.2,
+                        fill: '#818cf8', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.1
                     }));
                 }
                 const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
@@ -2529,18 +2919,18 @@
                 svg.appendChild(hit);
             });
 
-            attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+            attachTouchScrub(svg, tooltip, n, padL, chartW, (idx, r) => {
                 const s = series[idx];
                 tooltip.innerHTML = buildTip(s, idx);
                 const yRef = s.rawWeight !== null ? getY(s.rawWeight) : (s.trendWeight !== null ? getY(s.trendWeight) : padT + chartH / 2);
-                positionTooltip(tooltip, r, getX(s.day), yRef);
+                positionTooltip(tooltip, r, getX(idx), yRef);
             });
 
             svg.onmouseleave = () => tooltip.classList.add('hidden');
         }
 
-        // GRAPH 3: Weekly Alcohol Budget Comparison
-        function drawWeeklyComparisonChart() {
+        // GRAPH 3: Weekly / Monthly Alcohol Budget Comparison
+        function drawWeeklyComparisonChart(dateKeys) {
             const svg = document.getElementById('weekly-svg');
             const tooltip = document.getElementById('weekly-tooltip');
             if (!svg) return;
@@ -2558,19 +2948,12 @@
             const chartW = W - padL - padR;
             const chartH = H - padT - padB;
 
-            const groups = PHASES.map(p => {
-                let actual = 0;
-                for (let d = p.daysRange[0]; d <= p.daysRange[1]; d++) {
-                    if (appState.logs[d]?.logged) actual += Number(appState.logs[d].drinks || 0);
-                }
-                return {
-                    label: `W${p.week}`,
-                    baseline: getPhaseBaselineDrinks(p),
-                    target: getPhaseTargetDrinks(p),
-                    actual: Math.round(actual * 10) / 10
-                };
-            });
+            const { mode, buckets } = buildPeriodBuckets(dateKeys);
+            document.getElementById('period-chart-title').textContent = mode === 'month'
+                ? 'Monthly Alcohol Budget Comparison'
+                : 'Weekly Alcohol Budget Comparison';
 
+            const groups = buckets.slice(-8);
             const maxVal = Math.max(5, ...groups.flatMap(g => [g.baseline, g.target, g.actual])) * 1.15;
             const getY = (v) => padT + chartH - (v / maxVal) * chartH;
 
@@ -2582,11 +2965,11 @@
                 svg.appendChild(lbl);
             }
 
-            const groupW = chartW / groups.length;
-            const barW = Math.min(22, groupW * 0.22);
+            const groupW = chartW / Math.max(1, groups.length);
+            const barW = Math.min(20, groupW * 0.23);
 
             const buildTip = (g) => `
-                <div class="font-bold text-emerald-300 mb-0.5">${g.label} Alcohol Budget</div>
+                <div class="font-bold text-emerald-300 mb-0.5">${g.label} Budget</div>
                 <div>Actual: <strong>${g.actual}</strong> · Target: <strong>≤${g.target}</strong></div>
                 <div class="text-slate-300">Baseline: ${g.baseline} drinks</div>
             `;
@@ -2606,13 +2989,13 @@
                         y: padT + chartH - h,
                         width: barW,
                         height: h,
-                        rx: 4,
+                        rx: 3,
                         fill: b.fill
                     }));
                 });
 
-                const xLbl = createSvgEl('text', { x: centerX, y: H - 8, fill: textColor, 'font-size': 11, 'font-weight': '600', 'text-anchor': 'middle' });
-                xLbl.textContent = g.label;
+                const xLbl = createSvgEl('text', { x: centerX, y: H - 8, fill: textColor, 'font-size': 10, 'font-weight': '600', 'text-anchor': 'middle' });
+                xLbl.textContent = g.label.replace('Wk ', '');
                 svg.appendChild(xLbl);
 
                 const hit = createSvgEl('rect', { x: padL + groupW * idx, y: padT, width: groupW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
@@ -2633,11 +3016,11 @@
             svg.onmouseleave = () => tooltip.classList.add('hidden');
         }
 
-        // GRAPH 3.5: RHR, Garmin Sleep Score (0-100) & Mental Clarity (1-5) vs Alcohol
-        function drawRecoveryCorrelationChart() {
+        // GRAPH 3.5: RHR, Garmin Sleep Score & Mental Clarity vs Alcohol
+        function drawRecoveryCorrelationChart(dateKeys) {
             const svg = document.getElementById('recovery-svg');
             const tooltip = document.getElementById('recovery-tooltip');
-            if (!svg) return;
+            if (!svg || dateKeys.length === 0) return;
 
             const rect = svg.parentElement.getBoundingClientRect();
             const W = Math.max(280, rect.width);
@@ -2648,16 +3031,17 @@
             const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
+            const n = dateKeys.length;
+            const showDots = n <= 35;
 
-            const daysData = [];
-            for (let d = 1; d <= 30; d++) {
-                const entry = appState.logs[d];
+            const daysData = dateKeys.map((dk, idx) => {
+                const entry = appState.logs[dk];
                 const rhr = entry?.logged && entry.rhr !== null && entry.rhr !== undefined && entry.rhr !== '' ? Number(entry.rhr) : null;
                 const sleep = entry?.logged && entry.sleepQuality !== null && entry.sleepQuality !== undefined && entry.sleepQuality !== '' ? Number(entry.sleepQuality) : null;
                 const clarity = entry?.logged && entry.mentalClarity ? Number(entry.mentalClarity) : null;
                 const drinks = entry?.logged ? Number(entry.drinks || 0) : null;
-                daysData.push({ day: d, rhr, sleep, clarity, drinks });
-            }
+                return { idx, dateKey: dk, rhr, sleep, clarity, drinks };
+            });
 
             const validRhrs = daysData.map(x => x.rhr).filter(v => v !== null);
             const validSleeps = daysData.map(x => x.sleep).filter(v => v !== null);
@@ -2694,20 +3078,20 @@
                 svg.appendChild(rTxt);
             }
 
-            const getX = (day) => padL + ((day - 1) / 29) * chartW;
+            const getX = (idx) => n <= 1 ? padL + chartW / 2 : padL + (idx / (n - 1)) * chartW;
             const getYRhr = (val) => padT + chartH - ((val - minRhr) / spanRhr) * chartH;
             const getYSleep = (val) => padT + chartH - (Math.max(0, Math.min(100, val)) / 100) * chartH;
             const getYClarity = (val) => padT + chartH - ((val - 1) / 4) * chartH;
-            const slotW = chartW / 30;
+            const slotW = chartW / Math.max(1, n);
+            const barW = Math.max(1.5, Math.min(14, slotW * 0.6));
 
-            // Background Alcohol Bars
             daysData.forEach(item => {
                 if (item.drinks !== null && item.drinks > 0) {
                     const bH = (item.drinks / maxDrinks) * (chartH * 0.4);
                     svg.appendChild(createSvgEl('rect', {
-                        x: getX(item.day) - slotW * 0.3,
+                        x: getX(item.idx) - barW / 2,
                         y: padT + chartH - bH,
-                        width: slotW * 0.6,
+                        width: barW,
                         height: bH,
                         rx: 2,
                         fill: '#fbbf24',
@@ -2716,25 +3100,22 @@
                 }
             });
 
-            // Garmin Sleep Score Solid Line
             const sleepPts = daysData.filter(x => x.sleep !== null);
             if (sleepPts.length > 1) {
-                const pathD = sleepPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getYSleep(p.sleep)}`).join(' ');
-                svg.appendChild(createSvgEl('path', { d: pathD, fill: 'none', stroke: '#38bdf8', 'stroke-width': 2.2, 'stroke-linecap': 'round' }));
+                const pathD = sleepPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.idx)} ${getYSleep(p.sleep)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: pathD, fill: 'none', stroke: '#38bdf8', 'stroke-width': 2.1, 'stroke-linecap': 'round' }));
             }
 
-            // Mental Clarity Dashed Line
             const clarityPts = daysData.filter(x => x.clarity !== null);
             if (clarityPts.length > 1) {
-                const pathD = clarityPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getYClarity(p.clarity)}`).join(' ');
-                svg.appendChild(createSvgEl('path', { d: pathD, fill: 'none', stroke: '#34d399', 'stroke-width': 2, 'stroke-dasharray': '4 3', 'stroke-linecap': 'round' }));
+                const pathD = clarityPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.idx)} ${getYClarity(p.clarity)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: pathD, fill: 'none', stroke: '#34d399', 'stroke-width': 1.9, 'stroke-dasharray': '4 3', 'stroke-linecap': 'round' }));
             }
 
-            // RHR Solid Line
             const rhrPts = daysData.filter(x => x.rhr !== null);
             if (rhrPts.length > 1) {
-                const pathD = rhrPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.day)} ${getYRhr(p.rhr)}`).join(' ');
-                svg.appendChild(createSvgEl('path', { d: pathD, fill: 'none', stroke: '#f43f5e', 'stroke-width': 2.5, 'stroke-linecap': 'round' }));
+                const pathD = rhrPts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.idx)} ${getYRhr(p.rhr)}`).join(' ');
+                svg.appendChild(createSvgEl('path', { d: pathD, fill: 'none', stroke: '#f43f5e', 'stroke-width': 2.4, 'stroke-linecap': 'round' }));
             }
 
             const buildTipHtml = (item) => {
@@ -2743,37 +3124,30 @@
                 const clarityStr = item.clarity !== null ? `${item.clarity}/5` : '—';
                 const drinksStr = item.drinks !== null ? `${item.drinks} drinks` : 'Unlogged';
                 return `
-                    <div class="font-bold text-rose-300 mb-0.5">Day ${item.day} Recovery & Clarity</div>
+                    <div class="font-bold text-rose-300 mb-0.5">${formatShortDateKey(item.dateKey)} Recovery</div>
                     <div>RHR: <strong>${rhrStr}</strong> · Drinks: <strong>${drinksStr}</strong></div>
                     <div>Garmin Sleep: <strong>${sleepStr}</strong> · Clarity: <strong>${clarityStr}</strong></div>
                 `;
             };
 
             daysData.forEach(item => {
-                const cx = getX(item.day);
-                if (item.day === 1 || item.day % 5 === 0) {
+                const cx = getX(item.idx);
+                if (shouldShowXTick(item.idx, n)) {
                     const xLbl = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
-                    xLbl.textContent = `D${item.day}`;
+                    xLbl.textContent = formatShortDateKey(item.dateKey);
                     svg.appendChild(xLbl);
                 }
 
-                if (item.sleep !== null) {
-                    svg.appendChild(createSvgEl('circle', {
-                        cx, cy: getYSleep(item.sleep), r: 3,
-                        fill: '#38bdf8', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.2
-                    }));
-                }
-                if (item.clarity !== null) {
-                    svg.appendChild(createSvgEl('circle', {
-                        cx, cy: getYClarity(item.clarity), r: 2.8,
-                        fill: '#34d399', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.1
-                    }));
-                }
-                if (item.rhr !== null) {
-                    svg.appendChild(createSvgEl('circle', {
-                        cx, cy: getYRhr(item.rhr), r: 3.5,
-                        fill: '#f43f5e', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.5
-                    }));
+                if (showDots) {
+                    if (item.sleep !== null) {
+                        svg.appendChild(createSvgEl('circle', { cx, cy: getYSleep(item.sleep), r: 2.8, fill: '#38bdf8', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1 }));
+                    }
+                    if (item.clarity !== null) {
+                        svg.appendChild(createSvgEl('circle', { cx, cy: getYClarity(item.clarity), r: 2.5, fill: '#34d399', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1 }));
+                    }
+                    if (item.rhr !== null) {
+                        svg.appendChild(createSvgEl('circle', { cx, cy: getYRhr(item.rhr), r: 3.2, fill: '#f43f5e', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.2 }));
+                    }
                 }
 
                 const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
@@ -2785,21 +3159,21 @@
                 svg.appendChild(hit);
             });
 
-            attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+            attachTouchScrub(svg, tooltip, n, padL, chartW, (idx, r) => {
                 const item = daysData[idx];
                 const yRef = item.rhr !== null ? getYRhr(item.rhr) : (item.sleep !== null ? getYSleep(item.sleep) : padT + chartH * 0.5);
                 tooltip.innerHTML = buildTipHtml(item);
-                positionTooltip(tooltip, r, getX(item.day), yRef);
+                positionTooltip(tooltip, r, getX(idx), yRef);
             });
 
             svg.onmouseleave = () => tooltip.classList.add('hidden');
         }
 
         // GRAPH 4: Exercise Minutes & Alcohol Alignment
-        function drawTrainingCorrelationChart() {
+        function drawTrainingCorrelationChart(dateKeys) {
             const svg = document.getElementById('training-svg');
             const tooltip = document.getElementById('training-tooltip');
-            if (!svg) return;
+            if (!svg || dateKeys.length === 0) return;
 
             const rect = svg.parentElement.getBoundingClientRect();
             const W = Math.max(280, rect.width);
@@ -2810,10 +3184,10 @@
             const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
+            const n = dateKeys.length;
 
-            const daysData = [];
-            for (let d = 1; d <= 30; d++) {
-                const entry = appState.logs[d];
+            const daysData = dateKeys.map((dk, idx) => {
+                const entry = appState.logs[dk];
                 const w = entry?.logged ? normalizeWorkout(entry.workout) : null;
                 const mins = w ? Number(w.duration || 0) : 0;
                 const vol = w ? calcWorkoutVolume(w) : 0;
@@ -2824,8 +3198,8 @@
                     else color = '#2dd4bf';
                 }
                 const drinks = entry?.logged ? Number(entry.drinks || 0) : null;
-                daysData.push({ day: d, mins, vol, color, drinks, workout: w });
-            }
+                return { idx, dateKey: dk, mins, vol, color, drinks };
+            });
 
             const maxMins = Math.max(60, ...daysData.map(x => x.mins)) * 1.1;
             const maxDrinks = Math.max(4, ...daysData.map(x => x.drinks || 0));
@@ -2833,10 +3207,11 @@
             const padL = 38, padR = 16, padT = 16, padB = 28;
             const chartW = W - padL - padR;
             const chartH = H - padT - padB;
-            const getX = (day) => padL + ((day - 1) / 29) * chartW;
+            const getX = (idx) => n <= 1 ? padL + chartW / 2 : padL + (idx / (n - 1)) * chartW;
             const getYMin = (m) => padT + chartH - (m / maxMins) * chartH;
             const getYDrink = (drk) => padT + chartH - (drk / maxDrinks) * (chartH * 0.85);
-            const slotW = chartW / 30;
+            const slotW = chartW / Math.max(1, n);
+            const barW = Math.max(2, Math.min(18, slotW * 0.68));
 
             for (let i = 0; i <= 4; i++) {
                 const y = padT + chartH - (i / 4) * chartH;
@@ -2847,33 +3222,33 @@
             }
 
             const buildTip = (item) => `
-                <div class="font-bold text-violet-300 mb-0.5">Day ${item.day} Training</div>
+                <div class="font-bold text-violet-300 mb-0.5">${formatShortDateKey(item.dateKey)} Training</div>
                 <div>Active: <strong>${item.mins} min</strong> · Drinks: <strong>${item.drinks !== null ? item.drinks : '—'}</strong></div>
                 ${item.vol > 0 ? `<div class="text-slate-300">Lift Volume: ${Math.round(item.vol).toLocaleString()} ${appState.weightUnit}</div>` : ''}
             `;
 
             daysData.forEach(item => {
-                const cx = getX(item.day);
+                const cx = getX(item.idx);
                 if (item.mins > 0) {
                     const bH = Math.max(3, (item.mins / maxMins) * chartH);
                     svg.appendChild(createSvgEl('rect', {
-                        x: cx - slotW * 0.34,
+                        x: cx - barW / 2,
                         y: padT + chartH - bH,
-                        width: slotW * 0.68,
+                        width: barW,
                         height: bH,
-                        rx: 3,
+                        rx: Math.min(3, barW / 2),
                         fill: item.color
                     }));
                 }
                 if (item.drinks !== null && item.drinks > 0) {
                     svg.appendChild(createSvgEl('circle', {
-                        cx, cy: getYDrink(item.drinks), r: 3.5,
-                        fill: '#f43f5e', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1.2
+                        cx, cy: getYDrink(item.drinks), r: n <= 45 ? 3.2 : 2.3,
+                        fill: '#f43f5e', stroke: isDark ? '#0f172a' : '#ffffff', 'stroke-width': 1
                     }));
                 }
-                if (item.day === 1 || item.day % 5 === 0) {
+                if (shouldShowXTick(item.idx, n)) {
                     const t = createSvgEl('text', { x: cx, y: H - 8, fill: textColor, 'font-size': 10, 'text-anchor': 'middle' });
-                    t.textContent = `D${item.day}`;
+                    t.textContent = formatShortDateKey(item.dateKey);
                     svg.appendChild(t);
                 }
                 const hit = createSvgEl('rect', { x: cx - slotW / 2, y: padT, width: slotW, height: chartH, fill: 'transparent', class: 'cursor-pointer' });
@@ -2884,178 +3259,115 @@
                 svg.appendChild(hit);
             });
 
-            attachTouchScrub(svg, tooltip, 30, padL, chartW, (idx, r) => {
+            attachTouchScrub(svg, tooltip, n, padL, chartW, (idx, r) => {
                 const item = daysData[idx];
                 tooltip.innerHTML = buildTip(item);
-                positionTooltip(tooltip, r, getX(item.day), item.mins > 0 ? getYMin(item.mins) : padT + chartH * 0.5);
+                positionTooltip(tooltip, r, getX(idx), item.mins > 0 ? getYMin(item.mins) : padT + chartH * 0.5);
             });
 
             svg.onmouseleave = () => tooltip.classList.add('hidden');
         }
 
         // ==========================================
-        // 8. DEMO DATA, IMPORT/EXPORT & RESET
+        // 11. 90-DAY DEMO DATA, IMPORT/EXPORT & RESET
         // ==========================================
         function loadDemoData() {
-            const today = new Date();
-            const start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 17);
-            appState.startDate = start.toISOString().split('T')[0];
+            const todayKey = getTodayKey();
+            const totalDemoDays = 90;
+            const startKey = addDaysToKey(todayKey, -(totalDemoDays - 1));
+
+            appState.startDate = startKey;
             appState.baselineWeekly = 14;
+            appState.weeklyTarget = 7;
             appState.weightUnit = 'lbs';
-            appState.startingWeight = 240.0;
-            appState.goalWeight = 232.0;
-
-            const sampleDays = [
-                {
-                    d: 1, drinks: 2, na: 1, w: 240.0, rhr: 58, sleep: 74, clarity: 3, energy: 3, note: '60-min buffer worked; had Athletic IPA first',
-                    workout: {
-                        modalities: ['strength'], duration: 55, rpe: '7',
-                        lifts: [
-                            { name: 'Squat / Split Squat', sets: 3, reps: 8, weight: 185 },
-                            { name: 'Bench Press', sets: 3, reps: 8, weight: 155 }
-                        ],
-                        notes: 'Solid lower/push opener'
-                    }
-                },
-                {
-                    d: 2, drinks: 0, na: 2, w: 239.6, rhr: 59, sleep: 72, clarity: 3, energy: 3, note: 'Dry Tuesday — sparkling water + bitters',
-                    workout: { modalities: ['cycling'], duration: 45, rpe: '6', lifts: [], notes: '45m Zwift Zone 2 ride' }
-                },
-                {
-                    d: 3, drinks: 2, na: 1, w: 239.4, rhr: 53, sleep: 86, clarity: 4, energy: 4, note: 'Sharp morning after dry night; delayed dinner wine',
-                    workout: {
-                        modalities: ['strength'], duration: 50, rpe: '7',
-                        lifts: [
-                            { name: 'Deadlift / RDL', sets: 3, reps: 8, weight: 205 },
-                            { name: 'Pull-ups / Rows', sets: 3, reps: 10, weight: 135 }
-                        ],
-                        notes: 'Posterior chain & upper pull'
-                    }
-                },
-                {
-                    d: 4, drinks: 0, na: 2, w: 238.9, rhr: 57, sleep: 75, clarity: 3, energy: 3, note: 'Clean recovery day',
-                    workout: { modalities: ['mobility'], duration: 25, rpe: '3', lifts: [], notes: 'Hip & thoracic mobility' }
-                },
-                {
-                    d: 5, drinks: 3, na: 2, w: 238.8, rhr: 52, sleep: 89, clarity: 5, energy: 4, note: 'Laser focus in the morning; Friday social paced well',
-                    workout: {
-                        modalities: ['strength'], duration: 50, rpe: '8',
-                        lifts: [
-                            { name: 'Overhead Press', sets: 3, reps: 8, weight: 105 },
-                            { name: 'Squat / Split Squat', sets: 3, reps: 8, weight: 195 }
-                        ],
-                        notes: 'Moved up 10 lbs on squats'
-                    }
-                },
-                {
-                    d: 6, drinks: 3, na: 1, w: 239.3, rhr: 61, sleep: 62, clarity: 2, energy: 2, note: 'Noticeable Garmin sleep dip after 3 drinks',
-                    workout: { modalities: ['cycling'], duration: 75, rpe: '7', lifts: [], notes: '75m weekend endurance ride' }
-                },
-                {
-                    d: 7, drinks: 1, na: 2, w: 239.0, rhr: 60, sleep: 65, clarity: 2, energy: 3, note: 'Week 1 finished at 11/12 drinks',
-                    workout: { modalities: ['recovery'], duration: 30, rpe: '3', lifts: [], notes: 'Active recovery walk' }
-                },
-                {
-                    d: 8, drinks: 0, na: 2, w: 238.4, rhr: 55, sleep: 82, clarity: 4, energy: 4, note: 'Monday dry guardrail locked in',
-                    workout: {
-                        modalities: ['strength'], duration: 60, rpe: '8',
-                        lifts: [
-                            { name: 'Squat / Split Squat', sets: 4, reps: 6, weight: 205 },
-                            { name: 'Bench Press', sets: 3, reps: 8, weight: 165 }
-                        ],
-                        notes: 'High energy after dry night'
-                    }
-                },
-                {
-                    d: 9, drinks: 0, na: 2, w: 237.8, rhr: 52, sleep: 90, clarity: 5, energy: 5, note: 'Garmin sleep 90 — mental clarity awesome',
-                    workout: { modalities: ['cycling'], duration: 50, rpe: '6', lifts: [], notes: 'Tempo intervals on trainer' }
-                },
-                {
-                    d: 10, drinks: 0, na: 1, w: 237.3, rhr: 51, sleep: 92, clarity: 5, energy: 5, note: '3-day dry streak, laser focus all morning',
-                    workout: {
-                        modalities: ['strength'], duration: 55, rpe: '8',
-                        lifts: [
-                            { name: 'Deadlift / RDL', sets: 3, reps: 6, weight: 225 },
-                            { name: 'Pull-ups / Rows', sets: 4, reps: 8, weight: 145 }
-                        ],
-                        notes: 'RDL felt super crisp'
-                    }
-                },
-                {
-                    d: 11, drinks: 2, na: 2, w: 237.1, rhr: 51, sleep: 88, clarity: 4, energy: 4, note: 'Work dinner — ordered NA beer first',
-                    workout: { modalities: ['mobility'], duration: 20, rpe: '3', lifts: [], notes: 'Morning core & stretch' }
-                },
-                {
-                    d: 12, drinks: 3, na: 2, w: 237.5, rhr: 57, sleep: 71, clarity: 3, energy: 3, note: 'Friday night, kept to 3 drinks',
-                    workout: {
-                        modalities: ['strength'], duration: 50, rpe: '7',
-                        lifts: [
-                            { name: 'Overhead Press', sets: 4, reps: 6, weight: 115 },
-                            { name: 'Core / Plyometrics', sets: 3, reps: 12, weight: 25 }
-                        ],
-                        notes: 'Upper press & explosive work'
-                    }
-                },
-                {
-                    d: 13, drinks: 2.5, na: 2, w: 237.2, rhr: 60, sleep: 64, clarity: 2, energy: 3, note: 'Switched to light lagers',
-                    workout: { modalities: ['cycling'], duration: 90, rpe: '7', lifts: [], notes: '90m outdoor gravel ride' }
-                },
-                {
-                    d: 14, drinks: 0, na: 2, w: 236.7, rhr: 58, sleep: 70, clarity: 3, energy: 3, note: 'Week 2 finished at 7.5/10 drinks',
-                    workout: { modalities: ['recovery'], duration: 30, rpe: '3', lifts: [], notes: 'Foam rolling & walk' }
-                },
-                {
-                    d: 15, drinks: 0, na: 2, w: 236.1, rhr: 52, sleep: 91, clarity: 5, energy: 5, note: 'Week 3 started dry with 91 sleep score',
-                    workout: {
-                        modalities: ['strength'], duration: 60, rpe: '8',
-                        lifts: [
-                            { name: 'Squat / Split Squat', sets: 4, reps: 6, weight: 215 },
-                            { name: 'Bench Press', sets: 4, reps: 6, weight: 175 }
-                        ],
-                        notes: 'New 30-day squat & bench PRs!'
-                    }
-                },
-                {
-                    d: 16, drinks: 0, na: 2, w: 235.8, rhr: 50, sleep: 93, clarity: 5, energy: 5, note: 'Hop water in chilled pint glass',
-                    workout: { modalities: ['cycling'], duration: 50, rpe: '6', lifts: [], notes: '50m Zone 2 spin, low HR drift' }
-                },
-                {
-                    d: 17, drinks: 1.5, na: 2, w: 235.5, rhr: 50, sleep: 91, clarity: 5, energy: 5, note: '1-for-1 sparkling water rule, low ABV spritz',
-                    workout: {
-                        modalities: ['strength'], duration: 55, rpe: '8',
-                        lifts: [
-                            { name: 'Deadlift / RDL', sets: 4, reps: 6, weight: 235 },
-                            { name: 'Pull-ups / Rows', sets: 4, reps: 8, weight: 150 }
-                        ],
-                        notes: '235 lbs RDL PR'
-                    }
-                },
-                {
-                    d: 18, drinks: 0, na: 2, w: 235.1, rhr: 54, sleep: 84, clarity: 4, energy: 4, note: 'Down nearly 5 lbs & sleeping soundly',
-                    workout: { modalities: ['mobility', 'cardio'], duration: 35, rpe: '5', lifts: [], notes: 'Core + easy run' }
-                }
-            ];
-
+            appState.startingWeight = 244.0;
+            appState.goalWeight = 230.0;
             appState.logs = {};
-            sampleDays.forEach(item => {
-                appState.logs[item.d] = {
+
+            let weight = 244.0;
+            let squatLoad = 175;
+            let rdlLoad = 195;
+            let benchLoad = 145;
+            let prevDrinks = 2;
+
+            for (let i = 0; i < totalDemoDays; i++) {
+                const dk = addDaysToKey(startKey, i);
+                const dt = parseDateKey(dk);
+                const dow = dt.getDay(); // 0=Sun..6=Sat
+                const progress = i / totalDemoDays; // 0..1 improvement over 90 days
+
+                // Gradual reduction in drinks over 90 days
+                let drinks = 0;
+                if (dow === 5 || dow === 6) {
+                    drinks = progress < 0.33 ? 3 : (progress < 0.66 ? 2 : (i % 2 === 0 ? 1.5 : 2));
+                } else if (dow === 3 && progress < 0.45) {
+                    drinks = 2;
+                } else if (dow === 0 && progress < 0.25) {
+                    drinks = 1;
+                }
+
+                // Weight trends steadily downward with small weekend water bumps
+                const deltaW = drinks >= 2 ? 0.35 : -0.22;
+                weight = Math.max(229.5, Math.round((weight + deltaW + ((i % 3) - 1) * 0.12) * 10) / 10);
+
+                // Morning biometrics respond to prior night's alcohol + 90-day fitness gain
+                const baseRhr = 58 - Math.round(progress * 6);
+                const rhr = baseRhr + (prevDrinks > 0 ? Math.min(8, Math.round(prevDrinks * 2.5)) : -2);
+                const sleep = Math.max(52, Math.min(96, Math.round(84 + progress * 7 - prevDrinks * 7 + ((i % 5) - 2))));
+                const clarity = prevDrinks === 0 ? (progress > 0.3 ? 5 : 4) : (prevDrinks >= 2.5 ? 2 : 3);
+                const energy = prevDrinks === 0 ? (sleep >= 85 ? 5 : 4) : (prevDrinks >= 2.5 ? 2 : 3);
+
+                // Progressive overload workouts
+                let workout = { modalities: [], duration: 0, rpe: '', lifts: [], notes: '' };
+                if (dow === 1 || dow === 4) {
+                    if (i > 0 && i % 14 === 0) { squatLoad += 5; benchLoad += 5; }
+                    workout = {
+                        modalities: ['strength'], duration: 55, rpe: '8',
+                        lifts: [
+                            { name: 'Squat / Split Squat', sets: 4, reps: 6, weight: squatLoad },
+                            { name: 'Bench Press', sets: 3, reps: 8, weight: benchLoad }
+                        ],
+                        notes: 'Strength progression block'
+                    };
+                } else if (dow === 3) {
+                    if (i > 0 && i % 14 === 3) { rdlLoad += 5; }
+                    workout = {
+                        modalities: ['strength'], duration: 50, rpe: '7',
+                        lifts: [
+                            { name: 'Deadlift / RDL', sets: 3, reps: 6, weight: rdlLoad },
+                            { name: 'Pull-ups / Rows', sets: 4, reps: 8, weight: 140 + Math.round(progress * 15) }
+                        ],
+                        notes: 'Posterior chain & pull'
+                    };
+                } else if (dow === 2 || dow === 6) {
+                    workout = {
+                        modalities: ['cycling'], duration: dow === 6 ? 75 : 45, rpe: '6',
+                        lifts: [], notes: dow === 6 ? 'Weekend endurance ride' : 'Zone 2 aerobic ride'
+                    };
+                } else if (dow === 0) {
+                    workout = { modalities: ['mobility', 'recovery'], duration: 30, rpe: '3', lifts: [], notes: 'Recovery walk & mobility' };
+                }
+
+                appState.logs[dk] = {
                     logged: true,
-                    drinks: item.drinks,
-                    naDrinks: item.na,
-                    weight: item.w,
-                    rhr: item.rhr,
-                    sleepQuality: item.sleep,
-                    mentalClarity: item.clarity,
-                    energyLevel: item.energy,
-                    workout: normalizeWorkout(item.workout),
-                    habits: { buffer60: true, recovery: true },
-                    notes: item.note
+                    drinks,
+                    naDrinks: drinks === 0 ? 2 : 1,
+                    weight,
+                    rhr,
+                    sleepQuality: sleep,
+                    mentalClarity: clarity,
+                    energyLevel: energy,
+                    workout,
+                    habits: { buffer60: true, recovery: true, sleepWindow: drinks === 0 },
+                    notes: drinks === 0 ? 'Dry night — strong Garmin sleep & clarity' : 'Social night paced with water'
                 };
-            });
+                prevDrinks = drinks;
+            }
 
             saveState();
+            jumpCalendarToToday();
             renderAll();
-            showToast('Loaded 18-day sample health log');
+            showToast('Loaded 90-day health history — try 7D, 30D, 90D & All-Time!');
         }
 
         function exportData() {
@@ -3063,7 +3375,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `peak-health-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `peak-health-backup-${getTodayKey()}.json`;
             a.click();
             URL.revokeObjectURL(url);
             showToast('Backup exported');
@@ -3077,24 +3389,20 @@
                 try {
                     const imported = JSON.parse(e.target.result);
                     if (imported && typeof imported === 'object' && imported.logs) {
-                        const normalizedLogs = {};
-                        for (const [k, v] of Object.entries(imported.logs)) {
-                            normalizedLogs[k] = {
-                                ...v,
-                                rhr: v.rhr !== undefined && v.rhr !== null && v.rhr !== '' ? Number(v.rhr) : null,
-                                sleepQuality: normalizeSleepScore(v.sleepQuality),
-                                mentalClarity: v.mentalClarity !== undefined && v.mentalClarity !== null && v.mentalClarity !== '' ? Number(v.mentalClarity) : null,
-                                energyLevel: v.energyLevel !== undefined && v.energyLevel !== null && v.energyLevel !== '' ? Number(v.energyLevel) : null,
-                                workout: normalizeWorkout(v.workout)
-                            };
-                        }
+                        const startDate = isIsoDateKey(imported.startDate) ? imported.startDate : getTodayKey();
+                        const baseline = Number(imported.baselineWeekly) || 14;
+                        const weeklyTarget = imported.weeklyTarget !== undefined && imported.weeklyTarget !== null
+                            ? Math.max(0, Number(imported.weeklyTarget))
+                            : Math.max(1, Math.round(baseline * 0.5));
+
                         appState = {
-                            baselineWeekly: Number(imported.baselineWeekly) || 14,
-                            startDate: imported.startDate || new Date().toISOString().split('T')[0],
+                            baselineWeekly: baseline,
+                            weeklyTarget,
+                            startDate,
                             weightUnit: imported.weightUnit === 'kg' ? 'kg' : 'lbs',
                             startingWeight: imported.startingWeight !== undefined ? imported.startingWeight : null,
                             goalWeight: imported.goalWeight !== undefined ? imported.goalWeight : null,
-                            logs: normalizedLogs
+                            logs: normalizeLogsObject(imported.logs, startDate)
                         };
                         saveState();
                         renderAll();
@@ -3134,18 +3442,14 @@
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 banner.classList.add('hidden');
-            }, 2400);
+            }, 2600);
         }
 
         // Boot App & Responsive Chart Redraw
         window.addEventListener('DOMContentLoaded', () => {
-            const baselineInput = document.getElementById('setup-baseline');
-            if (baselineInput) {
-                baselineInput.addEventListener('input', updateSetupPreview);
-            }
             loadState();
             renderAll();
-            setTimeout(drawAllCharts, 40);
+            setTimeout(() => drawAllCharts(getRangeDateKeys(activeTimeRange)), 40);
         });
 
         let resizeTimer = null;
@@ -3153,7 +3457,7 @@
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
                 if (!document.getElementById('view-analytics').classList.contains('hidden')) {
-                    drawAllCharts();
+                    drawAllCharts(getRangeDateKeys(activeTimeRange));
                 }
             }, 120);
         });
