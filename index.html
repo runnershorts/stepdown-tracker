@@ -1117,53 +1117,52 @@
                 } else if (/^\d+$/.test(k)) {
                     const dayNum = parseInt(k, 10);
                     if (dayNum >= 1 && dayNum <= 366) {
-        function switchTab(tabName, shouldScroll = false) {
-            ['analytics', 'tracker', 'playbook'].forEach(t => {
-                const view = document.getElementById(`view-${t}`);
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if (!view || !btn) return;
-                if (t === tabName) {
-                    view.classList.remove('hidden');
-                    btn.className = 'flex-1 min-w-[110px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm transition whitespace-nowrap';
-                } else {
-                    view.classList.add('hidden');
-                    btn.className = 'flex-1 min-w-[110px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap';
+                        dateKey = addDaysToKey(baseStart, dayNum - 1);
+                    }
                 }
-            });
+                if (!dateKey) continue;
 
-            // Keep mobile bottom-bar Calendar button state in sync
-            const mobileCalBtn = document.getElementById('mobile-nav-calendar');
-            if (mobileCalBtn) {
-                mobileCalBtn.className = tabName === 'tracker'
-                    ? 'min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200 border border-emerald-300/80 dark:border-emerald-700 font-semibold transition active:scale-95 px-1'
-                    : 'min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1';
+                result[dateKey] = {
+                    logged: Boolean(v.logged),
+                    drinks: Number(v.drinks) || 0,
+                    naDrinks: Number(v.naDrinks) || 0,
+                    weight: (v.weight !== undefined && v.weight !== null && v.weight !== '') ? Number(v.weight) : null,
+                    rhr: (v.rhr !== undefined && v.rhr !== null && v.rhr !== '') ? Number(v.rhr) : null,
+                    sleepQuality: normalizeSleepScore(v.sleepQuality),
+                    mentalClarity: (v.mentalClarity !== undefined && v.mentalClarity !== null && v.mentalClarity !== '') ? Number(v.mentalClarity) : null,
+                    energyLevel: (v.energyLevel !== undefined && v.energyLevel !== null && v.energyLevel !== '') ? Number(v.energyLevel) : null,
+                    workout: normalizeWorkout(v.workout),
+                    habits: (v.habits && typeof v.habits === 'object') ? v.habits : {},
+                    notes: String(v.notes || '')
+                };
             }
-
-            if (tabName === 'tracker') {
-                renderCalendarMonth();
-            } else if (tabName === 'analytics') {
-                setTimeout(() => drawAllCharts(getRangeDateKeys(activeTimeRange)), 25);
-            }
-
-            if (shouldScroll) {
-                const tabsEl = document.getElementById('primary-tabs');
-                if (tabsEl) {
-                    tabsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            }
+            return result;
         }
 
-        function openCalendarView() {
-            const trackerView = document.getElementById('view-tracker');
-            const alreadyOpen = trackerView && !trackerView.classList.contains('hidden');
-            if (alreadyOpen) {
-                jumpCalendarToToday();
-                const tabsEl = document.getElementById('primary-tabs');
-                if (tabsEl) tabsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                switchTab('tracker', true);
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return;
+                const parsed = JSON.parse(raw);
+                if (!parsed || typeof parsed !== 'object') return;
+
+                const startDate = isIsoDateKey(parsed.startDate) ? parsed.startDate : getTodayKey();
+                const baseline = Math.max(1, Number(parsed.baselineWeekly) || 14);
+                const weeklyTarget = (parsed.weeklyTarget !== undefined && parsed.weeklyTarget !== null && !isNaN(Number(parsed.weeklyTarget)))
+                    ? Math.max(0, Number(parsed.weeklyTarget))
+                    : Math.max(1, Math.round(baseline * 0.5));
+
+                appState = {
+                    baselineWeekly: baseline,
+                    weeklyTarget,
+                    startDate,
+                    weightUnit: parsed.weightUnit === 'kg' ? 'kg' : 'lbs',
+                    startingWeight: (parsed.startingWeight !== undefined && parsed.startingWeight !== null && parsed.startingWeight !== '') ? Number(parsed.startingWeight) : null,
+                    goalWeight: (parsed.goalWeight !== undefined && parsed.goalWeight !== null && parsed.goalWeight !== '') ? Number(parsed.goalWeight) : null,
+                    logs: normalizeLogsObject(parsed.logs, startDate)
+                };
+            } catch (e) {
+                console.error('Failed to load state from localStorage:', e);
             }
         }
 
@@ -2330,10 +2329,11 @@
             showToast('Health goals updated');
         }
 
-        function switchTab(tabName) {
+        function switchTab(tabName, shouldScroll = false) {
             ['analytics', 'tracker', 'playbook'].forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 const btn = document.getElementById(`tab-btn-${t}`);
+                if (!view || !btn) return;
                 if (t === tabName) {
                     view.classList.remove('hidden');
                     btn.className = 'flex-1 min-w-[110px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm transition whitespace-nowrap';
@@ -2342,8 +2342,40 @@
                     btn.className = 'flex-1 min-w-[110px] min-h-[44px] py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap';
                 }
             });
-            if (tabName === 'analytics') {
+
+            // Keep mobile bottom-bar Calendar button state in sync
+            const mobileCalBtn = document.getElementById('mobile-nav-calendar');
+            if (mobileCalBtn) {
+                mobileCalBtn.className = tabName === 'tracker'
+                    ? 'min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200 border border-emerald-300/80 dark:border-emerald-700 font-semibold transition active:scale-95 px-1'
+                    : 'min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1';
+            }
+
+            if (tabName === 'tracker') {
+                renderCalendarMonth();
+            } else if (tabName === 'analytics') {
                 setTimeout(() => drawAllCharts(getRangeDateKeys(activeTimeRange)), 25);
+            }
+
+            if (shouldScroll) {
+                const tabsEl = document.getElementById('primary-tabs');
+                if (tabsEl) {
+                    tabsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        }
+
+        function openCalendarView() {
+            const trackerView = document.getElementById('view-tracker');
+            const alreadyOpen = trackerView && !trackerView.classList.contains('hidden');
+            if (alreadyOpen) {
+                jumpCalendarToToday();
+                const tabsEl = document.getElementById('primary-tabs');
+                if (tabsEl) tabsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                switchTab('tracker', true);
             }
         }
 
