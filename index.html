@@ -6,15 +6,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Peak Health">
-    <meta name="theme-color" id="meta-theme-color" content="#0f172a">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='52%25' stop-color='%2314b8a6'/%3E%3Cstop offset='100%25' stop-color='%230284c7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Cpath d='M26 108 H54 L68 72 L86 124 L104 54 L120 108 H154' fill='none' stroke='%23ffffff' stroke-width='11' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='146' cy='46' r='10' fill='%23fef08a'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" id="apple-touch-icon-link" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='52%25' stop-color='%2314b8a6'/%3E%3Cstop offset='100%25' stop-color='%230284c7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Cpath d='M26 108 H54 L68 72 L86 124 L104 54 L120 108 H154' fill='none' stroke='%23ffffff' stroke-width='11' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='146' cy='46' r='10' fill='%23fef08a'/%3E%3C/svg%3E">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <title>Peak Health · Unlimited Health & Performance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            darkMode: 'class',
+            darkMode: 'media',
             theme: {
                 extend: {
                     fontFamily: {
@@ -29,22 +28,6 @@
                 }
             }
         };
-        (function() {
-            try {
-                var raw = localStorage.getItem('stepdown_30day_tracker_v2');
-                var mode = 'auto';
-                if (raw) {
-                    var parsed = JSON.parse(raw);
-                    if (parsed && parsed.themeMode) mode = parsed.themeMode;
-                }
-                var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                var isDark = mode === 'dark' || mode === 'oled' || (mode === 'auto' && sysDark);
-                document.documentElement.classList.toggle('dark', isDark);
-                document.documentElement.classList.toggle('theme-oled', mode === 'oled');
-                var meta = document.getElementById('meta-theme-color');
-                if (meta) meta.setAttribute('content', mode === 'oled' ? '#000000' : (isDark ? '#0f172a' : '#ffffff'));
-            } catch (e) {}
-        })();
     </script>
     <style>
         * {
@@ -90,48 +73,6 @@
         .animate-slide-up {
             animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        /* Pure #000000 Midnight OLED Theme Overrides */
-        html.theme-oled,
-        html.theme-oled body {
-            background-color: #000000 !important;
-        }
-        html.theme-oled header,
-        html.theme-oled nav {
-            background-color: rgba(0, 0, 0, 0.94) !important;
-            border-color: #1c1c20 !important;
-        }
-        html.theme-oled .dark\:bg-slate-950 {
-            background-color: #000000 !important;
-        }
-        html.theme-oled .dark\:bg-slate-900,
-        html.theme-oled .dark\:bg-slate-900\/95,
-        html.theme-oled .dark\:bg-slate-900\/90 {
-            background-color: #050507 !important;
-        }
-        html.theme-oled .dark\:bg-slate-850,
-        html.theme-oled .dark\:bg-slate-900\/70 {
-            background-color: #0c0c10 !important;
-        }
-        html.theme-oled .dark\:bg-slate-800 {
-            background-color: #141419 !important;
-        }
-        html.theme-oled .dark\:border-slate-800 {
-            border-color: #1e1e24 !important;
-        }
-        html.theme-oled .dark\:border-slate-700 {
-            border-color: #272730 !important;
-        }
-        /* Interactive Muscle Body Map */
-        .muscle-region {
-            cursor: pointer;
-            transition: opacity 0.16s ease, filter 0.16s ease, stroke-width 0.16s ease;
-        }
-        .muscle-region:hover {
-            filter: brightness(1.12);
-        }
-        .muscle-region:active {
-            opacity: 0.78;
-        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-white">
@@ -148,12 +89,8 @@
                     <p id="header-subtitle" class="text-xs text-slate-500 dark:text-slate-400 truncate">Unlimited Body, Recovery, Training & Habits</p>
                 </div>
             </div>
-            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                <button type="button" onclick="cycleThemeMode()" id="theme-cycle-btn" aria-label="Cycle theme mode" title="Cycle Theme: Auto / Light / Dark / OLED" class="min-h-[44px] px-2.5 sm:px-3 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/70 dark:border-slate-700 transition flex items-center gap-1 active:scale-95">
-                    <span id="theme-cycle-icon">🌓</span>
-                    <span id="theme-cycle-label" class="hidden min-[400px]:inline">Auto</span>
-                </button>
-                <button type="button" onclick="loadDemoData()" class="min-h-[44px] px-2.5 sm:px-3 py-2 text-xs font-semibold rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 transition flex items-center gap-1 active:scale-95">
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="loadDemoData()" class="min-h-[44px] px-3 py-2 text-xs font-semibold rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 transition flex items-center gap-1.5 active:scale-95">
                     <span>✨ 90D Demo</span>
                 </button>
                 <button type="button" onclick="openSetupModal()" class="hidden md:flex min-h-[44px] px-3.5 py-2 text-xs sm:text-sm font-medium rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition items-center gap-1.5 active:scale-95">
@@ -187,111 +124,87 @@
             </div>
         </section>
 
-        <!-- KPI Summary Grid (Clickable Insight Tiles + 7D Sparklines · Adapts to Selected Horizon) -->
+        <!-- KPI Summary Grid (Adapts to Selected Horizon) -->
         <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
             <!-- Body Weight & Trend -->
-            <button type="button" onclick="openKpiInsight('weight')" aria-label="Open Weight & Delta insights" class="group text-left w-full bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-indigo-400/70 dark:hover:border-indigo-500/60 shadow-sm hover:shadow-md transition active:scale-[0.98] cursor-pointer flex flex-col justify-between">
-                <div class="w-full">
-                    <div class="flex items-center justify-between mb-1 w-full">
-                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition">Weight & Delta</span>
-                        <span class="text-indigo-500 text-sm flex items-center gap-0.5">⚖️<span class="text-[11px] text-slate-300 dark:text-slate-600 group-hover:text-indigo-400 transition">›</span></span>
-                    </div>
-                    <div class="flex items-baseline gap-1.5">
-                        <span id="kpi-weight" class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">—</span>
-                        <span id="kpi-weight-delta" class="text-xs font-semibold text-slate-400">0.0</span>
-                    </div>
-                    <p id="kpi-weight-trend" class="text-[11px] text-slate-400 mt-1">7-day trend: —</p>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Weight & Delta</span>
+                    <span class="text-indigo-500 text-sm">⚖️</span>
                 </div>
-                <div class="w-full h-6 mt-2 pointer-events-none"><svg id="spark-weight" class="w-full h-full overflow-visible" aria-hidden="true"></svg></div>
-            </button>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-weight" class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">—</span>
+                    <span id="kpi-weight-delta" class="text-xs font-semibold text-slate-400">0.0</span>
+                </div>
+                <p id="kpi-weight-trend" class="text-[11px] text-slate-400 mt-1">7-day trend: —</p>
+            </div>
 
             <!-- Recovery & Clarity KPI Card -->
-            <button type="button" onclick="openKpiInsight('recovery')" aria-label="Open Recovery & Clarity insights" class="group text-left w-full bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-rose-400/70 dark:hover:border-rose-500/60 shadow-sm hover:shadow-md transition active:scale-[0.98] cursor-pointer flex flex-col justify-between">
-                <div class="w-full">
-                    <div class="flex items-center justify-between mb-1 w-full">
-                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400 group-hover:text-rose-600 dark:group-hover:text-rose-300 transition">Recovery & Clarity</span>
-                        <span class="text-rose-500 text-sm flex items-center gap-0.5">❤️<span class="text-[11px] text-slate-300 dark:text-slate-600 group-hover:text-rose-400 transition">›</span></span>
-                    </div>
-                    <div class="flex items-baseline gap-1.5">
-                        <span id="kpi-rhr" class="text-2xl sm:text-3xl font-bold text-rose-600 dark:text-rose-400">—</span>
-                        <span id="kpi-rhr-delta" class="text-xs font-semibold text-slate-400">bpm</span>
-                    </div>
-                    <p id="kpi-recovery-scores" class="text-[11px] text-slate-400 mt-1">Sleep — · Clarity —/5</p>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Recovery & Clarity</span>
+                    <span class="text-rose-500 text-sm">❤️</span>
                 </div>
-                <div class="w-full h-6 mt-2 pointer-events-none"><svg id="spark-recovery" class="w-full h-full overflow-visible" aria-hidden="true"></svg></div>
-            </button>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-rhr" class="text-2xl sm:text-3xl font-bold text-rose-600 dark:text-rose-400">—</span>
+                    <span id="kpi-rhr-delta" class="text-xs font-semibold text-slate-400">bpm</span>
+                </div>
+                <p id="kpi-recovery-scores" class="text-[11px] text-slate-400 mt-1">Sleep — · Clarity —/5</p>
+            </div>
 
             <!-- Exercise & Strength KPI -->
-            <button type="button" onclick="openKpiInsight('training')" aria-label="Open Training & Lifts insights" class="group text-left w-full bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-violet-400/70 dark:hover:border-violet-500/60 shadow-sm hover:shadow-md transition active:scale-[0.98] cursor-pointer flex flex-col justify-between">
-                <div class="w-full">
-                    <div class="flex items-center justify-between mb-1 w-full">
-                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400 group-hover:text-violet-600 dark:group-hover:text-violet-300 transition">Training & Lifts</span>
-                        <span class="text-violet-500 text-sm flex items-center gap-0.5">🏋️<span class="text-[11px] text-slate-300 dark:text-slate-600 group-hover:text-violet-400 transition">›</span></span>
-                    </div>
-                    <div class="flex items-baseline gap-1.5">
-                        <span id="kpi-workouts" class="text-2xl sm:text-3xl font-bold text-violet-600 dark:text-violet-400">0</span>
-                        <span id="kpi-workout-mins" class="text-xs text-slate-500 dark:text-slate-400">sessions · 0m</span>
-                    </div>
-                    <p id="kpi-lift-volume" class="text-[11px] text-slate-400 mt-1">0 lbs · 0 str / 0 endur</p>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Training & Lifts</span>
+                    <span class="text-violet-500 text-sm">🏋️</span>
                 </div>
-                <div class="w-full h-6 mt-2 pointer-events-none"><svg id="spark-training" class="w-full h-full overflow-visible" aria-hidden="true"></svg></div>
-            </button>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-workouts" class="text-2xl sm:text-3xl font-bold text-violet-600 dark:text-violet-400">0</span>
+                    <span id="kpi-workout-mins" class="text-xs text-slate-500 dark:text-slate-400">sessions · 0m</span>
+                </div>
+                <p id="kpi-lift-volume" class="text-[11px] text-slate-400 mt-1">0 lbs · 0 str / 0 endur</p>
+            </div>
 
             <!-- Rolling 7-Day Alcohol Budget -->
-            <button type="button" onclick="openKpiInsight('pace')" aria-label="Open 7D Alcohol Pace insights" class="group text-left w-full bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-amber-400/70 dark:hover:border-amber-500/60 shadow-sm hover:shadow-md transition active:scale-[0.98] cursor-pointer flex flex-col justify-between">
-                <div class="w-full">
-                    <div class="flex items-center justify-between mb-1 w-full gap-1">
-                        <span id="kpi-week-label" class="text-xs font-medium text-slate-500 dark:text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-300 transition truncate">7D Alcohol Pace</span>
-                        <span id="kpi-week-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 shrink-0">On Track</span>
-                    </div>
-                    <div class="flex items-baseline gap-1.5">
-                        <span id="kpi-week-actual" class="text-2xl sm:text-3xl font-bold">0</span>
-                        <span id="kpi-week-target" class="text-xs text-slate-500 dark:text-slate-400">/ 7 max</span>
-                    </div>
-                    <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-1.5 overflow-hidden">
-                        <div id="kpi-week-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
-                    </div>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span id="kpi-week-label" class="text-xs font-medium text-slate-500 dark:text-slate-400">7D Alcohol Pace</span>
+                    <span id="kpi-week-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">On Track</span>
                 </div>
-                <div class="w-full h-6 mt-1.5 pointer-events-none"><svg id="spark-pace" class="w-full h-full overflow-visible" aria-hidden="true"></svg></div>
-            </button>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-week-actual" class="text-2xl sm:text-3xl font-bold">0</span>
+                    <span id="kpi-week-target" class="text-xs text-slate-500 dark:text-slate-400">/ 7 max</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+                    <div id="kpi-week-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
 
             <!-- Dry Days & Streak -->
-            <button type="button" onclick="openKpiInsight('dry')" aria-label="Open Dry Days & Streak insights" class="group text-left w-full bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-emerald-400/70 dark:hover:border-emerald-500/60 shadow-sm hover:shadow-md transition active:scale-[0.98] cursor-pointer flex flex-col justify-between">
-                <div class="w-full">
-                    <div class="flex items-center justify-between mb-1 w-full">
-                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition">Dry Days & Streak</span>
-                        <span class="text-emerald-500 text-sm flex items-center gap-0.5">🔥<span class="text-[11px] text-slate-300 dark:text-slate-600 group-hover:text-emerald-400 transition">›</span></span>
-                    </div>
-                    <div class="flex items-baseline gap-1.5">
-                        <span id="kpi-dry-days" class="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">0</span>
-                        <span class="text-xs text-slate-500 dark:text-slate-400">dry · <strong id="kpi-streak" class="text-slate-700 dark:text-slate-200">0d</strong> best</span>
-                    </div>
-                    <p id="kpi-na-swaps" class="text-[11px] text-slate-400 mt-1">0 NA drinks swapped</p>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Dry Days & Streak</span>
+                    <span class="text-emerald-500 text-sm">🔥</span>
                 </div>
-                <div class="w-full h-6 mt-2 pointer-events-none"><svg id="spark-dry" class="w-full h-full overflow-visible" aria-hidden="true"></svg></div>
-            </button>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-dry-days" class="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">0</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">dry · <strong id="kpi-streak" class="text-slate-700 dark:text-slate-200">0d</strong> best</span>
+                </div>
+                <p id="kpi-na-swaps" class="text-[11px] text-slate-400 mt-1">0 NA drinks swapped</p>
+            </div>
 
             <!-- Drinks Avoided & Calories Saved -->
-            <button type="button" onclick="openKpiInsight('saved')" aria-label="Open Drinks Avoided insights" class="group text-left w-full bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-sky-400/70 dark:hover:border-sky-500/60 shadow-sm hover:shadow-md transition active:scale-[0.98] cursor-pointer flex flex-col justify-between">
-                <div class="w-full">
-                    <div class="flex items-center justify-between mb-1 w-full">
-                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400 group-hover:text-sky-600 dark:group-hover:text-sky-300 transition">Drinks Avoided</span>
-                        <span class="text-sky-500 text-sm flex items-center gap-0.5">📉<span class="text-[11px] text-slate-300 dark:text-slate-600 group-hover:text-sky-400 transition">›</span></span>
-                    </div>
-                    <div class="flex items-baseline gap-1.5">
-                        <span id="kpi-saved" class="text-2xl sm:text-3xl font-bold text-sky-600 dark:text-sky-400">0</span>
-                        <span class="text-xs text-slate-500 dark:text-slate-400">vs baseline</span>
-                    </div>
-                    <p id="kpi-savings-extra" class="text-[11px] text-slate-400 mt-1">~0 kcal saved</p>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Drinks Avoided</span>
+                    <span class="text-sky-500 text-sm">📉</span>
                 </div>
-                <div class="w-full h-6 mt-2 pointer-events-none"><svg id="spark-saved" class="w-full h-full overflow-visible" aria-hidden="true"></svg></div>
-            </button>
-        </section>
-
-        <!-- 7D WEEKLY WINS STRIP -->
-        <section aria-label="7-Day Weekly Wins" class="bg-white dark:bg-slate-900 px-3.5 py-2.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center gap-2.5">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 shrink-0">7D Wins</span>
-            <div id="weekly-wins-strip" class="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar"></div>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-saved" class="text-2xl sm:text-3xl font-bold text-sky-600 dark:text-sky-400">0</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">vs baseline</span>
+                </div>
+                <p id="kpi-savings-extra" class="text-[11px] text-slate-400 mt-1">~0 kcal saved</p>
+            </div>
         </section>
 
         <!-- Primary Navigation Tabs -->
@@ -309,55 +222,27 @@
 
         <!-- TAB 1: DASHBOARD & INTERACTIVE VISUAL GRAPHS -->
         <section id="view-analytics" class="space-y-5">
-            <!-- Quick Action Strip + Today Focus / Deep Dive Toggle -->
-            <div class="bg-white dark:bg-slate-900 p-3.5 sm:px-4 sm:py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
-                <div class="flex flex-wrap items-center justify-between gap-2.5">
-                    <div class="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
-                        <button type="button" onclick="setDashboardView('focus')" id="dash-view-focus" class="min-h-[36px] px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 transition whitespace-nowrap">
-                            🎯 Today Focus
-                        </button>
-                        <button type="button" onclick="setDashboardView('deep')" id="dash-view-deep" class="min-h-[36px] px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition whitespace-nowrap">
-                            📊 Deep Dive
-                        </button>
-                    </div>
-                    <span class="text-[11px] text-slate-400 hidden sm:inline">Tap any KPI tile above for deep insights & Dry vs. Drinking splits</span>
+            <!-- Quick Action Strip -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+                <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+                    <span class="inline-block w-2 h-2 shrink-0 rounded-full bg-emerald-500"></span>
+                    <span>Switch between <strong>7D / 30D / 90D / All-Time</strong> above; touch & slide any chart to inspect exact dates.</span>
                 </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <button type="button" onclick="openMorningCheckIn()" class="min-h-[42px] flex-1 sm:flex-none px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl shadow-xs transition active:scale-95 whitespace-nowrap">
-                        ☀️ Morning Check-In
-                    </button>
-                    <button type="button" onclick="openYesterdayCheckIn()" class="min-h-[42px] px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700 text-xs font-semibold rounded-xl transition active:scale-95 whitespace-nowrap">
-                        ← Yesterday
-                    </button>
-                    <button type="button" onclick="startLiveWorkoutToday()" class="min-h-[42px] flex-1 sm:flex-none px-3.5 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold rounded-xl shadow-xs transition active:scale-95 whitespace-nowrap">
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                    <button type="button" onclick="startLiveWorkoutToday()" class="min-h-[42px] flex-1 md:flex-none px-3.5 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold rounded-xl shadow-xs transition active:scale-95">
                         🏋️ Live Workout
                     </button>
-                    <button type="button" onclick="quickLogDryToday()" class="hidden md:inline-flex items-center min-h-[42px] px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold rounded-xl transition whitespace-nowrap">
+                    <button type="button" onclick="quickLogDryToday()" class="hidden md:inline-flex items-center min-h-[42px] px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold rounded-xl transition">
                         ✓ 0-Drink Today
                     </button>
-                    <button type="button" onclick="openTodayModal()" class="hidden md:inline-flex items-center min-h-[42px] px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition whitespace-nowrap">
+                    <button type="button" onclick="openTodayModal()" class="hidden md:inline-flex items-center min-h-[42px] px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition">
                         + Log Today
                     </button>
                 </div>
             </div>
 
-            <!-- COMPACT EXPAND BANNER (SHOWN IN TODAY FOCUS MODE) -->
-            <button type="button" id="deep-dive-collapsed-card" onclick="setDashboardView('deep')" class="hidden w-full text-left bg-white dark:bg-slate-900 hover:border-emerald-400/70 dark:hover:border-emerald-600 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm transition active:scale-[0.99] flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-10 h-10 shrink-0 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">📊</div>
-                    <div class="min-w-0">
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white truncate">Deep Dive Analytics (5 Charts & Summary Table)</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 truncate">Alcohol pace, weight trend, Garmin sleep/RHR, and training alignment — tap to expand</p>
-                    </div>
-                </div>
-                <span class="text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 shrink-0">Expand ▾</span>
-            </button>
-
-            <!-- DEEP DIVE CHARTS CONTAINER -->
-            <div id="deep-dive-charts-container" class="space-y-5">
-
             <!-- GRAPH 1: ALCOHOL BUDGET VS TARGET CURVE -->
-            <div id="chart-card-pace" class="scroll-mt-20 bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4 transition-all">
+            <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                         <h2 id="pace-chart-title" class="text-base font-bold">Alcohol Budget vs. Target Curve</h2>
@@ -382,7 +267,7 @@
             <!-- GRAPH 2 & GRAPH 3 GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 <!-- GRAPH 2: WEIGHT TREND VS ALCOHOL -->
-                <div id="chart-card-weight" class="scroll-mt-20 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 transition-all">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
                     <div>
                         <h2 class="text-base font-bold">Weight Trend vs. Alcohol Intake</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400">7-day smoothed trend & daily scale weight vs. drinks</p>
@@ -399,7 +284,7 @@
                 </div>
 
                 <!-- GRAPH 3: PERIOD ALCOHOL BUDGET COMPARISON -->
-                <div id="chart-card-weekly" class="scroll-mt-20 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 transition-all">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
                     <div>
                         <h2 id="period-chart-title" class="text-base font-bold">Weekly Alcohol Budget Comparison</h2>
                         <p id="period-chart-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Baseline vs. target ceiling vs. actual drinks logged</p>
@@ -418,7 +303,7 @@
 
             <!-- GRAPH 3.5: RECOVERY, GARMIN SLEEP & CLARITY -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div id="chart-card-recovery" class="scroll-mt-20 lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 transition-all">
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
                     <div>
                         <h2 class="text-base font-bold">RHR, Garmin Sleep Score & Mental Clarity vs. Alcohol</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400">Morning RHR (bpm), Garmin Sleep Score (0–100), and Mental Clarity (1–5) overlaid on daily drinks</p>
@@ -452,7 +337,7 @@
 
             <!-- GRAPH 4 & STRENGTH PROGRESSION GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div id="chart-card-training" class="scroll-mt-20 lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3 transition-all">
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3">
                     <div>
                         <h2 class="text-base font-bold">Exercise Minutes, Lifting Volume & Alcohol Alignment</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400">Daily active training minutes by modality vs. daily drink count</p>
@@ -484,32 +369,16 @@
                 </div>
             </div>
 
-            </div><!-- /#deep-dive-charts-container -->
-
-            <!-- WEEKLY MUSCLE GROUP BALANCE, INTERACTIVE BODY MAP & SMART WORKOUT SUGGESTIONS -->
+            <!-- WEEKLY MUSCLE GROUP BALANCE & SMART WORKOUT SUGGESTIONS -->
             <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm grid grid-cols-1 lg:grid-cols-5 gap-5">
-                <div class="lg:col-span-3 space-y-3.5">
+                <div class="lg:col-span-3 space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
-                            <h2 class="text-base font-bold">Interactive Muscle Body Map (Last 7 Days)</h2>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Tap any muscle or tile to start today's workout filtered to that body part</p>
+                            <h2 class="text-base font-bold">Weekly Body Part Focus (Last 7 Days)</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Auto-tracked from your logged lifts & manual body-part tags</p>
                         </div>
                         <span id="muscle-coverage-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 dark:bg-violet-950/70 dark:text-violet-300">0 / 7 hit</span>
                     </div>
-
-                    <!-- Front & Back Anatomical Silhouette SVG -->
-                    <div class="bg-slate-50/90 dark:bg-slate-850 rounded-2xl border border-slate-200/70 dark:border-slate-800 p-3.5 space-y-2.5">
-                        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 dark:text-slate-400">
-                            <div class="flex items-center gap-3">
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> Trained</span>
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> Secondary</span>
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-slate-600 inline-block"></span> Due</span>
-                            </div>
-                            <span id="body-map-hover-hint" class="text-[11px] font-semibold text-violet-600 dark:text-violet-400">Tap any muscle → Filter workout</span>
-                        </div>
-                        <div id="muscle-body-map" class="grid grid-cols-2 gap-3 max-w-md mx-auto select-none"></div>
-                    </div>
-
                     <div id="muscle-group-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
                 </div>
 
@@ -530,7 +399,7 @@
             </div>
 
             <!-- Period Breakdown Table (Weeks for Short/Med, Months for Long/All-Time) -->
-            <div id="deep-dive-table-card" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm">
                 <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
                     <h3 id="summary-table-title" class="text-sm font-bold">Weekly Health, Weight, Training & Habit Summary</h3>
                     <span id="summary-table-badge" class="text-[11px] font-semibold text-slate-400">Grouped by Week</span>
@@ -679,27 +548,23 @@
     </main>
 
     <!-- STICKY MOBILE BOTTOM ACTION BAR (<768px) -->
-    <nav aria-label="Mobile Quick Actions" class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 safe-bottom px-2 pt-2">
-        <div class="grid grid-cols-5 gap-1.5 max-w-md mx-auto">
+    <nav aria-label="Mobile Quick Actions" class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 safe-bottom px-2.5 pt-2">
+        <div class="grid grid-cols-4 gap-1.5 max-w-md mx-auto">
             <button type="button" onclick="openTodayModal()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-emerald-600 active:bg-emerald-700 text-white font-semibold shadow-xs transition active:scale-95 px-1">
                 <span class="text-sm leading-none mb-0.5">＋</span>
-                <span class="text-[10px] leading-tight">Log</span>
-            </button>
-            <button type="button" onclick="openMorningCheckIn()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-950/60 active:bg-amber-100 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 font-semibold transition active:scale-95 px-1">
-                <span class="text-sm leading-none mb-0.5">☀️</span>
-                <span class="text-[10px] leading-tight">Check-In</span>
+                <span class="text-[11px] leading-tight">Log Today</span>
             </button>
             <button type="button" onclick="quickLogDryToday()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/70 active:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 font-semibold transition active:scale-95 px-1">
                 <span class="text-sm leading-none mb-0.5">✓</span>
-                <span class="text-[10px] leading-tight">0-Drink</span>
+                <span class="text-[11px] leading-tight">0-Drink Log</span>
             </button>
             <button type="button" id="mobile-nav-calendar" onclick="openCalendarView()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1">
                 <span class="text-sm leading-none mb-0.5">📅</span>
-                <span class="text-[10px] leading-tight">Calendar</span>
+                <span class="text-[11px] leading-tight">Calendar</span>
             </button>
             <button type="button" onclick="openSetupModal()" class="min-h-[48px] flex flex-col items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 active:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold transition active:scale-95 px-1">
                 <span class="text-sm leading-none mb-0.5">⚙️</span>
-                <span class="text-[10px] leading-tight">Goals</span>
+                <span class="text-[11px] leading-tight">Goals</span>
             </button>
         </div>
     </nav>
@@ -834,8 +699,7 @@
                             <button type="button" onclick="toggleWorkoutClock()" id="workout-clock-btn" class="min-h-[30px] px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 border border-violet-200 dark:border-violet-700 text-[11px] font-bold text-violet-700 dark:text-violet-300 tabular-nums transition active:scale-95">
                                 ⏱ <span id="workout-clock-display">00:00</span> · Start
                             </button>
-                            <span id="modal-session-pr-badge" class="hidden text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/70 dark:text-amber-200">🏆 0 PR</span>
-                            <span id="modal-session-volume-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-violet-100 text-violet-800 dark:bg-violet-900/70 dark:text-violet-200">0 lbs lifted</span>
+                            <span id="modal-session-volume-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-violet-100 text-violet-800 dark:bg-violet-900/70 dark:text-violet-200">0 lbs vol</span>
                         </div>
                     </div>
 
@@ -1049,137 +913,6 @@
             <div class="flex items-center gap-2.5 pt-1">
                 <button type="button" onclick="closeConfirmModal()" class="flex-1 min-h-[44px] py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold">Cancel</button>
                 <button type="button" onclick="executeReset()" class="flex-1 min-h-[44px] py-2.5 rounded-xl bg-rose-600 text-white text-xs font-semibold">Yes, Reset</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- KPI METRIC INSIGHTS BOTTOM-SHEET DRAWER -->
-    <div id="kpi-insight-modal" onclick="if(event.target===this) closeKpiInsight()" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-end md:items-center justify-center p-0 md:p-4">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-t-3xl md:rounded-3xl border-t md:border border-slate-200 dark:border-slate-800 shadow-2xl animate-slide-up max-h-[90dvh] flex flex-col overflow-hidden">
-            <!-- Sticky Drawer Header -->
-            <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-5 pt-2.5 pb-3.5 border-b border-slate-100 dark:border-slate-800">
-                <div class="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto mb-2.5 md:hidden"></div>
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <div id="kpi-insight-icon" class="w-10 h-10 shrink-0 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 flex items-center justify-center text-lg">📊</div>
-                        <div class="min-w-0">
-                            <span id="kpi-insight-horizon" class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block truncate">Metric Insights</span>
-                            <h2 id="kpi-insight-title" class="text-base sm:text-lg font-bold truncate">Insights</h2>
-                        </div>
-                    </div>
-                    <button type="button" onclick="closeKpiInsight()" aria-label="Close insights" class="w-10 h-10 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition active:scale-95">
-                        ✕
-                    </button>
-                </div>
-            </div>
-
-            <!-- Scrollable Drawer Body -->
-            <div id="kpi-insight-body" class="flex-1 overflow-y-auto overscroll-contain p-5 space-y-4"></div>
-
-            <!-- Sticky Drawer Footer Quick Actions -->
-            <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-5 pt-3 border-t border-slate-100 dark:border-slate-800 safe-bottom flex items-center gap-2.5">
-                <button type="button" onclick="jumpToInsightChart()" class="min-h-[48px] flex-1 py-3 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm font-bold active:scale-[0.98] transition flex items-center justify-center gap-1.5">
-                    <span>📊 View Chart</span>
-                </button>
-                <button type="button" onclick="logTodayFromInsight()" class="min-h-[48px] flex-1 py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-sm active:scale-[0.98] transition flex items-center justify-center gap-1.5">
-                    <span>+ Log Today</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 10-SECOND MORNING CHECK-IN BOTTOM-SHEET DRAWER -->
-    <div id="morning-checkin-modal" onclick="if(event.target===this) closeMorningCheckIn()" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-end md:items-center justify-center p-0 md:p-4">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-t-3xl md:rounded-3xl border-t md:border border-slate-200 dark:border-slate-800 shadow-2xl animate-slide-up max-h-[92dvh] flex flex-col overflow-hidden">
-            <!-- Sticky Header -->
-            <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-5 pt-2.5 pb-3 border-b border-slate-100 dark:border-slate-800 space-y-2.5">
-                <div class="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto md:hidden"></div>
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <div class="w-9 h-9 shrink-0 rounded-xl bg-amber-100 dark:bg-amber-950/70 text-amber-600 dark:text-amber-300 flex items-center justify-center text-lg">☀️</div>
-                        <div class="min-w-0">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 block truncate">10-Second Check-In</span>
-                            <h2 id="mc-date-title" class="text-base font-bold truncate">Today</h2>
-                        </div>
-                    </div>
-                    <button type="button" onclick="closeMorningCheckIn()" aria-label="Close check-in" class="w-10 h-10 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 active:scale-95 transition">✕</button>
-                </div>
-                <!-- 1-Tap Today / Yesterday Switcher -->
-                <div class="grid grid-cols-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800 gap-1">
-                    <button type="button" id="mc-tab-today" onclick="switchMorningCheckInDate('today')" class="min-h-[38px] px-2.5 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition">
-                        ☀️ Today
-                    </button>
-                    <button type="button" id="mc-tab-yesterday" onclick="switchMorningCheckInDate('yesterday')" class="min-h-[38px] px-2.5 py-1.5 text-xs font-bold rounded-lg text-slate-600 dark:text-slate-400 transition">
-                        ← Yesterday
-                    </button>
-                </div>
-            </div>
-
-            <!-- Scrollable Fast Inputs -->
-            <div class="flex-1 overflow-y-auto overscroll-contain p-5 space-y-4">
-                <!-- Weight -->
-                <div class="bg-indigo-50/60 dark:bg-indigo-950/30 p-3.5 rounded-2xl border border-indigo-200/70 dark:border-indigo-800/50">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label for="mc-weight-input" class="text-xs font-bold text-indigo-900 dark:text-indigo-300">⚖️ Morning Weight (<span id="mc-weight-unit">lbs</span>)</label>
-                        <button type="button" onclick="clearMcField('weight')" class="text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 px-1.5 py-0.5">Skip</button>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="adjustMcWeight(-0.2)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">−0.2</button>
-                        <input type="number" inputmode="decimal" id="mc-weight-input" step="0.1" placeholder="e.g., 240.0" class="flex-1 min-w-0 h-11 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-3 text-center text-lg font-bold tabular-nums focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <button type="button" onclick="adjustMcWeight(0.2)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">+0.2</button>
-                    </div>
-                </div>
-
-                <!-- Garmin Sleep Score -->
-                <div class="bg-sky-50/60 dark:bg-sky-950/25 p-3.5 rounded-2xl border border-sky-200/70 dark:border-sky-800/50">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label for="mc-sleep-input" class="text-xs font-bold text-sky-900 dark:text-sky-300">😴 Garmin Sleep Score (0–100)</label>
-                        <button type="button" onclick="clearMcField('sleep')" class="text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 px-1.5 py-0.5">Clear</button>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="adjustMcSleep(-5)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">−5</button>
-                        <input type="number" inputmode="numeric" id="mc-sleep-input" min="0" max="100" step="1" placeholder="e.g., 85" class="flex-1 min-w-0 h-11 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-3 text-center text-lg font-bold tabular-nums focus:outline-none focus:ring-2 focus:ring-sky-500">
-                        <button type="button" onclick="adjustMcSleep(5)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">+5</button>
-                    </div>
-                    <div class="grid grid-cols-4 gap-1.5 mt-2">
-                        <button type="button" onclick="setMcSleepPreset(60)" class="min-h-[34px] text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 active:scale-95">60</button>
-                        <button type="button" onclick="setMcSleepPreset(75)" class="min-h-[34px] text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 active:scale-95">75</button>
-                        <button type="button" onclick="setMcSleepPreset(85)" class="min-h-[34px] text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 active:scale-95">85</button>
-                        <button type="button" onclick="setMcSleepPreset(92)" class="min-h-[34px] text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 active:scale-95">92</button>
-                    </div>
-                </div>
-
-                <!-- Resting Heart Rate -->
-                <div class="bg-rose-50/60 dark:bg-rose-950/25 p-3.5 rounded-2xl border border-rose-200/70 dark:border-rose-800/50">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label for="mc-rhr-input" class="text-xs font-bold text-rose-900 dark:text-rose-300">❤️ Resting Heart Rate (bpm)</label>
-                        <button type="button" onclick="clearMcField('rhr')" class="text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 px-1.5 py-0.5">Clear</button>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="adjustMcRhr(-1)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">−1</button>
-                        <input type="number" inputmode="numeric" id="mc-rhr-input" min="30" max="150" step="1" placeholder="e.g., 54" class="flex-1 min-w-0 h-11 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-3 text-center text-lg font-bold tabular-nums focus:outline-none focus:ring-2 focus:ring-rose-500">
-                        <button type="button" onclick="adjustMcRhr(1)" class="w-12 h-11 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm active:scale-95 transition">+1</button>
-                    </div>
-                </div>
-
-                <!-- Mental Clarity (1-5) -->
-                <div class="bg-emerald-50/60 dark:bg-emerald-950/25 p-3.5 rounded-2xl border border-emerald-200/70 dark:border-emerald-800/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-emerald-900 dark:text-emerald-300">🧠 Mental Clarity (1–5)</span>
-                        <span class="text-[10px] text-slate-400">Tap again to clear</span>
-                    </div>
-                    <div id="mc-clarity-pills" class="grid grid-cols-5 gap-1.5"></div>
-                </div>
-            </div>
-
-            <!-- Sticky Footer -->
-            <div class="shrink-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-5 pt-3 border-t border-slate-100 dark:border-slate-800 safe-bottom flex items-center gap-2.5">
-                <button type="button" onclick="openFullLogFromCheckIn()" class="min-h-[48px] px-3.5 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition whitespace-nowrap">
-                    Full Log →
-                </button>
-                <button type="button" onclick="saveMorningCheckIn()" class="min-h-[48px] flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm active:scale-[0.99] transition">
-                    Save Check-In
-                </button>
             </div>
         </div>
     </div>
@@ -1415,17 +1148,8 @@
             weightUnit: 'lbs',
             startingWeight: null,
             goalWeight: null,
-            drinkCost: 9,
-            themeMode: 'auto',
-            dashboardView: null,
             logs: {}
         };
-
-        let activeMorningCheckInDate = getTodayKey();
-        let morningCheckInClarity = null;
-
-        let activeKpiInsight = null;
-        let selectedPaceDayKey = null;
 
         let currentSuggestedWorkout = null;
 
@@ -1477,12 +1201,11 @@
                             done: Boolean(sr.done)
                         }));
                     } else {
-                        // Legacy lift without setRows (e.g., older logs or 90D demo): treat historical sets as completed
                         const sCount = Math.max(1, Math.min(12, Number(l.sets) || 3));
                         const rVal = Math.max(0, Number(l.reps) || 8);
                         const wVal = Math.max(0, Number(l.weight) || 0);
                         for (let i = 0; i < sCount; i++) {
-                            setRows.push({ reps: rVal, weight: wVal, done: true });
+                            setRows.push({ reps: rVal, weight: wVal, done: false });
                         }
                     }
                     const liftObj = {
@@ -1493,7 +1216,6 @@
                         setRows,
                         collapsed: Boolean(l.collapsed)
                     };
-                    syncLiftSummary(liftObj);
                     return liftObj;
                 }) : [],
                 notes: String(rawWorkout.notes || '')
@@ -1502,11 +1224,9 @@
 
         function syncLiftSummary(lift) {
             if (!lift || !Array.isArray(lift.setRows)) return;
-            const completedRows = lift.setRows.filter(s => s.done);
-            const activeRows = completedRows.length > 0 ? completedRows : lift.setRows;
-            lift.sets = activeRows.length;
-            if (activeRows.length > 0) {
-                const heaviest = activeRows.reduce((best, s) => s.weight >= best.weight ? s : best, activeRows[0]);
+            lift.sets = lift.setRows.length;
+            if (lift.setRows.length > 0) {
+                const heaviest = lift.setRows.reduce((best, s) => s.weight >= best.weight ? s : best, lift.setRows[0]);
                 lift.weight = heaviest.weight;
                 lift.reps = heaviest.reps;
             } else {
@@ -1518,12 +1238,12 @@
         function calcLiftVolume(lift) {
             if (!lift) return 0;
             if (Array.isArray(lift.setRows) && lift.setRows.length > 0) {
-                return lift.setRows.reduce((sum, s) => sum + (s.done ? (Number(s.reps) || 0) * (Number(s.weight) || 0) : 0), 0);
+                return lift.setRows.reduce((sum, s) => sum + ((Number(s.reps) || 0) * (Number(s.weight) || 0)), 0);
             }
             return (Number(lift.sets) || 0) * (Number(lift.reps) || 0) * (Number(lift.weight) || 0);
         }
 
-        function inferMuscleGroupsFromWorkout(workout, completedOnly = false) {
+        function inferMuscleGroupsFromWorkout(workout) {
             const w = normalizeWorkout(workout);
             const primarySets = {};
             const secondarySets = {};
@@ -1534,10 +1254,8 @@
 
             w.lifts.forEach(l => {
                 const name = String(l.name || '').toLowerCase();
-                const sets = Array.isArray(l.setRows) && l.setRows.length > 0
-                    ? (completedOnly ? l.setRows.filter(s => s.done).length : l.setRows.length)
-                    : Math.max(1, Number(l.sets) || 0);
-                if (!name || sets <= 0) return;
+                const sets = Array.isArray(l.setRows) && l.setRows.length > 0 ? l.setRows.length : Math.max(1, Number(l.sets) || 0);
+                if (!name) return;
                 MUSCLE_GROUPS.forEach(mg => {
                     if (mg.primaryKeys.some(k => name.includes(k))) {
                         primarySets[mg.id] += sets;
@@ -1576,77 +1294,16 @@
                 const w = normalizeWorkout(appState.logs[dk]?.workout);
                 const match = w.lifts.find(l => String(l.name || '').trim().toLowerCase() === target);
                 if (match) {
-                    const doneRows = Array.isArray(match.setRows) ? match.setRows.filter(s => s.done) : [];
-                    if (doneRows.length === 0) continue;
-                    const heaviest = doneRows.reduce((best, s) => s.weight >= best.weight ? s : best, doneRows[0]);
                     return {
                         dateKey: dk,
-                        sets: doneRows.length,
-                        reps: heaviest.reps,
-                        weight: heaviest.weight,
-                        setRows: doneRows.map(s => ({ reps: s.reps, weight: s.weight, done: false }))
+                        sets: match.setRows.length,
+                        reps: match.reps,
+                        weight: match.weight,
+                        setRows: match.setRows.map(s => ({ reps: s.reps, weight: s.weight, done: false }))
                     };
                 }
             }
             return null;
-        }
-
-        function findExerciseBestRecord(exerciseName, beforeDateKey = activeModalDate) {
-            const target = String(exerciseName || '').trim().toLowerCase();
-            if (!target) return null;
-            let bestWeight = 0;
-            let found = false;
-            const sortedKeys = getAllLoggedDateKeysSorted();
-            for (let i = 0; i < sortedKeys.length; i++) {
-                const dk = sortedKeys[i];
-                if (beforeDateKey && dk >= beforeDateKey) continue;
-                const w = normalizeWorkout(appState.logs[dk]?.workout);
-                w.lifts.forEach(l => {
-                    if (String(l.name || '').trim().toLowerCase() === target) {
-                        const doneRows = Array.isArray(l.setRows) ? l.setRows.filter(s => s.done) : [];
-                        if (doneRows.length === 0) return;
-                        found = true;
-                        const maxW = Math.max(0, ...doneRows.map(s => Number(s.weight) || 0));
-                        if (maxW > bestWeight) bestWeight = maxW;
-                    }
-                });
-            }
-            return found && bestWeight > 0 ? { bestWeight } : null;
-        }
-
-        function getLiftPrStatus(lift, beforeDateKey = activeModalDate) {
-            if (!lift || !lift.name) return { state: 'none', diff: 0, pastBest: 0 };
-            const pastRec = findExerciseBestRecord(lift.name, beforeDateKey);
-            if (!pastRec || pastRec.bestWeight <= 0) return { state: 'none', diff: 0, pastBest: 0 };
-            const rows = Array.isArray(lift.setRows) ? lift.setRows : [];
-            const doneMax = rows.reduce((m, s) => (s.done && Number(s.weight) > m) ? Number(s.weight) : m, 0);
-            const plannedMax = rows.reduce((m, s) => (Number(s.weight) > m) ? Number(s.weight) : m, 0);
-            if (doneMax > pastRec.bestWeight) {
-                return {
-                    state: 'confirmed',
-                    diff: Math.round((doneMax - pastRec.bestWeight) * 10) / 10,
-                    pastBest: pastRec.bestWeight
-                };
-            }
-            if (plannedMax > pastRec.bestWeight) {
-                return {
-                    state: 'pending',
-                    diff: Math.round((plannedMax - pastRec.bestWeight) * 10) / 10,
-                    pastBest: pastRec.bestWeight
-                };
-            }
-            return { state: 'none', diff: 0, pastBest: pastRec.bestWeight };
-        }
-
-        function getLiftPrBadgeHtml(lift) {
-            const st = getLiftPrStatus(lift, activeModalDate);
-            if (st.state === 'confirmed') {
-                return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 border border-amber-300/80 dark:border-amber-700 text-[10px] font-bold">🏆 NEW PR! (+${st.diff} ${appState.weightUnit})</span>`;
-            }
-            if (st.state === 'pending') {
-                return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-[10px] font-semibold">🎯 Tap ✓ to confirm PR (+${st.diff} ${appState.weightUnit})</span>`;
-            }
-            return '';
         }
 
         function isActiveWorkout(workout) {
@@ -1712,9 +1369,6 @@
                     weightUnit: parsed.weightUnit === 'kg' ? 'kg' : 'lbs',
                     startingWeight: (parsed.startingWeight !== undefined && parsed.startingWeight !== null && parsed.startingWeight !== '') ? Number(parsed.startingWeight) : null,
                     goalWeight: (parsed.goalWeight !== undefined && parsed.goalWeight !== null && parsed.goalWeight !== '') ? Number(parsed.goalWeight) : null,
-                    drinkCost: (parsed.drinkCost !== undefined && parsed.drinkCost !== null && !isNaN(Number(parsed.drinkCost))) ? Math.max(1, Number(parsed.drinkCost)) : 9,
-                    themeMode: ['auto', 'light', 'dark', 'oled'].includes(parsed.themeMode) ? parsed.themeMode : 'auto',
-                    dashboardView: ['focus', 'deep'].includes(parsed.dashboardView) ? parsed.dashboardView : null,
                     logs: normalizeLogsObject(parsed.logs, startDate)
                 };
             } catch (e) {
@@ -1994,20 +1648,13 @@
         function renderAll() {
             const dateKeys = getRangeDateKeys(activeTimeRange);
             renderHeaderAndKPIs(dateKeys);
-            renderKpiSparklines();
-            renderWeeklyWinsStrip();
             renderCalendarMonth();
             renderAnalyticsTable(dateKeys);
             renderTopLiftsSummary(dateKeys);
             renderMuscleGroupCoach();
             renderRecoveryComparisonCard(dateKeys);
-            const analyticsVisible = !document.getElementById('view-analytics').classList.contains('hidden');
-            const deepVisible = !document.getElementById('deep-dive-charts-container')?.classList.contains('hidden');
-            if (analyticsVisible && deepVisible) {
+            if (!document.getElementById('view-analytics').classList.contains('hidden')) {
                 drawAllCharts(dateKeys);
-            }
-            if (activeKpiInsight && !document.getElementById('kpi-insight-modal')?.classList.contains('hidden')) {
-                renderKpiInsightDrawer(activeKpiInsight);
             }
         }
 
@@ -2722,13 +2369,9 @@
                     const dk = sorted[i];
                     if (dk >= activeModalDate) continue;
                     const w = normalizeWorkout(appState.logs[dk]?.workout);
-                    const completedLifts = w.lifts.filter(l => l.setRows.some(s => s.done));
-                    const sourceLifts = completedLifts.length > 0 ? completedLifts : w.lifts;
-                    if (sourceLifts.length > 0) {
-                        sourceLifts.forEach(l => {
-                            const doneRows = l.setRows.filter(s => s.done);
-                            const baseRows = doneRows.length > 0 ? doneRows : l.setRows;
-                            const clonedRows = baseRows.map(s => ({ reps: s.reps, weight: s.weight, done: false }));
+                    if (w.lifts.length > 0) {
+                        w.lifts.forEach(l => {
+                            const clonedRows = l.setRows.map(s => ({ reps: s.reps, weight: s.weight, done: false }));
                             addLiftRow(l.name, clonedRows.length, l.reps, l.weight, clonedRows);
                         });
                         showToast(`Repeated workout from ${formatShortDateKey(dk)}`);
@@ -2785,20 +2428,6 @@
             renderModalMuscleGroups();
         }
 
-        function refreshLiftLiveMeta(liftIdx) {
-            if (!tempDayDraft || !tempDayDraft.workout.lifts[liftIdx]) return;
-            const lift = tempDayDraft.workout.lifts[liftIdx];
-            const setRows = Array.isArray(lift.setRows) ? lift.setRows : [];
-            const doneCount = setRows.filter(s => s.done).length;
-            const vol = Math.round(calcLiftVolume(lift));
-
-            const prEl = document.getElementById(`lift-pr-badge-${liftIdx}`);
-            if (prEl) prEl.innerHTML = getLiftPrBadgeHtml(lift);
-
-            const metaEl = document.getElementById(`lift-vol-meta-${liftIdx}`);
-            if (metaEl) metaEl.textContent = `${doneCount}/${setRows.length} done · ${vol.toLocaleString()} ${appState.weightUnit} lifted`;
-        }
-
         function updateSetField(liftIdx, setIdx, field, val) {
             if (!tempDayDraft || !tempDayDraft.workout.lifts[liftIdx]) return;
             const lift = tempDayDraft.workout.lifts[liftIdx];
@@ -2807,7 +2436,6 @@
             syncLiftSummary(lift);
             modalDirty = true;
             updateSessionVolumeBadge();
-            refreshLiftLiveMeta(liftIdx);
         }
 
         function nudgeSetWeight(liftIdx, setIdx, delta) {
@@ -2827,7 +2455,6 @@
             const row = lift.setRows[setIdx];
             if (!row) return;
             row.done = !row.done;
-            syncLiftSummary(lift);
             modalDirty = true;
             if (row.done) {
                 startRestTimer(restTimerDefault);
@@ -2843,7 +2470,6 @@
             }
             modalDirty = true;
             updateSessionVolumeBadge();
-            refreshLiftLiveMeta(idx);
         }
 
         function removeLiftRow(idx) {
@@ -2977,20 +2603,9 @@
 
         function updateSessionVolumeBadge() {
             const badge = document.getElementById('modal-session-volume-badge');
-            const prBadge = document.getElementById('modal-session-pr-badge');
             if (!badge || !tempDayDraft) return;
             const vol = calcWorkoutVolume(tempDayDraft.workout);
-            badge.textContent = `${Math.round(vol).toLocaleString()} ${appState.weightUnit} lifted`;
-
-            if (prBadge) {
-                const confirmedPrs = tempDayDraft.workout.lifts.filter(l => getLiftPrStatus(l, activeModalDate).state === 'confirmed').length;
-                if (confirmedPrs > 0) {
-                    prBadge.textContent = `🏆 ${confirmedPrs} PR${confirmedPrs === 1 ? '' : 's'}`;
-                    prBadge.classList.remove('hidden');
-                } else {
-                    prBadge.classList.add('hidden');
-                }
-            }
+            badge.textContent = `${Math.round(vol).toLocaleString()} ${appState.weightUnit} vol`;
         }
 
         function renderModalLifts() {
@@ -3011,21 +2626,18 @@
                 const vol = Math.round(calcLiftVolume(l));
                 const allDone = setRows.length > 0 && doneCount === setRows.length;
                 const lastRec = l.name ? findLastExerciseRecord(l.name, activeModalDate) : null;
-                const prStatus = getLiftPrStatus(l, activeModalDate);
-                const prBadgeHtml = getLiftPrBadgeHtml(l);
                 const lastBadge = lastRec
                     ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 block">Last (${formatShortDateKey(lastRec.dateKey)}): ${lastRec.sets}×${lastRec.reps} @ ${lastRec.weight} ${appState.weightUnit}</span>`
                     : '';
 
                 if (l.collapsed) {
                     return `
-                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-850 border ${prStatus.state === 'confirmed' ? 'border-amber-400/80 dark:border-amber-600' : (allDone ? 'border-emerald-400/70 dark:border-emerald-700' : 'border-slate-200 dark:border-slate-700')} flex items-center justify-between gap-2">
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-850 border ${allDone ? 'border-emerald-400/70 dark:border-emerald-700' : 'border-slate-200 dark:border-slate-700'} flex items-center justify-between gap-2">
                             <button type="button" onclick="toggleLiftCollapse(${idx})" class="flex-1 min-w-0 text-left flex items-center gap-2">
                                 <span class="text-xs font-bold ${allDone ? 'text-emerald-600 dark:text-emerald-400' : 'text-violet-600 dark:text-violet-400'}">${allDone ? '✓' : '▸'}</span>
                                 <div class="min-w-0">
                                     <div class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">${escapeHtml(l.name || 'Unnamed Lift')}</div>
-                                    <div id="lift-vol-meta-${idx}" class="text-[10px] text-slate-500 dark:text-slate-400">${doneCount}/${setRows.length} done · ${vol.toLocaleString()} ${appState.weightUnit} lifted</div>
-                                    <div id="lift-pr-badge-${idx}" class="mt-0.5 empty:hidden">${prBadgeHtml}</div>
+                                    <div class="text-[10px] text-slate-500 dark:text-slate-400">${doneCount}/${setRows.length} sets · ${vol.toLocaleString()} ${appState.weightUnit} vol</div>
                                 </div>
                             </button>
                             <button type="button" onclick="removeLiftRow(${idx})" aria-label="Remove lift" class="w-8 h-8 shrink-0 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-95">✕</button>
@@ -3039,16 +2651,13 @@
                         repOpts.push(sr.reps);
                         repOpts.sort((a, b) => a - b);
                     }
-                    const isConfirmedPrRow = sr.done && prStatus.pastBest > 0 && Number(sr.weight) > prStatus.pastBest;
-                    const rowBg = isConfirmedPrRow
-                        ? 'bg-amber-50/90 dark:bg-amber-950/40 border-amber-400 dark:border-amber-600'
-                        : (sr.done
-                            ? 'bg-emerald-50/90 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700'
-                            : 'bg-slate-50 dark:bg-slate-900/70 border-slate-200/80 dark:border-slate-700');
+                    const rowBg = sr.done
+                        ? 'bg-emerald-50/90 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700'
+                        : 'bg-slate-50 dark:bg-slate-900/70 border-slate-200/80 dark:border-slate-700';
 
                     return `
                         <div class="grid grid-cols-[26px_1fr_72px_38px] items-center gap-1.5 p-1.5 rounded-xl border transition ${rowBg}">
-                            <span class="text-[11px] font-bold text-center ${isConfirmedPrRow ? 'text-amber-600 dark:text-amber-400' : 'text-slate-500 dark:text-slate-400'}">${isConfirmedPrRow ? '🏆' : (sIdx + 1)}</span>
+                            <span class="text-[11px] font-bold text-center text-slate-500 dark:text-slate-400">${sIdx + 1}</span>
                             <div class="flex items-center gap-1 min-w-0">
                                 <button type="button" onclick="nudgeSetWeight(${idx}, ${sIdx}, -${weightStep})" class="w-7 h-8 shrink-0 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-bold active:scale-95">−</button>
                                 <input type="number" inputmode="decimal" min="0" step="2.5" value="${sr.weight}" oninput="updateSetField(${idx}, ${sIdx}, 'weight', this.value)" aria-label="Weight" class="w-full min-w-0 h-8 rounded-lg bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-1 text-center text-xs font-bold tabular-nums">
@@ -3057,7 +2666,7 @@
                             <select onchange="updateSetField(${idx}, ${sIdx}, 'reps', this.value)" aria-label="Reps" class="h-8 rounded-lg bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-1 text-xs font-bold text-center tabular-nums">
                                 ${repOpts.map(r => `<option value="${r}" ${r === sr.reps ? 'selected' : ''}>${r} rep${r === 1 ? '' : 's'}</option>`).join('')}
                             </select>
-                            <button type="button" onclick="toggleSetDone(${idx}, ${sIdx})" aria-label="Complete set" class="w-9 h-8 rounded-lg font-bold text-xs flex items-center justify-center transition active:scale-95 ${sr.done ? (isConfirmedPrRow ? 'bg-amber-500 text-white shadow-xs' : 'bg-emerald-600 text-white shadow-xs') : 'bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-500'}">
+                            <button type="button" onclick="toggleSetDone(${idx}, ${sIdx})" aria-label="Complete set" class="w-9 h-8 rounded-lg font-bold text-xs flex items-center justify-center transition active:scale-95 ${sr.done ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-500'}">
                                 ✓
                             </button>
                         </div>
@@ -3065,7 +2674,7 @@
                 }).join('');
 
                 return `
-                    <div class="p-3 rounded-2xl bg-white dark:bg-slate-850 border ${prStatus.state === 'confirmed' ? 'border-amber-400/80 dark:border-amber-600' : (allDone ? 'border-emerald-400/70 dark:border-emerald-700' : 'border-slate-200 dark:border-slate-700')} space-y-2.5 shadow-2xs">
+                    <div class="p-3 rounded-2xl bg-white dark:bg-slate-850 border ${allDone ? 'border-emerald-400/70 dark:border-emerald-700' : 'border-slate-200 dark:border-slate-700'} space-y-2.5 shadow-2xs">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex-1 min-w-0 space-y-1">
                                 <div class="flex items-center gap-1.5">
@@ -3073,7 +2682,6 @@
                                     <input type="text" value="${escapeHtml(l.name)}" oninput="updateLiftField(${idx}, 'name', this.value)" placeholder="Exercise name" class="flex-1 min-w-0 h-8 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-violet-500">
                                 </div>
                                 ${lastBadge}
-                                <div id="lift-pr-badge-${idx}" class="mt-0.5 empty:hidden">${prBadgeHtml}</div>
                             </div>
                             <button type="button" onclick="removeLiftRow(${idx})" aria-label="Remove lift" class="w-8 h-8 shrink-0 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-95">✕</button>
                         </div>
@@ -3092,7 +2700,7 @@
                                 <button type="button" onclick="addSetRow(${idx})" class="min-h-[32px] px-2.5 py-1 rounded-lg bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[11px] font-bold active:scale-95">+ Add Set</button>
                                 ${setRows.length > 1 ? `<button type="button" onclick="removeSetRow(${idx}, ${setRows.length - 1})" class="min-h-[32px] px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 text-[11px] font-semibold active:scale-95">− Set</button>` : ''}
                             </div>
-                            <span id="lift-vol-meta-${idx}" class="text-[11px] font-bold text-slate-500 dark:text-slate-400">${doneCount}/${setRows.length} done · ${vol.toLocaleString()} ${appState.weightUnit} lifted</span>
+                            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400">${doneCount}/${setRows.length} · ${vol.toLocaleString()} ${appState.weightUnit}</span>
                         </div>
                     </div>
                 `;
@@ -3405,16 +3013,14 @@
                 w.lifts.forEach(l => {
                     const key = (l.name || 'Unnamed Lift').trim();
                     if (!key) return;
-                    const doneRows = Array.isArray(l.setRows) ? l.setRows.filter(s => s.done) : [];
-                    if (Array.isArray(l.setRows) && l.setRows.length > 0 && doneRows.length === 0) return;
                     const vol = calcLiftVolume(l);
-                    const maxW = doneRows.length > 0
-                        ? Math.max(...doneRows.map(s => Number(s.weight) || 0))
+                    const maxW = Array.isArray(l.setRows) && l.setRows.length > 0
+                        ? Math.max(...l.setRows.map(s => Number(s.weight) || 0))
                         : Number(l.weight) || 0;
-                    const bestRow = doneRows.length > 0
-                        ? doneRows.reduce((b, s) => s.weight >= b.weight ? s : b, doneRows[0])
+                    const bestRow = Array.isArray(l.setRows) && l.setRows.length > 0
+                        ? l.setRows.reduce((b, s) => s.weight >= b.weight ? s : b, l.setRows[0])
                         : { reps: l.reps, weight: l.weight };
-                    const setCount = doneRows.length > 0 ? doneRows.length : l.sets;
+                    const setCount = Array.isArray(l.setRows) && l.setRows.length > 0 ? l.setRows.length : l.sets;
 
                     if (!liftMap[key]) {
                         liftMap[key] = { name: key, maxWeight: 0, bestSetStr: '', bestVol: 0, sessions: 0 };
@@ -3476,7 +3082,7 @@
             weekKeys.forEach(dk => {
                 const entry = appState.logs[dk];
                 if (!entry?.logged) return;
-                const { primarySets, secondarySets } = inferMuscleGroupsFromWorkout(entry.workout, true);
+                const { primarySets, secondarySets } = inferMuscleGroupsFromWorkout(entry.workout);
                 MUSCLE_GROUPS.forEach(mg => {
                     if (primarySets[mg.id] > 0) {
                         totals[mg.id].directSets += primarySets[mg.id];
@@ -3511,7 +3117,7 @@
                 const barColor = isDirectHit ? 'bg-emerald-500' : isSecondaryOnly ? 'bg-amber-400' : 'bg-slate-300 dark:bg-slate-700';
 
                 return `
-                    <button type="button" onclick="startWorkoutForMuscle('${mg.id}')" class="text-left w-full p-3 rounded-xl border ${cardCls} hover:border-violet-400 dark:hover:border-violet-500 transition active:scale-[0.98] space-y-1.5">
+                    <div class="p-3 rounded-xl border ${cardCls} space-y-1.5">
                         <div class="flex items-center justify-between gap-1">
                             <span class="text-xs font-bold">${mg.icon} ${mg.label}</span>
                             ${statusBadge}
@@ -3522,12 +3128,11 @@
                         <div class="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-slate-800 overflow-hidden">
                             <div class="${barColor} h-full rounded-full transition-all" style="width: ${pct}%"></div>
                         </div>
-                    </button>
+                    </div>
                 `;
             }).join('');
 
             badgeEl.textContent = `${hitCount} / ${MUSCLE_GROUPS.length} hit this week`;
-            renderMuscleBodyMap(totals);
 
             // Identify unworked (0 direct sets) body parts and prioritize the top 2-3 for a cohesive workout
             const missingGroups = MUSCLE_GROUPS
@@ -3805,7 +3410,7 @@
             svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
             svg.innerHTML = '';
 
-            const isDark = isAppDarkMode();
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
             const padL = 38, padR = 16, padT = 16, padB = 28;
@@ -4002,7 +3607,7 @@
             svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
             svg.innerHTML = '';
 
-            const isDark = isAppDarkMode();
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
 
@@ -4118,7 +3723,7 @@
             svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
             svg.innerHTML = '';
 
-            const isDark = isAppDarkMode();
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
             const padL = 34, padR = 14, padT = 16, padB = 28;
@@ -4205,7 +3810,7 @@
             svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
             svg.innerHTML = '';
 
-            const isDark = isAppDarkMode();
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
             const n = dateKeys.length;
@@ -4358,7 +3963,7 @@
             svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
             svg.innerHTML = '';
 
-            const isDark = isAppDarkMode();
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const gridColor = isDark ? '#1e293b' : '#e2e8f0';
             const textColor = isDark ? '#94a3b8' : '#64748b';
             const n = dateKeys.length;
@@ -4579,9 +4184,6 @@
                             weightUnit: imported.weightUnit === 'kg' ? 'kg' : 'lbs',
                             startingWeight: imported.startingWeight !== undefined ? imported.startingWeight : null,
                             goalWeight: imported.goalWeight !== undefined ? imported.goalWeight : null,
-                            drinkCost: (imported.drinkCost !== undefined && imported.drinkCost !== null && !isNaN(Number(imported.drinkCost))) ? Math.max(1, Number(imported.drinkCost)) : 9,
-                            themeMode: ['auto', 'light', 'dark', 'oled'].includes(imported.themeMode) ? imported.themeMode : (appState.themeMode || 'auto'),
-                            dashboardView: ['focus', 'deep'].includes(imported.dashboardView) ? imported.dashboardView : appState.dashboardView,
                             logs: normalizeLogsObject(imported.logs, startDate)
                         };
                         saveState();
@@ -4625,1323 +4227,6 @@
             }, 2600);
         }
 
-        // ==========================================
-        // 12. KPI METRIC INSIGHTS DRAWER (UPGRADE 2)
-        // ==========================================
-        const KPI_INSIGHT_META = {
-            weight: {
-                title: 'Weight & Delta',
-                icon: '⚖️',
-                iconBg: 'bg-indigo-50 dark:bg-indigo-950/60',
-                accentText: 'text-indigo-600 dark:text-indigo-400',
-                chartId: 'chart-card-weight',
-                ringClass: 'ring-indigo-400',
-                logSection: 'section-weight'
-            },
-            recovery: {
-                title: 'Recovery & Clarity',
-                icon: '❤️',
-                iconBg: 'bg-rose-50 dark:bg-rose-950/60',
-                accentText: 'text-rose-600 dark:text-rose-400',
-                chartId: 'chart-card-recovery',
-                ringClass: 'ring-rose-400',
-                logSection: 'section-recovery'
-            },
-            training: {
-                title: 'Training & Lifts',
-                icon: '🏋️',
-                iconBg: 'bg-violet-50 dark:bg-violet-950/60',
-                accentText: 'text-violet-600 dark:text-violet-400',
-                chartId: 'chart-card-training',
-                ringClass: 'ring-violet-400',
-                logSection: 'section-training'
-            },
-            pace: {
-                title: '7D Alcohol Pace',
-                icon: '🍺',
-                iconBg: 'bg-amber-50 dark:bg-amber-950/60',
-                accentText: 'text-amber-600 dark:text-amber-400',
-                chartId: 'chart-card-weekly',
-                ringClass: 'ring-amber-400',
-                logSection: 'section-drinks'
-            },
-            dry: {
-                title: 'Dry Days & Streak',
-                icon: '🔥',
-                iconBg: 'bg-emerald-50 dark:bg-emerald-950/60',
-                accentText: 'text-emerald-600 dark:text-emerald-400',
-                chartId: 'chart-card-pace',
-                ringClass: 'ring-emerald-400',
-                logSection: 'section-drinks'
-            },
-            saved: {
-                title: 'Drinks Avoided & Savings',
-                icon: '📉',
-                iconBg: 'bg-sky-50 dark:bg-sky-950/60',
-                accentText: 'text-sky-600 dark:text-sky-400',
-                chartId: 'chart-card-pace',
-                ringClass: 'ring-sky-400',
-                logSection: 'section-drinks'
-            }
-        };
-
-        function getHorizonLabel(rangeKey = activeTimeRange) {
-            if (rangeKey === '7d') return 'Short · Last 7 Days';
-            if (rangeKey === '30d') return 'Medium · Last 30 Days';
-            if (rangeKey === '90d') return 'Long · Last 90 Days';
-            return 'All-Time History';
-        }
-
-        function openKpiInsight(metricKey) {
-            if (!KPI_INSIGHT_META[metricKey]) return;
-            activeKpiInsight = metricKey;
-            if (metricKey === 'pace' && !selectedPaceDayKey) {
-                selectedPaceDayKey = getTodayKey();
-            }
-            renderKpiInsightDrawer(metricKey);
-            const modal = document.getElementById('kpi-insight-modal');
-            if (modal) modal.classList.remove('hidden');
-            const body = document.getElementById('kpi-insight-body');
-            if (body) body.scrollTop = 0;
-        }
-
-        function closeKpiInsight() {
-            const modal = document.getElementById('kpi-insight-modal');
-            if (modal) modal.classList.add('hidden');
-            activeKpiInsight = null;
-        }
-
-        function jumpToInsightChart() {
-            const meta = KPI_INSIGHT_META[activeKpiInsight];
-            if (!meta) return;
-            closeKpiInsight();
-            const dashboardHidden = document.getElementById('view-analytics')?.classList.contains('hidden');
-            const wasFocus = document.getElementById('deep-dive-charts-container')?.classList.contains('hidden');
-            if (dashboardHidden) {
-                switchTab('analytics', false);
-            }
-            if (wasFocus) {
-                setDashboardView('deep', false);
-            }
-            setTimeout(() => {
-                const target = document.getElementById(meta.chartId);
-                if (!target) return;
-                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                target.classList.add('ring-2', meta.ringClass, 'ring-offset-2', 'dark:ring-offset-slate-950');
-                setTimeout(() => {
-                    target.classList.remove('ring-2', meta.ringClass, 'ring-offset-2', 'dark:ring-offset-slate-950');
-                }, 1400);
-            }, (dashboardHidden || wasFocus) ? 110 : 40);
-        }
-
-        function logTodayFromInsight() {
-            const meta = KPI_INSIGHT_META[activeKpiInsight];
-            const section = meta ? meta.logSection : null;
-            closeKpiInsight();
-            openDayModal(getTodayKey(), section);
-        }
-
-        function selectPaceInsightDay(dateKey) {
-            selectedPaceDayKey = dateKey;
-            if (activeKpiInsight === 'pace') {
-                renderKpiInsightDrawer('pace');
-            }
-        }
-
-        function editDateFromInsight(dateKey, focusSection = 'section-drinks') {
-            closeKpiInsight();
-            openDayModal(dateKey, focusSection);
-        }
-
-        function setInsightDrinkCost(cost) {
-            const num = Math.max(1, Number(cost) || 9);
-            appState.drinkCost = num;
-            saveState();
-            if (activeKpiInsight === 'saved') {
-                renderKpiInsightDrawer('saved');
-            }
-        }
-
-        function buildStatTileHtml(label, value, sub = '', accentCls = 'text-slate-900 dark:text-white') {
-            return `
-                <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800">
-                    <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 block">${label}</span>
-                    <span class="text-lg font-bold ${accentCls} block mt-0.5 tabular-nums">${value}</span>
-                    ${sub ? `<span class="text-[11px] text-slate-400 block mt-0.5">${sub}</span>` : ''}
-                </div>
-            `;
-        }
-
-        function buildDryVsDrinkRowHtml(title, dryVal, drinkVal, deltaText = '', deltaPositive = true) {
-            const deltaCls = deltaPositive
-                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300';
-            return `
-                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800 space-y-2">
-                    <div class="flex items-center justify-between gap-2">
-                        <span class="text-xs font-bold text-slate-700 dark:text-slate-200">${title}</span>
-                        ${deltaText ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${deltaCls}">${deltaText}</span>` : ''}
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-2.5 py-1.5">
-                            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-300 block">Dry Night</span>
-                            <span class="text-sm font-bold text-emerald-800 dark:text-emerald-200 tabular-nums">${dryVal}</span>
-                        </div>
-                        <div class="bg-rose-500/10 border border-rose-500/30 rounded-lg px-2.5 py-1.5">
-                            <span class="text-[10px] uppercase font-bold text-rose-700 dark:text-rose-300 block">Drinking Night</span>
-                            <span class="text-sm font-bold text-rose-800 dark:text-rose-200 tabular-nums">${drinkVal}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderKpiInsightDrawer(metricKey) {
-            const meta = KPI_INSIGHT_META[metricKey];
-            const iconEl = document.getElementById('kpi-insight-icon');
-            const horizonEl = document.getElementById('kpi-insight-horizon');
-            const titleEl = document.getElementById('kpi-insight-title');
-            const bodyEl = document.getElementById('kpi-insight-body');
-            if (!meta || !bodyEl) return;
-
-            iconEl.textContent = meta.icon;
-            iconEl.className = `w-10 h-10 shrink-0 rounded-2xl ${meta.iconBg} flex items-center justify-center text-lg`;
-            horizonEl.className = `text-[11px] font-bold uppercase tracking-wider ${meta.accentText} block truncate`;
-            horizonEl.textContent = metricKey === 'pace' ? 'Rolling 7-Day Window' : getHorizonLabel(activeTimeRange);
-            titleEl.textContent = meta.title;
-
-            const dateKeys = getRangeDateKeys(activeTimeRange);
-            const avgArr = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
-            const u = appState.weightUnit;
-
-            if (metricKey === 'weight') {
-                const series = computeWeightSeriesForKeys(dateKeys);
-                const loggedW = series.filter(s => s.rawWeight !== null);
-                const vals = loggedW.map(s => s.rawWeight);
-                const avgW = avgArr(vals);
-                const minW = vals.length ? Math.min(...vals) : null;
-                const maxW = vals.length ? Math.max(...vals) : null;
-                const latest = loggedW.length ? loggedW[loggedW.length - 1] : null;
-                const first = loggedW.length ? loggedW[0] : null;
-                const startRef = activeTimeRange === 'all' && appState.startingWeight !== null
-                    ? Number(appState.startingWeight)
-                    : (first ? first.rawWeight : null);
-                const delta = (latest && startRef !== null) ? Math.round((latest.rawWeight - startRef) * 10) / 10 : null;
-
-                // Weekly rate
-                let weeklyRateStr = 'Need 2+ weigh-ins';
-                if (loggedW.length >= 2) {
-                    const spanDays = Math.max(1, Math.round((parseDateKey(latest.dateKey) - parseDateKey(first.dateKey)) / 86400000));
-                    const rate = ((latest.rawWeight - first.rawWeight) / spanDays) * 7;
-                    weeklyRateStr = `${rate > 0 ? '+' : ''}${rate.toFixed(2)} ${u}/wk`;
-                }
-
-                // Dry night vs Drinking night next-morning scale shift
-                const dryShifts = [], drinkShifts = [];
-                const dryWeights = [], drinkWeights = [];
-                loggedW.forEach(item => {
-                    const prevKey = addDaysToKey(item.dateKey, -1);
-                    const prevLog = appState.logs[prevKey];
-                    const priorDrinks = prevLog?.logged ? Number(prevLog.drinks || 0) : null;
-                    if (priorDrinks === 0) {
-                        dryWeights.push(item.rawWeight);
-                        if (prevLog.weight !== null && prevLog.weight !== undefined && prevLog.weight !== '') {
-                            dryShifts.push(item.rawWeight - Number(prevLog.weight));
-                        }
-                    } else if (priorDrinks !== null && priorDrinks > 0) {
-                        drinkWeights.push(item.rawWeight);
-                        if (prevLog.weight !== null && prevLog.weight !== undefined && prevLog.weight !== '') {
-                            drinkShifts.push(item.rawWeight - Number(prevLog.weight));
-                        }
-                    }
-                });
-
-                const avgDryShift = avgArr(dryShifts);
-                const avgDrinkShift = avgArr(drinkShifts);
-                const fmtShift = v => v === null ? '—' : `${v > 0 ? '+' : ''}${v.toFixed(2)} ${u}`;
-                const shiftDiff = (avgDryShift !== null && avgDrinkShift !== null) ? (avgDryShift - avgDrinkShift) : null;
-
-                const goalHtml = appState.goalWeight !== null && latest
-                    ? buildStatTileHtml(
-                        'To Goal Weight',
-                        `${(latest.rawWeight - Number(appState.goalWeight)).toFixed(1)} ${u}`,
-                        `Goal: ${Number(appState.goalWeight).toFixed(1)} ${u}`,
-                        latest.rawWeight <= Number(appState.goalWeight) ? 'text-emerald-600 dark:text-emerald-400' : 'text-indigo-600 dark:text-indigo-400'
-                    )
-                    : buildStatTileHtml('Weigh-Ins Logged', `${loggedW.length} / ${dateKeys.length}d`, 'Consistency in window', 'text-indigo-600 dark:text-indigo-400');
-
-                bodyEl.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2.5">
-                        ${buildStatTileHtml('Latest & 7D Trend', latest ? `${latest.rawWeight.toFixed(1)} ${u}` : '—', latest && latest.trendWeight !== null ? `7D trend: ${latest.trendWeight.toFixed(1)} ${u}` : 'No weigh-ins yet', 'text-indigo-600 dark:text-indigo-400')}
-                        ${buildStatTileHtml('Period Delta', delta !== null ? `${delta > 0 ? '+' : ''}${delta.toFixed(1)} ${u}` : '—', weeklyRateStr, delta !== null && delta <= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400')}
-                        ${buildStatTileHtml('Average · Min / Max', avgW !== null ? `${avgW.toFixed(1)} ${u}` : '—', minW !== null ? `Min ${minW.toFixed(1)} · Max ${maxW.toFixed(1)} ${u}` : 'Log morning weights')}
-                        ${goalHtml}
-                    </div>
-
-                    <div class="space-y-2">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Dry Night vs. Drinking Night Impact</h3>
-                        ${buildDryVsDrinkRowHtml(
-                            'Next-Morning Scale Change',
-                            fmtShift(avgDryShift),
-                            fmtShift(avgDrinkShift),
-                            shiftDiff !== null ? `${shiftDiff <= 0 ? '' : '+'}${shiftDiff.toFixed(2)} ${u} lighter dry` : '',
-                            shiftDiff !== null ? shiftDiff <= 0 : true
-                        )}
-                        ${buildDryVsDrinkRowHtml(
-                            'Avg Scale Weight',
-                            avgArr(dryWeights) !== null ? `${avgArr(dryWeights).toFixed(1)} ${u}` : '—',
-                            avgArr(drinkWeights) !== null ? `${avgArr(drinkWeights).toFixed(1)} ${u}` : '—'
-                        )}
-                    </div>
-
-                    <div class="p-3.5 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200/70 dark:border-indigo-800/50 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                        <strong>Trend Tip:</strong> Single-day bumps after drinks are mostly temporary water retention and glycogen shifts—track the <strong>7-day smoothed trend</strong> for true fat-loss direction.
-                    </div>
-                `;
-                return;
-            }
-
-            if (metricKey === 'recovery') {
-                const stats = computeRecoveryStatsForKeys(dateKeys);
-                const rhrs = [], sleeps = [], clarities = [], energies = [];
-                dateKeys.forEach(dk => {
-                    const e = appState.logs[dk];
-                    if (!e?.logged) return;
-                    if (e.rhr !== null && e.rhr !== undefined && e.rhr !== '') rhrs.push(Number(e.rhr));
-                    if (e.sleepQuality !== null && e.sleepQuality !== undefined && e.sleepQuality !== '') sleeps.push(Number(e.sleepQuality));
-                    if (e.mentalClarity) clarities.push(Number(e.mentalClarity));
-                    if (e.energyLevel) energies.push(Number(e.energyLevel));
-                });
-
-                const rhrDiff = (stats.dryAvgRhr !== null && stats.drinkAvgRhr !== null)
-                    ? Math.round((stats.drinkAvgRhr - stats.dryAvgRhr) * 10) / 10 : null;
-                const sleepDiff = (stats.dryAvgSleep !== null && stats.drinkAvgSleep !== null)
-                    ? Math.round(stats.dryAvgSleep - stats.drinkAvgSleep) : null;
-                const clarityDiff = (stats.dryAvgClarity !== null && stats.drinkAvgClarity !== null)
-                    ? Math.round((stats.dryAvgClarity - stats.drinkAvgClarity) * 10) / 10 : null;
-                const energyDiff = (stats.dryAvgEnergy !== null && stats.drinkAvgEnergy !== null)
-                    ? Math.round((stats.dryAvgEnergy - stats.drinkAvgEnergy) * 10) / 10 : null;
-
-                bodyEl.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2.5">
-                        ${buildStatTileHtml('Resting HR (Avg)', stats.avgRhr !== null ? `${Math.round(stats.avgRhr)} bpm` : '—', rhrs.length ? `Min ${Math.min(...rhrs)} · Max ${Math.max(...rhrs)} bpm` : 'No RHR logged', 'text-rose-600 dark:text-rose-400')}
-                        ${buildStatTileHtml('Garmin Sleep (Avg)', stats.avgSleep !== null ? `${Math.round(stats.avgSleep)} / 100` : '—', sleeps.length ? `Min ${Math.min(...sleeps)} · Max ${Math.max(...sleeps)}` : 'No sleep logged', 'text-sky-600 dark:text-sky-400')}
-                        ${buildStatTileHtml('Mental Clarity', stats.avgClarity !== null ? `${stats.avgClarity.toFixed(1)} / 5` : '—', clarities.length ? `${clarities.length} mornings rated` : 'Tap 1–5 pills in log', 'text-emerald-600 dark:text-emerald-400')}
-                        ${buildStatTileHtml('Morning Energy', stats.avgEnergy !== null ? `${stats.avgEnergy.toFixed(1)} / 5` : '—', energies.length ? `${energies.length} mornings rated` : 'Tap 1–5 pills in log', 'text-amber-600 dark:text-amber-400')}
-                    </div>
-
-                    <div class="space-y-2">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Dry Night vs. Drinking Night Biometrics</h3>
-                        ${buildDryVsDrinkRowHtml(
-                            '❤️ Resting Heart Rate (lower = better)',
-                            stats.dryAvgRhr !== null ? `${stats.dryAvgRhr.toFixed(1)} bpm` : '—',
-                            stats.drinkAvgRhr !== null ? `${stats.drinkAvgRhr.toFixed(1)} bpm` : '—',
-                            rhrDiff !== null ? (rhrDiff >= 0 ? `-${rhrDiff} bpm dry` : `+${Math.abs(rhrDiff)} bpm`) : '',
-                            rhrDiff !== null ? rhrDiff >= 0 : true
-                        )}
-                        ${buildDryVsDrinkRowHtml(
-                            '😴 Garmin Sleep Score',
-                            stats.dryAvgSleep !== null ? `${Math.round(stats.dryAvgSleep)}/100` : '—',
-                            stats.drinkAvgSleep !== null ? `${Math.round(stats.drinkAvgSleep)}/100` : '—',
-                            sleepDiff !== null ? `${sleepDiff >= 0 ? '+' : ''}${sleepDiff} pts dry` : '',
-                            sleepDiff !== null ? sleepDiff >= 0 : true
-                        )}
-                        ${buildDryVsDrinkRowHtml(
-                            '🧠 Mental Clarity & ⚡ Energy',
-                            `${stats.dryAvgClarity !== null ? stats.dryAvgClarity.toFixed(1) : '—'}/5 · ${stats.dryAvgEnergy !== null ? stats.dryAvgEnergy.toFixed(1) : '—'}/5`,
-                            `${stats.drinkAvgClarity !== null ? stats.drinkAvgClarity.toFixed(1) : '—'}/5 · ${stats.drinkAvgEnergy !== null ? stats.drinkAvgEnergy.toFixed(1) : '—'}/5`,
-                            clarityDiff !== null ? `${clarityDiff >= 0 ? '+' : ''}${clarityDiff} clarity` : '',
-                            clarityDiff !== null ? clarityDiff >= 0 : true
-                        )}
-                    </div>
-                `;
-                return;
-            }
-
-            if (metricKey === 'training') {
-                let sessions = 0, totalMins = 0, totalVol = 0, strCount = 0, cardioCount = 0, mobCount = 0;
-                const durations = [], rpes = [], dryMins = [], drinkMins = [], dryVols = [], drinkVols = [];
-                let dryDays = 0, dryTrained = 0, drinkDays = 0, drinkTrained = 0;
-                let bestSessionVol = 0, bestSessionDate = null;
-
-                dateKeys.forEach(dk => {
-                    const e = appState.logs[dk];
-                    if (!e?.logged) return;
-                    const drk = Number(e.drinks || 0);
-                    const w = normalizeWorkout(e.workout);
-                    const active = isActiveWorkout(w);
-                    const dur = Number(w.duration || 0);
-                    const vol = calcWorkoutVolume(w);
-
-                    if (drk === 0) {
-                        dryDays++;
-                        if (active) {
-                            dryTrained++;
-                            dryMins.push(dur);
-                            if (vol > 0) dryVols.push(vol);
-                        }
-                    } else {
-                        drinkDays++;
-                        if (active) {
-                            drinkTrained++;
-                            drinkMins.push(dur);
-                            if (vol > 0) drinkVols.push(vol);
-                        }
-                    }
-
-                    if (active) {
-                        sessions++;
-                        totalMins += dur;
-                        if (dur > 0) durations.push(dur);
-                        totalVol += vol;
-                        if (vol > bestSessionVol) {
-                            bestSessionVol = vol;
-                            bestSessionDate = dk;
-                        }
-                        if (w.rpe && !isNaN(Number(w.rpe))) rpes.push(Number(w.rpe));
-                        if (w.modalities.includes('strength') || w.lifts.length > 0) strCount++;
-                        if (w.modalities.includes('cycling') || w.modalities.includes('cardio')) cardioCount++;
-                        if (w.modalities.includes('mobility') || w.modalities.includes('recovery')) mobCount++;
-                    }
-                });
-
-                const avgDur = avgArr(durations);
-                const maxDur = durations.length ? Math.max(...durations) : 0;
-                const avgRpe = avgArr(rpes);
-                const dryRate = dryDays > 0 ? Math.round((dryTrained / dryDays) * 100) : null;
-                const drinkRate = drinkDays > 0 ? Math.round((drinkTrained / drinkDays) * 100) : null;
-                const rateDiff = (dryRate !== null && drinkRate !== null) ? (dryRate - drinkRate) : null;
-
-                bodyEl.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2.5">
-                        ${buildStatTileHtml('Total Sessions', `${sessions}`, `${strCount} strength · ${cardioCount} cardio · ${mobCount} mob`, 'text-violet-600 dark:text-violet-400')}
-                        ${buildStatTileHtml('Active Minutes', `${totalMins.toLocaleString()}m`, avgDur !== null ? `Avg ${Math.round(avgDur)}m · Max ${maxDur}m` : 'No duration logged', 'text-cyan-600 dark:text-cyan-400')}
-                        ${buildStatTileHtml('Completed Lift Volume', `${Math.round(totalVol).toLocaleString()} ${u}`, bestSessionVol > 0 ? `Best: ${Math.round(bestSessionVol).toLocaleString()} ${u} (${formatShortDateKey(bestSessionDate)})` : 'Check ✓ sets to count volume')}
-                        ${buildStatTileHtml('Avg Effort (RPE)', avgRpe !== null ? `${avgRpe.toFixed(1)} / 10` : '—', rpes.length ? `Range ${Math.min(...rpes)}–${Math.max(...rpes)} RPE` : 'Select RPE in workout log')}
-                    </div>
-
-                    <div class="space-y-2">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Dry Day vs. Drinking Day Training</h3>
-                        ${buildDryVsDrinkRowHtml(
-                            'Workout Consistency Rate',
-                            dryRate !== null ? `${dryRate}% (${dryTrained}/${dryDays}d)` : '—',
-                            drinkRate !== null ? `${drinkRate}% (${drinkTrained}/${drinkDays}d)` : '—',
-                            rateDiff !== null ? `${rateDiff >= 0 ? '+' : ''}${rateDiff}% on dry days` : '',
-                            rateDiff !== null ? rateDiff >= 0 : true
-                        )}
-                        ${buildDryVsDrinkRowHtml(
-                            'Avg Active Duration (Trained Days)',
-                            avgArr(dryMins) !== null ? `${Math.round(avgArr(dryMins))} min` : '—',
-                            avgArr(drinkMins) !== null ? `${Math.round(avgArr(drinkMins))} min` : '—'
-                        )}
-                    </div>
-                `;
-                return;
-            }
-
-            if (metricKey === 'pace') {
-                const last7 = getRangeDateKeys('7d');
-                if (!selectedPaceDayKey || !last7.includes(selectedPaceDayKey)) {
-                    selectedPaceDayKey = last7[last7.length - 1];
-                }
-
-                let total7 = 0, dry7 = 0, logged7 = 0, maxDay = 0;
-                const drinkingDayVals = [];
-                last7.forEach(dk => {
-                    const e = appState.logs[dk];
-                    if (e?.logged) {
-                        logged7++;
-                        const d = Number(e.drinks || 0);
-                        total7 += d;
-                        if (d === 0) dry7++;
-                        else drinkingDayVals.push(d);
-                        if (d > maxDay) maxDay = d;
-                    }
-                });
-
-                const cap = Math.max(0, Number(appState.weeklyTarget) || 0);
-                const remaining = Math.round((cap - total7) * 10) / 10;
-                const avgOnDrinkDays = avgArr(drinkingDayVals);
-
-                const stripHtml = last7.map(dk => {
-                    const e = appState.logs[dk];
-                    const dt = parseDateKey(dk);
-                    const dow = dt.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2);
-                    const dayNum = dt.getDate();
-                    const isSelected = dk === selectedPaceDayKey;
-                    const isLogged = !!(e && e.logged);
-                    const d = isLogged ? Number(e.drinks || 0) : null;
-
-                    let pillBg = 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700';
-                    if (isLogged) {
-                        if (d === 0) pillBg = 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700';
-                        else if (d <= Math.max(1, Math.ceil(getDailyTarget()))) pillBg = 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-700';
-                        else pillBg = 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-700';
-                    }
-                    const selRing = isSelected ? 'ring-2 ring-slate-900 dark:ring-white scale-[1.03]' : '';
-
-                    return `
-                        <button type="button" onclick="selectPaceInsightDay('${dk}')" class="min-h-[60px] py-1.5 px-1 rounded-xl border flex flex-col items-center justify-center gap-0.5 transition active:scale-95 ${pillBg} ${selRing}">
-                            <span class="text-[10px] font-bold uppercase opacity-80">${dow}</span>
-                            <span class="text-xs font-bold leading-none">${isLogged ? d : '—'}</span>
-                            <span class="text-[9px] opacity-70">${dayNum}</span>
-                        </button>
-                    `;
-                }).join('');
-
-                const selEntry = appState.logs[selectedPaceDayKey];
-                const selWorkout = selEntry?.logged ? normalizeWorkout(selEntry.workout) : null;
-                const selDetailHtml = selEntry?.logged
-                    ? `
-                        <div class="grid grid-cols-3 gap-2 text-xs">
-                            <div class="bg-white dark:bg-slate-900 rounded-lg p-2 border border-slate-200/70 dark:border-slate-800">
-                                <span class="text-[10px] text-slate-400 block">Drinks / NA</span>
-                                <strong class="text-slate-900 dark:text-white">${Number(selEntry.drinks || 0)} drk · ${Number(selEntry.naDrinks || 0)} NA</strong>
-                            </div>
-                            <div class="bg-white dark:bg-slate-900 rounded-lg p-2 border border-slate-200/70 dark:border-slate-800">
-                                <span class="text-[10px] text-slate-400 block">Sleep / RHR</span>
-                                <strong class="text-slate-900 dark:text-white">${selEntry.sleepQuality !== null && selEntry.sleepQuality !== undefined ? Math.round(selEntry.sleepQuality) : '—'} · ${selEntry.rhr !== null && selEntry.rhr !== undefined ? selEntry.rhr + ' bpm' : '—'}</strong>
-                            </div>
-                            <div class="bg-white dark:bg-slate-900 rounded-lg p-2 border border-slate-200/70 dark:border-slate-800">
-                                <span class="text-[10px] text-slate-400 block">Training</span>
-                                <strong class="text-slate-900 dark:text-white">${selWorkout && isActiveWorkout(selWorkout) ? (selWorkout.duration + 'm') : 'Rest'}</strong>
-                            </div>
-                        </div>
-                    `
-                    : `<p class="text-xs text-slate-500 dark:text-slate-400">No log recorded for ${formatFullDateKey(selectedPaceDayKey)} yet.</p>`;
-
-                bodyEl.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2.5">
-                        ${buildStatTileHtml('7D Total vs. Cap', `${Math.round(total7 * 10) / 10} / ${cap}`, remaining >= 0 ? `${remaining} drinks remaining` : `${Math.abs(remaining)} over weekly cap`, remaining >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400')}
-                        ${buildStatTileHtml('Dry Days (Last 7D)', `${dry7} / 7`, `${logged7} days logged · Peak ${maxDay}/day`, 'text-emerald-600 dark:text-emerald-400')}
-                        ${buildStatTileHtml('Avg on Drinking Days', avgOnDrinkDays !== null ? `${avgOnDrinkDays.toFixed(1)} drinks` : '0.0 drinks', `${drinkingDayVals.length} drinking day${drinkingDayVals.length === 1 ? '' : 's'}`)}
-                        ${buildStatTileHtml('vs. Old Baseline', `${Math.max(0, Math.round((appState.baselineWeekly - total7) * 10) / 10)} fewer`, `Old baseline: ${appState.baselineWeekly}/wk`, 'text-sky-600 dark:text-sky-400')}
-                    </div>
-
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Interactive 7-Day Breakdown</h3>
-                            <span class="text-[10px] text-slate-400">Tap any day to inspect</span>
-                        </div>
-                        <div class="grid grid-cols-7 gap-1.5">${stripHtml}</div>
-
-                        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 space-y-2.5">
-                            <div class="flex items-center justify-between gap-2">
-                                <span class="text-xs font-bold text-slate-800 dark:text-slate-100">${formatFullDateKey(selectedPaceDayKey)}</span>
-                                <button type="button" onclick="editDateFromInsight('${selectedPaceDayKey}', 'section-drinks')" class="min-h-[30px] px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold active:scale-95 transition">
-                                    ✎ Edit Date
-                                </button>
-                            </div>
-                            ${selDetailHtml}
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            if (metricKey === 'dry') {
-                let loggedDays = 0, dryDays = 0, curStreak = 0, bestStreak = 0, totalNa = 0, naOnDry = 0;
-                const dryByDow = [0, 0, 0, 0, 0, 0, 0];
-                const dowNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-                dateKeys.forEach(dk => {
-                    const e = appState.logs[dk];
-                    if (!e?.logged) {
-                        curStreak = 0;
-                        return;
-                    }
-                    loggedDays++;
-                    const d = Number(e.drinks || 0);
-                    const na = Number(e.naDrinks || 0);
-                    totalNa += na;
-                    if (d === 0) {
-                        dryDays++;
-                        naOnDry += na;
-                        curStreak++;
-                        if (curStreak > bestStreak) bestStreak = curStreak;
-                        dryByDow[parseDateKey(dk).getDay()]++;
-                    } else {
-                        curStreak = 0;
-                    }
-                });
-
-                // All-time best dry streak
-                let allBest = 0, allRun = 0;
-                const allKeys = getAllLoggedDateKeysSorted();
-                for (let i = 0; i < allKeys.length; i++) {
-                    const dk = allKeys[i];
-                    const contiguous = i === 0 || addDaysToKey(allKeys[i - 1], 1) === dk;
-                    if (!contiguous) allRun = 0;
-                    if (Number(appState.logs[dk]?.drinks || 0) === 0) {
-                        allRun++;
-                        if (allRun > allBest) allBest = allRun;
-                    } else {
-                        allRun = 0;
-                    }
-                }
-
-                const dryRate = loggedDays > 0 ? Math.round((dryDays / loggedDays) * 100) : 0;
-                const maxDowVal = Math.max(...dryByDow);
-                const topDow = maxDowVal > 0 ? dowNames[dryByDow.indexOf(maxDowVal)] : '—';
-                const recStats = computeRecoveryStatsForKeys(dateKeys);
-
-                bodyEl.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2.5">
-                        ${buildStatTileHtml('Dry Rate', `${dryRate}%`, `${dryDays} dry of ${loggedDays} logged days`, 'text-emerald-600 dark:text-emerald-400')}
-                        ${buildStatTileHtml('Active & Best Streak', `${curStreak}d active`, `Window best ${bestStreak}d · All-time ${allBest}d`, 'text-emerald-600 dark:text-emerald-400')}
-                        ${buildStatTileHtml('NA Swaps Logged', `${totalNa}`, dryDays > 0 ? `Avg ${(naOnDry / dryDays).toFixed(1)} NA on dry days` : 'Log NA swaps in daily sheet')}
-                        ${buildStatTileHtml('Strongest Dry Day', topDow, maxDowVal > 0 ? `${maxDowVal} alcohol-free ${topDow}s` : 'Log more days to see pattern')}
-                    </div>
-
-                    <div class="space-y-2">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">How Dry Nights Pay Off</h3>
-                        ${buildDryVsDrinkRowHtml(
-                            '😴 Next-Morning Garmin Sleep',
-                            recStats.dryAvgSleep !== null ? `${Math.round(recStats.dryAvgSleep)}/100` : '—',
-                            recStats.drinkAvgSleep !== null ? `${Math.round(recStats.drinkAvgSleep)}/100` : '—',
-                            (recStats.dryAvgSleep !== null && recStats.drinkAvgSleep !== null) ? `${Math.round(recStats.dryAvgSleep - recStats.drinkAvgSleep) >= 0 ? '+' : ''}${Math.round(recStats.dryAvgSleep - recStats.drinkAvgSleep)} pts` : '',
-                            (recStats.dryAvgSleep !== null && recStats.drinkAvgSleep !== null) ? recStats.dryAvgSleep >= recStats.drinkAvgSleep : true
-                        )}
-                        ${buildDryVsDrinkRowHtml(
-                            '❤️ Next-Morning Resting HR',
-                            recStats.dryAvgRhr !== null ? `${recStats.dryAvgRhr.toFixed(1)} bpm` : '—',
-                            recStats.drinkAvgRhr !== null ? `${recStats.drinkAvgRhr.toFixed(1)} bpm` : '—',
-                            (recStats.dryAvgRhr !== null && recStats.drinkAvgRhr !== null) ? `${Math.round((recStats.dryAvgRhr - recStats.drinkAvgRhr) * 10) / 10} bpm` : '',
-                            (recStats.dryAvgRhr !== null && recStats.drinkAvgRhr !== null) ? recStats.dryAvgRhr <= recStats.drinkAvgRhr : true
-                        )}
-                    </div>
-                `;
-                return;
-            }
-
-            if (metricKey === 'saved') {
-                let loggedDays = 0, totalDrinks = 0, dryDays = 0;
-                const drinkDaysArr = [];
-                dateKeys.forEach(dk => {
-                    const e = appState.logs[dk];
-                    if (!e?.logged) return;
-                    loggedDays++;
-                    const d = Number(e.drinks || 0);
-                    totalDrinks += d;
-                    if (d === 0) dryDays++;
-                    else drinkDaysArr.push(d);
-                });
-
-                const expectedBaseline = (appState.baselineWeekly / 7) * loggedDays;
-                const avoided = Math.max(0, Math.round((expectedBaseline - totalDrinks) * 10) / 10);
-                const kcalSaved = Math.round(avoided * 145);
-                const fatLbs = kcalSaved / 3500;
-                const fatVal = u === 'kg' ? (fatLbs * 0.453592) : fatLbs;
-                const drinkCost = Number(appState.drinkCost) || 9;
-                const moneySaved = Math.round(avoided * drinkCost);
-
-                const annualizedFactor = loggedDays > 0 ? (365 / loggedDays) : 0;
-                const projDrinksYr = Math.round(avoided * annualizedFactor);
-                const projKcalYr = Math.round(kcalSaved * annualizedFactor);
-                const projFatYr = (fatVal * annualizedFactor);
-                const projMoneyYr = Math.round(moneySaved * annualizedFactor);
-
-                const costBtns = [6, 9, 12, 15].map(c => {
-                    const active = drinkCost === c;
-                    const cls = active
-                        ? 'bg-sky-600 text-white border-sky-600 shadow-xs'
-                        : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-sky-400';
-                    return `<button type="button" onclick="setInsightDrinkCost(${c})" class="min-h-[36px] flex-1 py-1 px-2 rounded-xl border text-xs font-bold transition active:scale-95 ${cls}">$${c}</button>`;
-                }).join('');
-
-                bodyEl.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2.5">
-                        ${buildStatTileHtml('Drinks Avoided', `${avoided}`, `vs ${Math.round(expectedBaseline * 10) / 10} baseline pace`, 'text-sky-600 dark:text-sky-400')}
-                        ${buildStatTileHtml('Calories Saved', `${kcalSaved.toLocaleString()} kcal`, '~145 kcal per standard drink', 'text-emerald-600 dark:text-emerald-400')}
-                        ${buildStatTileHtml(`Equivalent Fat (${u})`, `${fatVal.toFixed(2)} ${u}`, '3,500 kcal ≈ 1 lb body fat', 'text-indigo-600 dark:text-indigo-400')}
-                        ${buildStatTileHtml('Money Saved', `$${moneySaved.toLocaleString()}`, `At $${drinkCost} avg per drink`, 'text-emerald-600 dark:text-emerald-400')}
-                    </div>
-
-                    <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Avg Cost Per Drink</span>
-                            <span class="text-[11px] text-slate-400">Tap to recalculate</span>
-                        </div>
-                        <div class="flex items-center gap-2">${costBtns}</div>
-                    </div>
-
-                    <div class="p-3.5 rounded-2xl bg-gradient-to-br from-sky-50 to-emerald-50/70 dark:from-sky-950/40 dark:to-emerald-950/30 border border-sky-200/70 dark:border-sky-800/50 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300">1-Year Pace Projection</span>
-                            <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">Based on ${loggedDays} logged days</span>
-                        </div>
-                        <div class="grid grid-cols-3 gap-2 text-center">
-                            <div class="bg-white/80 dark:bg-slate-900/70 rounded-xl p-2">
-                                <span class="text-sm font-bold text-sky-600 dark:text-sky-400 block">${projDrinksYr.toLocaleString()}</span>
-                                <span class="text-[10px] text-slate-500 dark:text-slate-400">drinks/yr</span>
-                            </div>
-                            <div class="bg-white/80 dark:bg-slate-900/70 rounded-xl p-2">
-                                <span class="text-sm font-bold text-indigo-600 dark:text-indigo-400 block">${projFatYr.toFixed(1)} ${u}</span>
-                                <span class="text-[10px] text-slate-500 dark:text-slate-400">${(projKcalYr / 1000).toFixed(0)}k kcal</span>
-                            </div>
-                            <div class="bg-white/80 dark:bg-slate-900/70 rounded-xl p-2">
-                                <span class="text-sm font-bold text-emerald-600 dark:text-emerald-400 block">$${projMoneyYr.toLocaleString()}</span>
-                                <span class="text-[10px] text-slate-500 dark:text-slate-400">saved/yr</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    ${buildDryVsDrinkRowHtml(
-                        'Actual Logged Intake Breakdown',
-                        `${dryDays} Dry Days (0 drk)`,
-                        `${drinkDaysArr.length} Drink Days (${avgArr(drinkDaysArr) !== null ? avgArr(drinkDaysArr).toFixed(1) : '0.0'} avg)`
-                    )}
-                `;
-            }
-        }
-
-        // ==========================================
-        // 13. UPGRADE 3: THEME SWITCHER, MORNING CHECK-IN,
-        //     TODAY FOCUS TOGGLE, SPARKLINES, WINS & BODY MAP
-        // ==========================================
-        const THEME_CYCLE = [
-            { id: 'auto', icon: '🌓', label: 'Auto' },
-            { id: 'light', icon: '☀️', label: 'Light' },
-            { id: 'dark', icon: '🌙', label: 'Dark' },
-            { id: 'oled', icon: '🖤', label: 'OLED' }
-        ];
-
-        function isAppDarkMode() {
-            return document.documentElement.classList.contains('dark');
-        }
-
-        function applyThemeMode(mode = appState.themeMode || 'auto', redraw = true) {
-            const validMode = ['auto', 'light', 'dark', 'oled'].includes(mode) ? mode : 'auto';
-            appState.themeMode = validMode;
-            const sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const isDark = validMode === 'dark' || validMode === 'oled' || (validMode === 'auto' && sysDark);
-
-            document.documentElement.classList.toggle('dark', isDark);
-            document.documentElement.classList.toggle('theme-oled', validMode === 'oled');
-            document.documentElement.setAttribute('data-theme', validMode);
-
-            const meta = document.getElementById('meta-theme-color');
-            if (meta) {
-                meta.setAttribute('content', validMode === 'oled' ? '#000000' : (isDark ? '#0f172a' : '#ffffff'));
-            }
-
-            const info = THEME_CYCLE.find(t => t.id === validMode) || THEME_CYCLE[0];
-            const iconEl = document.getElementById('theme-cycle-icon');
-            const labelEl = document.getElementById('theme-cycle-label');
-            if (iconEl) iconEl.textContent = info.icon;
-            if (labelEl) labelEl.textContent = info.label;
-
-            if (redraw && appBooted) {
-                renderKpiSparklines();
-                renderMuscleGroupCoach();
-                if (!document.getElementById('view-analytics')?.classList.contains('hidden') &&
-                    !document.getElementById('deep-dive-charts-container')?.classList.contains('hidden')) {
-                    drawAllCharts(getRangeDateKeys(activeTimeRange));
-                }
-            }
-        }
-
-        function cycleThemeMode() {
-            const cur = appState.themeMode || 'auto';
-            const idx = THEME_CYCLE.findIndex(t => t.id === cur);
-            const next = THEME_CYCLE[(idx + 1) % THEME_CYCLE.length];
-            applyThemeMode(next.id, true);
-            saveState();
-            showToast(`Theme: ${next.icon} ${next.label}`);
-        }
-
-        if (window.matchMedia) {
-            const mq = window.matchMedia('(prefers-color-scheme: dark)');
-            const onSysChange = () => {
-                if ((appState.themeMode || 'auto') === 'auto') {
-                    applyThemeMode('auto', true);
-                }
-            };
-            if (mq.addEventListener) mq.addEventListener('change', onSysChange);
-            else if (mq.addListener) mq.addListener(onSysChange);
-        }
-
-        // Native 180x180 PNG apple-touch-icon generator for crisp iOS Home Screen icons
-        function buildNativeAppleTouchIcon() {
-            try {
-                const canvas = document.createElement('canvas');
-                canvas.width = 180;
-                canvas.height = 180;
-                const ctx = canvas.getContext('2d');
-                if (!ctx) return;
-
-                const grad = ctx.createLinearGradient(0, 0, 180, 180);
-                grad.addColorStop(0, '#10b981');
-                grad.addColorStop(0.52, '#14b8a6');
-                grad.addColorStop(1, '#0284c7');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, 180, 180);
-
-                // Subtle inner glow ring
-                ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-                ctx.lineWidth = 4;
-                ctx.strokeRect(10, 10, 160, 160);
-
-                // Pulse / peak line
-                ctx.beginPath();
-                ctx.moveTo(24, 108);
-                ctx.lineTo(54, 108);
-                ctx.lineTo(68, 72);
-                ctx.lineTo(86, 124);
-                ctx.lineTo(104, 54);
-                ctx.lineTo(120, 108);
-                ctx.lineTo(156, 108);
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 11;
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.stroke();
-
-                // Sun/peak accent dot
-                ctx.beginPath();
-                ctx.arc(144, 44, 10, 0, Math.PI * 2);
-                ctx.fillStyle = '#fef08a';
-                ctx.fill();
-
-                const pngUrl = canvas.toDataURL('image/png');
-                const link = document.getElementById('apple-touch-icon-link');
-                if (link && pngUrl) link.setAttribute('href', pngUrl);
-            } catch (e) {}
-        }
-
-        // --- Today Focus vs. Deep Dive Toggle ---
-        function setDashboardView(mode, shouldSave = true) {
-            const valid = mode === 'focus' ? 'focus' : 'deep';
-            appState.dashboardView = valid;
-
-            const chartsBox = document.getElementById('deep-dive-charts-container');
-            const tableCard = document.getElementById('deep-dive-table-card');
-            const collapsedBanner = document.getElementById('deep-dive-collapsed-card');
-            const focusBtn = document.getElementById('dash-view-focus');
-            const deepBtn = document.getElementById('dash-view-deep');
-
-            const isFocus = valid === 'focus';
-            if (chartsBox) chartsBox.classList.toggle('hidden', isFocus);
-            if (tableCard) tableCard.classList.toggle('hidden', isFocus);
-            if (collapsedBanner) collapsedBanner.classList.toggle('hidden', !isFocus);
-
-            const activeCls = 'min-h-[36px] px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition whitespace-nowrap';
-            const idleCls = 'min-h-[36px] px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap';
-            if (focusBtn) focusBtn.className = isFocus ? activeCls : idleCls;
-            if (deepBtn) deepBtn.className = !isFocus ? activeCls : idleCls;
-
-            if (shouldSave) saveState();
-            if (!isFocus && !document.getElementById('view-analytics')?.classList.contains('hidden')) {
-                setTimeout(() => drawAllCharts(getRangeDateKeys(activeTimeRange)), 30);
-            }
-        }
-
-        // --- 10-Second Morning Check-In Drawer + Yesterday Shortcut ---
-        function openMorningCheckIn(dateKey = getTodayKey()) {
-            activeMorningCheckInDate = isIsoDateKey(dateKey) ? dateKey : getTodayKey();
-            populateMorningCheckInFields(activeMorningCheckInDate);
-            document.getElementById('morning-checkin-modal')?.classList.remove('hidden');
-        }
-
-        function openYesterdayCheckIn() {
-            openMorningCheckIn(addDaysToKey(getTodayKey(), -1));
-        }
-
-        function closeMorningCheckIn() {
-            document.getElementById('morning-checkin-modal')?.classList.add('hidden');
-        }
-
-        function switchMorningCheckInDate(which) {
-            const targetKey = which === 'yesterday' ? addDaysToKey(getTodayKey(), -1) : getTodayKey();
-            activeMorningCheckInDate = targetKey;
-            populateMorningCheckInFields(targetKey);
-        }
-
-        function populateMorningCheckInFields(dateKey) {
-            const todayKey = getTodayKey();
-            const yestKey = addDaysToKey(todayKey, -1);
-            const existing = appState.logs[dateKey] || null;
-
-            const titleEl = document.getElementById('mc-date-title');
-            if (titleEl) {
-                const prefix = dateKey === todayKey ? 'Today' : (dateKey === yestKey ? 'Yesterday' : '');
-                titleEl.textContent = prefix ? `${prefix} · ${formatShortDateKey(dateKey)}` : formatFullDateKey(dateKey);
-            }
-
-            const tabToday = document.getElementById('mc-tab-today');
-            const tabYest = document.getElementById('mc-tab-yesterday');
-            const activeTabCls = 'min-h-[38px] px-2.5 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs transition';
-            const idleTabCls = 'min-h-[38px] px-2.5 py-1.5 text-xs font-bold rounded-lg text-slate-600 dark:text-slate-400 transition';
-            if (tabToday) tabToday.className = dateKey === todayKey ? activeTabCls : idleTabCls;
-            if (tabYest) tabYest.className = dateKey === yestKey ? activeTabCls : idleTabCls;
-
-            const unitEl = document.getElementById('mc-weight-unit');
-            if (unitEl) unitEl.textContent = appState.weightUnit;
-
-            const weightVal = (existing && existing.weight !== null && existing.weight !== undefined)
-                ? existing.weight
-                : getSuggestedDefaultWeight(dateKey);
-            document.getElementById('mc-weight-input').value =
-                (weightVal !== null && weightVal !== undefined) ? weightVal : '';
-            document.getElementById('mc-sleep-input').value =
-                (existing && existing.sleepQuality !== null && existing.sleepQuality !== undefined) ? existing.sleepQuality : '';
-            document.getElementById('mc-rhr-input').value =
-                (existing && existing.rhr !== null && existing.rhr !== undefined) ? existing.rhr : '';
-
-            morningCheckInClarity = (existing && existing.mentalClarity) ? Number(existing.mentalClarity) : null;
-            renderMcClarityPills();
-        }
-
-        function renderMcClarityPills() {
-            const container = document.getElementById('mc-clarity-pills');
-            if (!container) return;
-            container.innerHTML = CLARITY_SCALE.map(item => {
-                const isSelected = Number(morningCheckInClarity) === item.val;
-                const cls = isSelected
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-                    : 'bg-white dark:bg-slate-850 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-emerald-400';
-                return `
-                    <button type="button" onclick="toggleMcClarity(${item.val})" class="min-h-[46px] py-1.5 px-1 rounded-xl border text-center transition active:scale-95 flex flex-col items-center justify-center ${cls}">
-                        <span class="text-xs font-bold leading-none">${item.val}</span>
-                        <span class="text-[10px] leading-tight mt-0.5 opacity-90">${item.label}</span>
-                    </button>
-                `;
-            }).join('');
-        }
-
-        function toggleMcClarity(val) {
-            morningCheckInClarity = Number(morningCheckInClarity) === val ? null : val;
-            renderMcClarityPills();
-        }
-
-        function adjustMcWeight(delta) {
-            const input = document.getElementById('mc-weight-input');
-            let current = parseFloat(input.value);
-            if (isNaN(current)) {
-                current = getSuggestedDefaultWeight(activeMorningCheckInDate) || (appState.weightUnit === 'kg' ? 100 : 220);
-            }
-            input.value = Math.max(40, Math.round((current + delta) * 10) / 10).toFixed(1);
-        }
-
-        function adjustMcSleep(delta) {
-            const input = document.getElementById('mc-sleep-input');
-            let current = parseInt(input.value, 10);
-            if (isNaN(current)) current = 80;
-            input.value = Math.max(0, Math.min(100, current + delta));
-        }
-
-        function setMcSleepPreset(val) {
-            document.getElementById('mc-sleep-input').value = val;
-        }
-
-        function adjustMcRhr(delta) {
-            const input = document.getElementById('mc-rhr-input');
-            let current = parseInt(input.value, 10);
-            if (isNaN(current)) current = 54;
-            input.value = Math.max(30, Math.min(150, current + delta));
-        }
-
-        function clearMcField(field) {
-            if (field === 'weight') document.getElementById('mc-weight-input').value = '';
-            else if (field === 'sleep') document.getElementById('mc-sleep-input').value = '';
-            else if (field === 'rhr') document.getElementById('mc-rhr-input').value = '';
-        }
-
-        function saveMorningCheckIn() {
-            const dk = activeMorningCheckInDate;
-            const existing = appState.logs[dk]
-                ? JSON.parse(JSON.stringify(appState.logs[dk]))
-                : {
-                    logged: true,
-                    drinks: 0,
-                    naDrinks: 1,
-                    weight: null,
-                    rhr: null,
-                    sleepQuality: null,
-                    mentalClarity: null,
-                    energyLevel: null,
-                    workout: { modalities: [], muscleGroups: [], duration: 0, rpe: '', lifts: [], notes: '' },
-                    habits: {},
-                    notes: ''
-                };
-
-            const rawW = document.getElementById('mc-weight-input').value.trim();
-            const rawS = document.getElementById('mc-sleep-input').value.trim();
-            const rawR = document.getElementById('mc-rhr-input').value.trim();
-
-            existing.logged = true;
-            existing.weight = rawW !== '' && !isNaN(Number(rawW)) ? Math.round(Number(rawW) * 10) / 10 : null;
-            existing.sleepQuality = rawS !== '' && !isNaN(Number(rawS)) ? Math.max(0, Math.min(100, Math.round(Number(rawS)))) : null;
-            existing.rhr = rawR !== '' && !isNaN(Number(rawR)) ? Math.round(Number(rawR)) : null;
-            existing.mentalClarity = morningCheckInClarity;
-            existing.workout = normalizeWorkout(existing.workout);
-            if (!existing.habits || typeof existing.habits !== 'object') existing.habits = {};
-            if (existing.weight !== null || existing.sleepQuality !== null || existing.rhr !== null) {
-                existing.habits.recovery = true;
-            }
-            if (appState.startingWeight === null && existing.weight !== null) {
-                appState.startingWeight = existing.weight;
-            }
-
-            appState.logs[dk] = existing;
-            saveState();
-            closeMorningCheckIn();
-            renderAll();
-            showToast(`☀️ ${formatShortDateKey(dk)} check-in saved!`);
-        }
-
-        function openFullLogFromCheckIn() {
-            const dk = activeMorningCheckInDate;
-            closeMorningCheckIn();
-            openDayModal(dk, 'section-recovery');
-        }
-
-        // --- KPI Tile Mini 7-Day Sparklines ---
-        function drawMiniSparkline(svgId, values, color, mode = 'line') {
-            const svg = document.getElementById(svgId);
-            if (!svg) return;
-            const W = 120, H = 24, pad = 2.5;
-            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-            svg.setAttribute('preserveAspectRatio', 'none');
-            svg.innerHTML = '';
-
-            const valid = values.filter(v => v !== null && !isNaN(v));
-            const mutedLine = isAppDarkMode() ? '#1e293b' : '#e2e8f0';
-
-            if (valid.length === 0) {
-                svg.appendChild(createSvgEl('line', { x1: 0, y1: H - 4, x2: W, y2: H - 4, stroke: mutedLine, 'stroke-width': 1.5, 'stroke-dasharray': '3 3' }));
-                return;
-            }
-
-            if (mode === 'bars') {
-                const n = values.length;
-                const maxV = Math.max(1, ...valid);
-                const slot = W / n;
-                const bw = Math.max(4, slot * 0.56);
-                values.forEach((v, i) => {
-                    const cx = i * slot + slot / 2;
-                    if (v === null) {
-                        svg.appendChild(createSvgEl('rect', { x: cx - bw / 2, y: H - 3, width: bw, height: 2, rx: 1, fill: mutedLine }));
-                    } else {
-                        const bh = v === 0 ? 3 : Math.max(4, (v / maxV) * (H - 4));
-                        const barFill = typeof color === 'function' ? color(v) : color;
-                        svg.appendChild(createSvgEl('rect', { x: cx - bw / 2, y: H - bh, width: bw, height: bh, rx: 2, fill: barFill, 'fill-opacity': 0.85 }));
-                    }
-                });
-                return;
-            }
-
-            if (mode === 'dots') {
-                const n = values.length;
-                const slot = W / n;
-                values.forEach((v, i) => {
-                    const cx = i * slot + slot / 2;
-                    const fill = v === null ? mutedLine : (v === 1 ? '#10b981' : '#f43f5e');
-                    svg.appendChild(createSvgEl('rect', { x: cx - slot * 0.3, y: v === 1 ? 5 : 13, width: slot * 0.6, height: v === 1 ? 15 : 7, rx: 3, fill, 'fill-opacity': v === null ? 0.5 : 0.88 }));
-                });
-                return;
-            }
-
-            const minV = Math.min(...valid);
-            const maxV = Math.max(...valid);
-            const span = Math.max(0.01, maxV - minV);
-            const n = values.length;
-            const pts = [];
-            values.forEach((v, i) => {
-                if (v === null || isNaN(v)) return;
-                const x = n <= 1 ? W / 2 : pad + (i / (n - 1)) * (W - pad * 2);
-                const y = span <= 0.01 ? H / 2 : (H - pad) - ((v - minV) / span) * (H - pad * 2);
-                pts.push({ x, y });
-            });
-
-            if (pts.length === 1) {
-                svg.appendChild(createSvgEl('circle', { cx: pts[0].x, cy: pts[0].y, r: 3, fill: color }));
-                return;
-            }
-
-            const lineD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
-            const areaD = `${lineD} L ${pts[pts.length - 1].x.toFixed(1)} ${H} L ${pts[0].x.toFixed(1)} ${H} Z`;
-            svg.appendChild(createSvgEl('path', { d: areaD, fill: color, 'fill-opacity': 0.14 }));
-            svg.appendChild(createSvgEl('path', { d: lineD, fill: 'none', stroke: color, 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }));
-            const last = pts[pts.length - 1];
-            svg.appendChild(createSvgEl('circle', { cx: last.x.toFixed(1), cy: last.y.toFixed(1), r: 2.6, fill: color }));
-        }
-
-        function renderKpiSparklines() {
-            const last7 = getRangeDateKeys('7d');
-            const weightSeries = computeWeightSeriesForKeys(last7);
-            const weightVals = weightSeries.map(s => s.rawWeight !== null ? s.rawWeight : s.trendWeight);
-            drawMiniSparkline('spark-weight', weightVals, '#6366f1', 'line');
-
-            const sleepVals = last7.map(dk => {
-                const e = appState.logs[dk];
-                if (!e?.logged) return null;
-                if (e.sleepQuality !== null && e.sleepQuality !== undefined) return Number(e.sleepQuality);
-                if (e.rhr !== null && e.rhr !== undefined) return Math.max(0, 110 - Number(e.rhr));
-                return null;
-            });
-            drawMiniSparkline('spark-recovery', sleepVals, '#f43f5e', 'line');
-
-            const trainVals = last7.map(dk => {
-                const e = appState.logs[dk];
-                if (!e?.logged) return null;
-                return Number(normalizeWorkout(e.workout).duration || 0);
-            });
-            drawMiniSparkline('spark-training', trainVals, '#8b5cf6', 'bars');
-
-            const dailyCap = Math.max(1, Math.ceil(getDailyTarget()));
-            const drinkVals = last7.map(dk => {
-                const e = appState.logs[dk];
-                return e?.logged ? Number(e.drinks || 0) : null;
-            });
-            drawMiniSparkline('spark-pace', drinkVals, (v) => v === 0 ? '#10b981' : (v <= dailyCap ? '#f59e0b' : '#f43f5e'), 'bars');
-
-            const dryVals = last7.map(dk => {
-                const e = appState.logs[dk];
-                if (!e?.logged) return null;
-                return Number(e.drinks || 0) === 0 ? 1 : 0;
-            });
-            drawMiniSparkline('spark-dry', dryVals, '#10b981', 'dots');
-
-            const dailyBase = appState.baselineWeekly / 7;
-            let cumAvoided = 0;
-            const avoidedVals = last7.map(dk => {
-                const e = appState.logs[dk];
-                if (!e?.logged) return null;
-                cumAvoided = Math.max(0, cumAvoided + (dailyBase - Number(e.drinks || 0)));
-                return Math.round(cumAvoided * 10) / 10;
-            });
-            drawMiniSparkline('spark-saved', avoidedVals, '#0ea5e9', 'line');
-        }
-
-        // --- 7D Weekly Wins Strip ---
-        function renderWeeklyWinsStrip() {
-            const strip = document.getElementById('weekly-wins-strip');
-            if (!strip) return;
-
-            const last7 = getRangeDateKeys('7d');
-            let logged7 = 0, dry7 = 0, drinks7 = 0, workouts7 = 0, activeMins7 = 0, na7 = 0;
-            const sleeps7 = [], rhrs7 = [], weights7 = [];
-            const musclesHit = new Set();
-
-            last7.forEach(dk => {
-                const e = appState.logs[dk];
-                if (!e?.logged) return;
-                logged7++;
-                const d = Number(e.drinks || 0);
-                drinks7 += d;
-                na7 += Number(e.naDrinks || 0);
-                if (d === 0) dry7++;
-                if (e.sleepQuality !== null && e.sleepQuality !== undefined) sleeps7.push(Number(e.sleepQuality));
-                if (e.rhr !== null && e.rhr !== undefined) rhrs7.push(Number(e.rhr));
-                if (e.weight !== null && e.weight !== undefined) weights7.push(Number(e.weight));
-                const w = normalizeWorkout(e.workout);
-                if (isActiveWorkout(w)) {
-                    workouts7++;
-                    activeMins7 += Number(w.duration || 0);
-                    const { primarySets } = inferMuscleGroupsFromWorkout(w, true);
-                    Object.entries(primarySets).forEach(([id, sets]) => {
-                        if (sets > 0) musclesHit.add(id);
-                    });
-                }
-            });
-
-            if (logged7 === 0) {
-                strip.innerHTML = `<span class="text-xs text-slate-400 py-0.5">Tap <strong>☀️ Morning Check-In</strong> or <strong>✨ 90D Demo</strong> to unlock your 7-day win badges.</span>`;
-                return;
-            }
-
-            const wins = [];
-            if (dry7 > 0) {
-                wins.push({ cls: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60', text: `🔥 ${dry7}/7 Dry Days`, click: "openKpiInsight('dry')" });
-            }
-            const avoided7 = Math.max(0, Math.round(((appState.baselineWeekly / 7) * logged7 - drinks7) * 10) / 10);
-            if (avoided7 > 0) {
-                wins.push({ cls: 'bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border-sky-200/80 dark:border-sky-800/60', text: `📉 ${avoided7} Avoided (~${Math.round(avoided7 * 145).toLocaleString()} kcal)`, click: "openKpiInsight('saved')" });
-            }
-            if (workouts7 > 0) {
-                wins.push({ cls: 'bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 border-violet-200/80 dark:border-violet-800/60', text: `🏋️ ${workouts7} Workouts · ${activeMins7}m`, click: "openKpiInsight('training')" });
-            }
-            if (sleeps7.length > 0) {
-                const avgSleep = Math.round(sleeps7.reduce((a, b) => a + b, 0) / sleeps7.length);
-                wins.push({ cls: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-800/60', text: `😴 Avg Sleep ${avgSleep}`, click: "openKpiInsight('recovery')" });
-            }
-            if (weights7.length >= 2) {
-                const wDelta = Math.round((weights7[weights7.length - 1] - weights7[0]) * 10) / 10;
-                if (wDelta <= 0) {
-                    wins.push({ cls: 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-200/80 dark:border-indigo-800/60', text: `⚖️ ${wDelta.toFixed(1)} ${appState.weightUnit} (7D)`, click: "openKpiInsight('weight')" });
-                }
-            }
-            if (musclesHit.size > 0) {
-                wins.push({ cls: 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/60', text: `💪 ${musclesHit.size}/7 Muscles Hit`, click: "startLiveWorkoutToday()" });
-            }
-            if (wins.length === 0 && na7 > 0) {
-                wins.push({ cls: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60', text: `🥤 ${na7} NA Swaps`, click: "openKpiInsight('dry')" });
-            }
-
-            strip.innerHTML = wins.map(w =>
-                `<button type="button" onclick="${w.click}" class="shrink-0 min-h-[30px] px-2.5 py-1 rounded-full border text-[11px] font-bold transition active:scale-95 whitespace-nowrap ${w.cls}">${w.text}</button>`
-            ).join('');
-        }
-
-        // --- Interactive Muscle Body Map (Front & Back Anatomical SVG) ---
-        function renderMuscleBodyMap(totals) {
-            const container = document.getElementById('muscle-body-map');
-            if (!container) return;
-
-            const isDark = isAppDarkMode();
-            const silhouetteFill = isDark ? '#1e293b' : '#e2e8f0';
-            const strokeCol = isDark ? '#0f172a' : '#ffffff';
-
-            const colorFor = (mgId) => {
-                const st = totals[mgId] || { directSets: 0, indirectSets: 0 };
-                if (st.directSets > 0) return '#10b981'; // Emerald = Trained
-                if (st.indirectSets > 0) return '#f59e0b'; // Amber = Secondary
-                return isDark ? '#475569' : '#94a3b8'; // Slate = Due
-            };
-
-            const titleFor = (mgId) => {
-                const mg = MUSCLE_GROUPS.find(m => m.id === mgId);
-                const st = totals[mgId] || { directSets: 0, indirectSets: 0 };
-                const status = st.directSets > 0 ? `${st.directSets} direct sets (Trained)` : (st.indirectSets > 0 ? `${st.indirectSets} indirect sets (Secondary)` : 'Due this week');
-                return `${mg ? mg.label : mgId}: ${status} — Tap to filter workout`;
-            };
-
-            const frontSvg = `
-                <div class="flex flex-col items-center">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Front</span>
-                    <svg viewBox="0 0 140 245" class="w-full max-w-[155px] h-auto" role="img" aria-label="Front muscle map">
-                        <!-- Silhouette base (head, neck, forearms, hands, feet) -->
-                        <circle cx="70" cy="22" r="14" fill="${silhouetteFill}" />
-                        <rect x="64" y="35" width="12" height="10" rx="4" fill="${silhouetteFill}" />
-                        <path d="M26 95 L18 134 C17 139 23 141 26 136 L35 98 Z" fill="${silhouetteFill}" />
-                        <path d="M114 95 L122 134 C123 139 117 141 114 136 L105 98 Z" fill="${silhouetteFill}" />
-                        <ellipse cx="53" cy="233" rx="9" ry="5" fill="${silhouetteFill}" />
-                        <ellipse cx="87" cy="233" rx="9" ry="5" fill="${silhouetteFill}" />
-
-                        <!-- Shoulders (Front Delts) -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('shoulders')">
-                            <title>${escapeHtml(titleFor('shoulders'))}</title>
-                            <path d="M46 47 C36 48 29 55 28 67 L39 70 L47 54 Z" fill="${colorFor('shoulders')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M94 47 C104 48 111 55 112 67 L101 70 L93 54 Z" fill="${colorFor('shoulders')}" stroke="${strokeCol}" stroke-width="1.4" />
-                        </g>
-
-                        <!-- Chest (Pecs) -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('chest')">
-                            <title>${escapeHtml(titleFor('chest'))}</title>
-                            <path d="M47 49 L69 51 L69 78 C60 80 48 77 45 68 Z" fill="${colorFor('chest')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M93 49 L71 51 L71 78 C80 80 92 77 95 68 Z" fill="${colorFor('chest')}" stroke="${strokeCol}" stroke-width="1.4" />
-                        </g>
-
-                        <!-- Biceps -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('biceps')">
-                            <title>${escapeHtml(titleFor('biceps'))}</title>
-                            <path d="M28 69 L39 71 L37 97 L26 94 Z" fill="${colorFor('biceps')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M112 69 L101 71 L103 97 L114 94 Z" fill="${colorFor('biceps')}" stroke="${strokeCol}" stroke-width="1.4" />
-                        </g>
-
-                        <!-- Core (Abs & Obliques) -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('core')">
-                            <title>${escapeHtml(titleFor('core'))}</title>
-                            <path d="M47 78 L93 78 L89 124 L51 124 Z" fill="${colorFor('core')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <line x1="70" y1="80" x2="70" y2="122" stroke="${strokeCol}" stroke-width="1.2" opacity="0.6" />
-                            <line x1="53" y1="93" x2="87" y2="93" stroke="${strokeCol}" stroke-width="1.1" opacity="0.55" />
-                            <line x1="54" y1="108" x2="86" y2="108" stroke="${strokeCol}" stroke-width="1.1" opacity="0.55" />
-                        </g>
-
-                        <!-- Legs (Quads & Calves) -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('legs')">
-                            <title>${escapeHtml(titleFor('legs'))}</title>
-                            <path d="M49 127 L68 127 L65 182 L47 182 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M91 127 L72 127 L75 182 L93 182 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M48 185 L64 185 L60 227 L49 227 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M92 185 L76 185 L80 227 L91 227 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                        </g>
-                    </svg>
-                </div>
-            `;
-
-            const backSvg = `
-                <div class="flex flex-col items-center">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Back</span>
-                    <svg viewBox="0 0 140 245" class="w-full max-w-[155px] h-auto" role="img" aria-label="Back muscle map">
-                        <!-- Silhouette base -->
-                        <circle cx="70" cy="22" r="14" fill="${silhouetteFill}" />
-                        <rect x="64" y="35" width="12" height="10" rx="4" fill="${silhouetteFill}" />
-                        <path d="M26 95 L18 134 C17 139 23 141 26 136 L35 98 Z" fill="${silhouetteFill}" />
-                        <path d="M114 95 L122 134 C123 139 117 141 114 136 L105 98 Z" fill="${silhouetteFill}" />
-                        <ellipse cx="53" cy="233" rx="9" ry="5" fill="${silhouetteFill}" />
-                        <ellipse cx="87" cy="233" rx="9" ry="5" fill="${silhouetteFill}" />
-
-                        <!-- Rear Delts / Shoulders -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('shoulders')">
-                            <title>${escapeHtml(titleFor('shoulders'))}</title>
-                            <path d="M46 47 C36 48 29 55 28 67 L39 70 L47 54 Z" fill="${colorFor('shoulders')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M94 47 C104 48 111 55 112 67 L101 70 L93 54 Z" fill="${colorFor('shoulders')}" stroke="${strokeCol}" stroke-width="1.4" />
-                        </g>
-
-                        <!-- Back (Traps, Lats, Lower Back) -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('back')">
-                            <title>${escapeHtml(titleFor('back'))}</title>
-                            <path d="M58 43 L82 43 L95 54 L91 114 L49 114 L45 54 Z" fill="${colorFor('back')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <line x1="70" y1="45" x2="70" y2="112" stroke="${strokeCol}" stroke-width="1.2" opacity="0.6" />
-                        </g>
-
-                        <!-- Triceps -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('triceps')">
-                            <title>${escapeHtml(titleFor('triceps'))}</title>
-                            <path d="M28 69 L39 71 L37 97 L26 94 Z" fill="${colorFor('triceps')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M112 69 L101 71 L103 97 L114 94 Z" fill="${colorFor('triceps')}" stroke="${strokeCol}" stroke-width="1.4" />
-                        </g>
-
-                        <!-- Legs (Glutes, Hamstrings, Calves) -->
-                        <g class="muscle-region" onclick="startWorkoutForMuscle('legs')">
-                            <title>${escapeHtml(titleFor('legs'))}</title>
-                            <path d="M49 117 L69 117 L69 144 C59 146 50 142 48 134 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M91 117 L71 117 L71 144 C81 146 90 142 92 134 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M48 144 L67 146 L65 184 L47 184 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M92 144 L73 146 L75 184 L93 184 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M48 187 L64 187 L60 227 L49 227 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                            <path d="M92 187 L76 187 L80 227 L91 227 Z" fill="${colorFor('legs')}" stroke="${strokeCol}" stroke-width="1.4" />
-                        </g>
-                    </svg>
-                </div>
-            `;
-
-            container.innerHTML = frontSvg + backSvg;
-        }
-
-        function startWorkoutForMuscle(muscleId) {
-            const mg = MUSCLE_GROUPS.find(m => m.id === muscleId);
-            openDayModal(getTodayKey(), 'section-training');
-            if (!tempDayDraft) return;
-
-            if (!tempDayDraft.workout.modalities.includes('strength')) {
-                tempDayDraft.workout.modalities.push('strength');
-                renderModalModalities();
-            }
-
-            const bpSelect = document.getElementById('picker-bodypart-select');
-            if (bpSelect) {
-                bpSelect.value = muscleId;
-                populateExerciseDropdown();
-                bpSelect.classList.add('ring-2', 'ring-violet-500');
-                setTimeout(() => bpSelect.classList.remove('ring-2', 'ring-violet-500'), 1100);
-            }
-
-            showToast(`Filtered to ${mg ? mg.icon + ' ' + mg.label : muscleId} — tap + Add to start!`);
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (!document.getElementById('morning-checkin-modal')?.classList.contains('hidden')) closeMorningCheckIn();
-                else if (!document.getElementById('kpi-insight-modal')?.classList.contains('hidden')) closeKpiInsight();
-                else if (!document.getElementById('day-modal')?.classList.contains('hidden')) closeDayModal();
-                else if (!document.getElementById('setup-modal')?.classList.contains('hidden')) closeSetupModal();
-                else if (!document.getElementById('confirm-modal')?.classList.contains('hidden')) closeConfirmModal();
-            }
-        });
-
         // Boot App & Responsive Chart Redraw
         let appBooted = false;
         function bootApp() {
@@ -5949,14 +4234,8 @@
             appBooted = true;
             try {
                 loadState();
-                buildNativeAppleTouchIcon();
-                applyThemeMode(appState.themeMode || 'auto', false);
-                const initialView = appState.dashboardView || (window.innerWidth < 768 ? 'focus' : 'deep');
-                setDashboardView(initialView, false);
                 renderAll();
-                if (initialView === 'deep') {
-                    setTimeout(() => drawAllCharts(getRangeDateKeys(activeTimeRange)), 40);
-                }
+                setTimeout(() => drawAllCharts(getRangeDateKeys(activeTimeRange)), 40);
             } catch (err) {
                 console.error('Peak Health boot error:', err);
             }
@@ -5972,8 +4251,7 @@
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
-                if (!document.getElementById('view-analytics').classList.contains('hidden') &&
-                    !document.getElementById('deep-dive-charts-container')?.classList.contains('hidden')) {
+                if (!document.getElementById('view-analytics').classList.contains('hidden')) {
                     drawAllCharts(getRangeDateKeys(activeTimeRange));
                 }
             }, 120);
