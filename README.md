@@ -1,4 +1,4 @@
-Tracker of personal fitness
+Stepdown-Tracker
 
 is an independent open-source fitness dashboard and personal project. It is not affiliated with, endorsed by, or sponsored by any other existing fitness or progress tracking company / app currently developed
 
