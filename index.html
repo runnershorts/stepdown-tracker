@@ -228,11 +228,14 @@
                     <span class="inline-block w-2 h-2 shrink-0 rounded-full bg-emerald-500"></span>
                     <span>Switch between <strong>7D / 30D / 90D / All-Time</strong> above; touch & slide any chart to inspect exact dates.</span>
                 </div>
-                <div class="hidden md:flex items-center gap-2">
-                    <button type="button" onclick="quickLogDryToday()" class="min-h-[44px] px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold rounded-xl transition">
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                    <button type="button" onclick="startLiveWorkoutToday()" class="min-h-[42px] flex-1 md:flex-none px-3.5 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold rounded-xl shadow-xs transition active:scale-95">
+                        🏋️ Live Workout
+                    </button>
+                    <button type="button" onclick="quickLogDryToday()" class="hidden md:inline-flex items-center min-h-[42px] px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold rounded-xl transition">
                         ✓ 0-Drink Today
                     </button>
-                    <button type="button" onclick="openTodayModal()" class="min-h-[44px] px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition">
+                    <button type="button" onclick="openTodayModal()" class="hidden md:inline-flex items-center min-h-[42px] px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm transition">
                         + Log Today
                     </button>
                 </div>
@@ -690,9 +693,30 @@
 
                 <!-- Exercise & Weight Training Section -->
                 <div id="section-training" class="bg-violet-50/60 dark:bg-violet-950/25 p-3.5 rounded-2xl border border-violet-200/70 dark:border-violet-800/50 space-y-3.5 scroll-mt-3">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <span class="text-xs font-bold uppercase tracking-wider text-violet-900 dark:text-violet-300">Exercise & Weight Training</span>
-                        <span id="modal-session-volume-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-800 dark:bg-violet-900/70 dark:text-violet-200">0 lbs vol</span>
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="toggleWorkoutClock()" id="workout-clock-btn" class="min-h-[30px] px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 border border-violet-200 dark:border-violet-700 text-[11px] font-bold text-violet-700 dark:text-violet-300 tabular-nums transition active:scale-95">
+                                ⏱ <span id="workout-clock-display">00:00</span> · Start
+                            </button>
+                            <span id="modal-session-volume-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-violet-100 text-violet-800 dark:bg-violet-900/70 dark:text-violet-200">0 lbs vol</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Routine Loader Dropdown -->
+                    <div class="bg-white/80 dark:bg-slate-900/70 p-2.5 rounded-xl border border-violet-200/70 dark:border-violet-800/50 flex items-center gap-2">
+                        <select id="modal-routine-select" aria-label="Load Workout Routine" class="flex-1 min-w-0 h-10 rounded-lg bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-2.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500">
+                            <option value="">⚡ Load a Workout Routine...</option>
+                            <option value="suggested">✨ Suggested Unworked Split</option>
+                            <option value="push">🫁 Upper Push (Chest · Shoulders · Tri)</option>
+                            <option value="pull">🦅 Upper Pull (Back · Biceps · Core)</option>
+                            <option value="legs">🦵 Leg Day (Squat · Hinge · Core)</option>
+                            <option value="arms">💪 Shoulders & Arms Focus</option>
+                            <option value="last">🔁 Repeat Last Strength Session</option>
+                        </select>
+                        <button type="button" onclick="applyRoutineTemplate()" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold shrink-0 transition active:scale-95">
+                            Load
+                        </button>
                     </div>
 
                     <div>
@@ -735,25 +759,44 @@
                         </div>
                     </div>
 
+                    <!-- Live Weight Training Lift Builder (2-Step Dropdowns + Set-by-Set Cards) -->
                     <div class="pt-2 border-t border-violet-200/60 dark:border-violet-800/40 space-y-2.5">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-slate-600 dark:text-slate-300">Weight Training Lifts</span>
-                            <button type="button" onclick="addLiftRow()" class="min-h-[40px] px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold transition active:scale-95">
-                                + Add Lift
-                            </button>
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Live Weight Training Log</span>
+                            <div class="flex items-center gap-1.5">
+                                <label for="rest-default-select" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">Rest:</label>
+                                <select id="rest-default-select" onchange="setRestTimerDefault(this.value)" class="h-7 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-1.5 text-[11px] font-bold text-violet-700 dark:text-violet-300">
+                                    <option value="60">60s</option>
+                                    <option value="90" selected>90s</option>
+                                    <option value="120">2m</option>
+                                    <option value="180">3m</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="flex flex-wrap gap-1.5">
-                            <button type="button" onclick="addPresetLift('Squat / Split Squat')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Squat</button>
-                            <button type="button" onclick="addPresetLift('Deadlift / RDL')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Deadlift/RDL</button>
-                            <button type="button" onclick="addPresetLift('Bench Press')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Bench</button>
-                            <button type="button" onclick="addPresetLift('Overhead Press')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ OHP</button>
-                            <button type="button" onclick="addPresetLift('Lateral Raises')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Lat Raises</button>
-                            <button type="button" onclick="addPresetLift('Pull-ups / Rows')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Pull/Row</button>
-                            <button type="button" onclick="addPresetLift('Bicep Curls')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Bicep Curls</button>
-                            <button type="button" onclick="addPresetLift('Tricep Pushdown / Dips')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Triceps</button>
-                            <button type="button" onclick="addPresetLift('Core / Plyometrics')" class="min-h-[36px] px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 active:scale-95">+ Core/Plyo</button>
+
+                        <!-- 2-Step Body Part -> Exercise Dropdown Picker -->
+                        <div class="bg-white/90 dark:bg-slate-900/80 p-2.5 rounded-xl border border-violet-200/70 dark:border-violet-800/50 space-y-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <select id="picker-bodypart-select" onchange="populateExerciseDropdown()" aria-label="Filter by Body Part" class="w-full h-10 rounded-lg bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-2.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500">
+                                    <option value="all">All Body Parts</option>
+                                    <option value="chest">🫁 Chest</option>
+                                    <option value="back">🦅 Back</option>
+                                    <option value="legs">🦵 Legs</option>
+                                    <option value="shoulders">⛰️ Shoulders</option>
+                                    <option value="biceps">💪 Biceps</option>
+                                    <option value="triceps">🔱 Triceps</option>
+                                    <option value="core">🛡️ Core</option>
+                                </select>
+                                <div class="flex items-center gap-1.5">
+                                    <select id="picker-exercise-select" aria-label="Select Exercise" class="flex-1 min-w-0 h-10 rounded-lg bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-2.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500"></select>
+                                    <button type="button" onclick="addSelectedExercise()" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold shrink-0 transition active:scale-95">
+                                        + Add
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div id="modal-lifts-container" class="space-y-2"></div>
+
+                        <div id="modal-lifts-container" class="space-y-2.5"></div>
                     </div>
 
                     <div>
@@ -772,6 +815,25 @@
                 <div>
                     <label for="modal-notes" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">Triggers, Swaps & Recovery Notes</label>
                     <textarea id="modal-notes" rows="2" oninput="markModalDirty()" placeholder="e.g., Had Athletic IPA at 6pm, Garmin sleep 88, sharp focus..." class="w-full rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+                </div>
+            </div>
+
+            <!-- Floating Auto Rest Timer Bar (Appears when a set is checked off) -->
+            <div id="rest-timer-bar" class="hidden shrink-0 bg-slate-900 dark:bg-slate-950 text-white px-4 py-2.5 border-t border-violet-500/40 z-20">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                        <span class="text-xs font-semibold text-slate-300 truncate">Rest Timer</span>
+                        <span id="rest-timer-display" class="text-base font-bold tabular-nums text-emerald-400">01:30</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="adjustRestTimer(-15)" class="min-h-[34px] px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold active:scale-95">−15s</button>
+                        <button type="button" onclick="adjustRestTimer(15)" class="min-h-[34px] px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold active:scale-95">+15s</button>
+                        <button type="button" onclick="stopRestTimer()" class="min-h-[34px] px-2.5 py-1 rounded-lg bg-violet-600 hover:bg-violet-500 text-[11px] font-bold active:scale-95">Skip</button>
+                    </div>
+                </div>
+                <div class="w-full h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                    <div id="rest-timer-progress" class="h-full bg-emerald-400 rounded-full transition-all duration-300" style="width: 100%"></div>
                 </div>
             </div>
 
@@ -942,6 +1004,84 @@
             }
         ];
 
+        const EXERCISE_CATALOG = {
+            chest: [
+                { name: 'Bench Press', defaultSets: 4, defaultReps: 8, defaultWeight: 135 },
+                { name: 'Incline Dumbbell Press', defaultSets: 3, defaultReps: 10, defaultWeight: 55 },
+                { name: 'Dumbbell Bench Press', defaultSets: 3, defaultReps: 10, defaultWeight: 60 },
+                { name: 'Cable Chest Fly', defaultSets: 3, defaultReps: 12, defaultWeight: 40 },
+                { name: 'Chest Dips', defaultSets: 3, defaultReps: 10, defaultWeight: 0 },
+                { name: 'Push-Ups', defaultSets: 3, defaultReps: 15, defaultWeight: 0 }
+            ],
+            back: [
+                { name: 'Pull-ups / Rows', defaultSets: 4, defaultReps: 8, defaultWeight: 135 },
+                { name: 'Barbell Bent-Over Row', defaultSets: 3, defaultReps: 8, defaultWeight: 135 },
+                { name: 'Lat Pulldown', defaultSets: 3, defaultReps: 10, defaultWeight: 120 },
+                { name: 'Seated Cable Row', defaultSets: 3, defaultReps: 10, defaultWeight: 120 },
+                { name: 'Single-Arm Dumbbell Row', defaultSets: 3, defaultReps: 10, defaultWeight: 60 },
+                { name: 'Face Pulls', defaultSets: 3, defaultReps: 15, defaultWeight: 40 }
+            ],
+            legs: [
+                { name: 'Squat / Split Squat', defaultSets: 4, defaultReps: 6, defaultWeight: 185 },
+                { name: 'Deadlift / RDL', defaultSets: 3, defaultReps: 6, defaultWeight: 205 },
+                { name: 'Bulgarian Split Squat', defaultSets: 3, defaultReps: 10, defaultWeight: 45 },
+                { name: 'Leg Press', defaultSets: 3, defaultReps: 10, defaultWeight: 270 },
+                { name: 'Hamstring Curl', defaultSets: 3, defaultReps: 12, defaultWeight: 90 },
+                { name: 'Walking Lunges', defaultSets: 3, defaultReps: 12, defaultWeight: 40 },
+                { name: 'Calf Raises', defaultSets: 3, defaultReps: 15, defaultWeight: 110 }
+            ],
+            shoulders: [
+                { name: 'Overhead Press', defaultSets: 3, defaultReps: 8, defaultWeight: 95 },
+                { name: 'Dumbbell Shoulder Press', defaultSets: 3, defaultReps: 10, defaultWeight: 45 },
+                { name: 'Lateral Raises', defaultSets: 3, defaultReps: 15, defaultWeight: 20 },
+                { name: 'Rear Delt Fly', defaultSets: 3, defaultReps: 15, defaultWeight: 20 },
+                { name: 'Arnold Press', defaultSets: 3, defaultReps: 10, defaultWeight: 40 }
+            ],
+            biceps: [
+                { name: 'Bicep Curls', defaultSets: 3, defaultReps: 10, defaultWeight: 35 },
+                { name: 'Incline Dumbbell Curl', defaultSets: 3, defaultReps: 10, defaultWeight: 30 },
+                { name: 'Hammer Curls', defaultSets: 3, defaultReps: 12, defaultWeight: 35 },
+                { name: 'EZ-Bar Preacher Curl', defaultSets: 3, defaultReps: 10, defaultWeight: 65 }
+            ],
+            triceps: [
+                { name: 'Tricep Pushdown / Dips', defaultSets: 3, defaultReps: 12, defaultWeight: 50 },
+                { name: 'Overhead Tricep Extension', defaultSets: 3, defaultReps: 10, defaultWeight: 40 },
+                { name: 'Skull Crushers', defaultSets: 3, defaultReps: 10, defaultWeight: 65 },
+                { name: 'Close-Grip Bench Press', defaultSets: 3, defaultReps: 8, defaultWeight: 115 }
+            ],
+            core: [
+                { name: 'Core / Plyometrics', defaultSets: 3, defaultReps: 12, defaultWeight: 25 },
+                { name: 'Hanging Leg Raises', defaultSets: 3, defaultReps: 12, defaultWeight: 0 },
+                { name: 'Cable Woodchop / Pallof Press', defaultSets: 3, defaultReps: 12, defaultWeight: 30 },
+                { name: 'Ab Wheel Rollout', defaultSets: 3, defaultReps: 10, defaultWeight: 0 }
+            ]
+        };
+
+        const ROUTINE_TEMPLATES = {
+            push: {
+                title: 'Upper Push',
+                muscleGroups: ['chest', 'shoulders', 'triceps'],
+                exercises: ['Bench Press', 'Incline Dumbbell Press', 'Overhead Press', 'Lateral Raises', 'Tricep Pushdown / Dips']
+            },
+            pull: {
+                title: 'Upper Pull',
+                muscleGroups: ['back', 'biceps', 'core'],
+                exercises: ['Pull-ups / Rows', 'Seated Cable Row', 'Face Pulls', 'Bicep Curls', 'Hammer Curls']
+            },
+            legs: {
+                title: 'Leg Day',
+                muscleGroups: ['legs', 'core'],
+                exercises: ['Squat / Split Squat', 'Deadlift / RDL', 'Bulgarian Split Squat', 'Hamstring Curl', 'Hanging Leg Raises']
+            },
+            arms: {
+                title: 'Shoulders & Arms',
+                muscleGroups: ['shoulders', 'biceps', 'triceps'],
+                exercises: ['Overhead Press', 'Lateral Raises', 'Bicep Curls', 'Tricep Pushdown / Dips', 'Hammer Curls']
+            }
+        };
+
+        const REP_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30];
+
         const CLARITY_SCALE = [
             { val: 1, label: 'Foggy' },
             { val: 2, label: 'Hazy' },
@@ -1020,6 +1160,15 @@
         let paceChartMode = 'cumulative';
         let setupUnitTemp = 'lbs';
 
+        // Live Gym Mode Timers
+        let restTimerDefault = 90;
+        let restTimerSeconds = 0;
+        let restTimerTotal = 90;
+        let restTimerInterval = null;
+        let workoutClockSeconds = 0;
+        let workoutClockRunning = false;
+        let workoutClockInterval = null;
+
         // ==========================================
         // 3. NORMALIZATION & AUTO-MIGRATION
         // ==========================================
@@ -1043,14 +1192,55 @@
                 muscleGroups: Array.isArray(rawWorkout.muscleGroups) ? rawWorkout.muscleGroups : [],
                 duration: Number(rawWorkout.duration) || 0,
                 rpe: rawWorkout.rpe !== undefined && rawWorkout.rpe !== null ? String(rawWorkout.rpe) : '',
-                lifts: Array.isArray(rawWorkout.lifts) ? rawWorkout.lifts.map(l => ({
-                    name: String(l.name || ''),
-                    sets: Number(l.sets) || 0,
-                    reps: Number(l.reps) || 0,
-                    weight: Number(l.weight) || 0
-                })) : [],
+                lifts: Array.isArray(rawWorkout.lifts) ? rawWorkout.lifts.map(l => {
+                    let setRows = [];
+                    if (Array.isArray(l.setRows) && l.setRows.length > 0) {
+                        setRows = l.setRows.map(sr => ({
+                            reps: Math.max(0, Number(sr.reps) || 0),
+                            weight: Math.max(0, Number(sr.weight) || 0),
+                            done: Boolean(sr.done)
+                        }));
+                    } else {
+                        const sCount = Math.max(1, Math.min(12, Number(l.sets) || 3));
+                        const rVal = Math.max(0, Number(l.reps) || 8);
+                        const wVal = Math.max(0, Number(l.weight) || 0);
+                        for (let i = 0; i < sCount; i++) {
+                            setRows.push({ reps: rVal, weight: wVal, done: false });
+                        }
+                    }
+                    const liftObj = {
+                        name: String(l.name || ''),
+                        sets: setRows.length,
+                        reps: setRows[0]?.reps || 0,
+                        weight: Math.max(0, ...setRows.map(s => s.weight)),
+                        setRows,
+                        collapsed: Boolean(l.collapsed)
+                    };
+                    return liftObj;
+                }) : [],
                 notes: String(rawWorkout.notes || '')
             };
+        }
+
+        function syncLiftSummary(lift) {
+            if (!lift || !Array.isArray(lift.setRows)) return;
+            lift.sets = lift.setRows.length;
+            if (lift.setRows.length > 0) {
+                const heaviest = lift.setRows.reduce((best, s) => s.weight >= best.weight ? s : best, lift.setRows[0]);
+                lift.weight = heaviest.weight;
+                lift.reps = heaviest.reps;
+            } else {
+                lift.weight = 0;
+                lift.reps = 0;
+            }
+        }
+
+        function calcLiftVolume(lift) {
+            if (!lift) return 0;
+            if (Array.isArray(lift.setRows) && lift.setRows.length > 0) {
+                return lift.setRows.reduce((sum, s) => sum + ((Number(s.reps) || 0) * (Number(s.weight) || 0)), 0);
+            }
+            return (Number(lift.sets) || 0) * (Number(lift.reps) || 0) * (Number(lift.weight) || 0);
         }
 
         function inferMuscleGroupsFromWorkout(workout) {
@@ -1064,7 +1254,7 @@
 
             w.lifts.forEach(l => {
                 const name = String(l.name || '').toLowerCase();
-                const sets = Math.max(1, Number(l.sets) || 0);
+                const sets = Array.isArray(l.setRows) && l.setRows.length > 0 ? l.setRows.length : Math.max(1, Number(l.sets) || 0);
                 if (!name) return;
                 MUSCLE_GROUPS.forEach(mg => {
                     if (mg.primaryKeys.some(k => name.includes(k))) {
@@ -1091,9 +1281,29 @@
 
         function calcWorkoutVolume(workout) {
             if (!workout || !Array.isArray(workout.lifts)) return 0;
-            return workout.lifts.reduce((sum, l) => {
-                return sum + ((Number(l.sets) || 0) * (Number(l.reps) || 0) * (Number(l.weight) || 0));
-            }, 0);
+            return workout.lifts.reduce((sum, l) => sum + calcLiftVolume(l), 0);
+        }
+
+        function findLastExerciseRecord(exerciseName, beforeDateKey = activeModalDate) {
+            const target = String(exerciseName || '').trim().toLowerCase();
+            if (!target) return null;
+            const sortedKeys = getAllLoggedDateKeysSorted();
+            for (let i = sortedKeys.length - 1; i >= 0; i--) {
+                const dk = sortedKeys[i];
+                if (beforeDateKey && dk >= beforeDateKey) continue;
+                const w = normalizeWorkout(appState.logs[dk]?.workout);
+                const match = w.lifts.find(l => String(l.name || '').trim().toLowerCase() === target);
+                if (match) {
+                    return {
+                        dateKey: dk,
+                        sets: match.setRows.length,
+                        reps: match.reps,
+                        weight: match.weight,
+                        setRows: match.setRows.map(s => ({ reps: s.reps, weight: s.weight, done: false }))
+                    };
+                }
+            }
+            return null;
         }
 
         function isActiveWorkout(workout) {
@@ -1799,6 +2009,13 @@
             openDayModal(getTodayKey());
         }
 
+        function startLiveWorkoutToday() {
+            openDayModal(getTodayKey(), 'section-training');
+            if (!workoutClockRunning) {
+                toggleWorkoutClock();
+            }
+        }
+
         function markModalDirty() {
             modalDirty = true;
         }
@@ -1863,8 +2080,10 @@
             renderModalRecoveryScales();
             renderModalModalities();
             renderModalMuscleGroups();
+            populateExerciseDropdown();
             renderModalLifts();
             renderModalHabits();
+            updateWorkoutClockDisplay();
             document.getElementById('day-modal').classList.remove('hidden');
 
             const scrollBody = document.getElementById('modal-scroll-body');
@@ -1875,12 +2094,23 @@
             }
         }
 
+        function navigateModalDay(delta) {
+            if (modalDirty) {
+                persistModalDraftSilently();
+                renderAll();
+            }
+            const nextDateKey = addDaysToKey(activeModalDate, delta);
+            openDayModal(nextDateKey, lastFocusedModalSection);
+        }
+
         function persistModalDraftSilently() {
             if (!tempDayDraft) return;
             tempDayDraft.logged = true;
 
             const rawWeightVal = document.getElementById('modal-weight-input').value.trim();
-            tempDayDraft.weight = rawWeightVal !== '' && !isNaN(Number(rawWeightVal)) ? Math.round(Number(rawWeightVal) * 10) / 10 : null;
+            tempDayDraft.weight = rawWeightVal !== '' && !isNaN(Number(rawWeightVal))
+                ? Math.round(Number(rawWeightVal) * 10) / 10
+                : null;
 
             const rawSleepVal = document.getElementById('modal-sleep-input').value.trim();
             tempDayDraft.sleepQuality = rawSleepVal !== '' && !isNaN(Number(rawSleepVal))
@@ -1888,13 +2118,29 @@
                 : null;
 
             const rawRhrVal = document.getElementById('modal-rhr-input').value.trim();
-            tempDayDraft.rhr = rawRhrVal !== '' && !isNaN(Number(rawRhrVal)) ? Math.round(Number(rawRhrVal)) : null;
+            tempDayDraft.rhr = rawRhrVal !== '' && !isNaN(Number(rawRhrVal))
+                ? Math.round(Number(rawRhrVal))
+                : null;
 
             tempDayDraft.notes = document.getElementById('modal-notes').value.trim();
+
+            if (workoutClockRunning && workoutClockSeconds >= 30) {
+                const elapsedMins = Math.max(1, Math.round(workoutClockSeconds / 60));
+                const durInput = document.getElementById('modal-workout-duration');
+                if (durInput && !Number(durInput.value)) {
+                    durInput.value = elapsedMins;
+                }
+            }
+
             tempDayDraft.workout.duration = Math.max(0, Number(document.getElementById('modal-workout-duration').value) || 0);
             tempDayDraft.workout.rpe = document.getElementById('modal-workout-rpe').value;
             tempDayDraft.workout.notes = document.getElementById('modal-workout-notes').value.trim();
-            tempDayDraft.workout.lifts = tempDayDraft.workout.lifts.filter(l => l.name.trim() !== '' || l.weight > 0);
+            tempDayDraft.workout.lifts = tempDayDraft.workout.lifts
+                .map(l => {
+                    syncLiftSummary(l);
+                    return l;
+                })
+                .filter(l => l.name.trim() !== '' || calcLiftVolume(l) > 0);
 
             if (appState.startingWeight === null && tempDayDraft.weight !== null) {
                 appState.startingWeight = tempDayDraft.weight;
@@ -1905,27 +2151,16 @@
             modalDirty = false;
         }
 
-        function navigateModalDay(delta) {
-            const targetKey = addDaysToKey(activeModalDate, delta);
-            if (modalDirty) {
-                const prevLabel = formatShortDateKey(activeModalDate);
-                persistModalDraftSilently();
-                renderAll();
-                showToast(`${prevLabel} auto-saved`);
-            }
-            openDayModal(targetKey, lastFocusedModalSection);
-        }
-
         function quickToggleDryDay(dateKey) {
             const existing = appState.logs[dateKey];
             const hasExtraData = existing && (
                 isActiveWorkout(normalizeWorkout(existing.workout)) ||
                 existing.weight !== null && existing.weight !== undefined ||
                 existing.notes ||
-                existing.rhr ||
-                existing.sleepQuality ||
-                existing.mentalClarity ||
-                existing.energyLevel
+                existing.rhr !== null && existing.rhr !== undefined ||
+                existing.sleepQuality !== null && existing.sleepQuality !== undefined ||
+                existing.mentalClarity !== null && existing.mentalClarity !== undefined ||
+                existing.energyLevel !== null && existing.energyLevel !== undefined
             );
             if (existing && existing.logged && Number(existing.drinks || 0) === 0 && !hasExtraData) {
                 delete appState.logs[dateKey];
@@ -1943,7 +2178,7 @@
                 sleepQuality: null,
                 mentalClarity: null,
                 energyLevel: null,
-                workout: { modalities: [], duration: 0, rpe: '', lifts: [], notes: '' },
+                workout: { modalities: [], muscleGroups: [], duration: 0, rpe: '', lifts: [], notes: '' },
                 habits: {},
                 notes: ''
             };
@@ -1964,24 +2199,24 @@
             if (!tempDayDraft) return;
             const next = Math.max(0, Math.round((Number(tempDayDraft[field] || 0) + delta) * 10) / 10);
             tempDayDraft[field] = next;
-            modalDirty = true;
             document.getElementById(field === 'drinks' ? 'modal-drinks-val' : 'modal-na-val').textContent = next;
+            modalDirty = true;
         }
 
         function setDrinksPreset(val) {
             if (!tempDayDraft) return;
             tempDayDraft.drinks = val;
-            modalDirty = true;
             document.getElementById('modal-drinks-val').textContent = val;
+            modalDirty = true;
         }
 
         function adjustWeight(delta) {
             const input = document.getElementById('modal-weight-input');
             let current = parseFloat(input.value);
             if (isNaN(current)) {
-                current = getSuggestedDefaultWeight(activeModalDate) || (appState.weightUnit === 'kg' ? 100.0 : 220.0);
+                current = getSuggestedDefaultWeight(activeModalDate) || (appState.weightUnit === 'kg' ? 100 : 220);
             }
-            input.value = Math.max(0, Math.round((current + delta) * 10) / 10).toFixed(1);
+            input.value = Math.max(40, Math.round((current + delta) * 10) / 10).toFixed(1);
             modalDirty = true;
         }
 
@@ -2036,6 +2271,438 @@
                         <span class="text-xs font-bold leading-none">${item.val}</span>
                         <span class="text-[10px] leading-tight mt-0.5 opacity-90">${item.label}</span>
                     </button>
+                `;
+            }).join('');
+        }
+
+        function addLiftRow(name = '', sets = 3, reps = 8, weight = 0, customSetRows = null) {
+            if (!tempDayDraft) return;
+            if (!tempDayDraft.workout.modalities.includes('strength')) {
+                tempDayDraft.workout.modalities.push('strength');
+                renderModalModalities();
+            }
+
+            // Auto-fill from last logged session if no custom setRows provided
+            let setRows = customSetRows;
+            if (!setRows) {
+                const lastRec = name ? findLastExerciseRecord(name, activeModalDate) : null;
+                if (lastRec && lastRec.setRows.length > 0) {
+                    setRows = lastRec.setRows.map(s => ({ reps: s.reps, weight: s.weight, done: false }));
+                } else {
+                    setRows = [];
+                    const count = Math.max(1, Number(sets) || 3);
+                    for (let i = 0; i < count; i++) {
+                        setRows.push({ reps: Number(reps) || 8, weight: Number(weight) || 0, done: false });
+                    }
+                }
+            }
+
+            const lift = { name, sets: setRows.length, reps: setRows[0]?.reps || 8, weight: setRows[0]?.weight || 0, setRows, collapsed: false };
+            syncLiftSummary(lift);
+            tempDayDraft.workout.lifts.push(lift);
+            modalDirty = true;
+            renderModalLifts();
+            renderModalMuscleGroups();
+        }
+
+        function populateExerciseDropdown() {
+            const bpSelect = document.getElementById('picker-bodypart-select');
+            const exSelect = document.getElementById('picker-exercise-select');
+            if (!bpSelect || !exSelect) return;
+
+            const bp = bpSelect.value || 'all';
+            const items = [];
+            if (bp === 'all') {
+                Object.entries(EXERCISE_CATALOG).forEach(([groupId, list]) => {
+                    const mg = MUSCLE_GROUPS.find(m => m.id === groupId);
+                    list.forEach(ex => items.push({ ...ex, groupLabel: mg ? mg.label : groupId }));
+                });
+            } else if (EXERCISE_CATALOG[bp]) {
+                const mg = MUSCLE_GROUPS.find(m => m.id === bp);
+                EXERCISE_CATALOG[bp].forEach(ex => items.push({ ...ex, groupLabel: mg ? mg.label : bp }));
+            }
+
+            exSelect.innerHTML = items.map(ex =>
+                `<option value="${escapeHtml(ex.name)}">${escapeHtml(ex.name)}${bp === 'all' ? ' (' + ex.groupLabel + ')' : ''}</option>`
+            ).join('') + `<option value="__custom__">+ Custom Exercise...</option>`;
+        }
+
+        function getCatalogDefaults(exName) {
+            const target = String(exName || '').toLowerCase();
+            for (const list of Object.values(EXERCISE_CATALOG)) {
+                const found = list.find(e => e.name.toLowerCase() === target);
+                if (found) return found;
+            }
+            return { defaultSets: 3, defaultReps: 8, defaultWeight: 100 };
+        }
+
+        function addSelectedExercise() {
+            const exSelect = document.getElementById('picker-exercise-select');
+            if (!exSelect) return;
+            const val = exSelect.value;
+            if (val === '__custom__') {
+                addLiftRow('', 3, 10, 45);
+                return;
+            }
+            const defs = getCatalogDefaults(val);
+            addLiftRow(val, defs.defaultSets, defs.defaultReps, defs.defaultWeight);
+            showToast(`Added ${val}`);
+        }
+
+        function applyRoutineTemplate() {
+            const sel = document.getElementById('modal-routine-select');
+            if (!sel || !sel.value || !tempDayDraft) return;
+            const key = sel.value;
+
+            if (key === 'suggested') {
+                if (currentSuggestedWorkout && currentSuggestedWorkout.lifts.length > 0) {
+                    currentSuggestedWorkout.lifts.forEach(l => addLiftRow(l.name, l.sets, l.reps, l.weight));
+                    showToast(`Loaded "${currentSuggestedWorkout.title}"`);
+                }
+                sel.value = '';
+                return;
+            }
+
+            if (key === 'last') {
+                const sorted = getAllLoggedDateKeysSorted();
+                for (let i = sorted.length - 1; i >= 0; i--) {
+                    const dk = sorted[i];
+                    if (dk >= activeModalDate) continue;
+                    const w = normalizeWorkout(appState.logs[dk]?.workout);
+                    if (w.lifts.length > 0) {
+                        w.lifts.forEach(l => {
+                            const clonedRows = l.setRows.map(s => ({ reps: s.reps, weight: s.weight, done: false }));
+                            addLiftRow(l.name, clonedRows.length, l.reps, l.weight, clonedRows);
+                        });
+                        showToast(`Repeated workout from ${formatShortDateKey(dk)}`);
+                        sel.value = '';
+                        return;
+                    }
+                }
+                showToast('No prior strength workout found');
+                sel.value = '';
+                return;
+            }
+
+            const tpl = ROUTINE_TEMPLATES[key];
+            if (tpl) {
+                tpl.muscleGroups.forEach(mgId => {
+                    if (!tempDayDraft.workout.muscleGroups.includes(mgId)) {
+                        tempDayDraft.workout.muscleGroups.push(mgId);
+                    }
+                });
+                tpl.exercises.forEach(exName => {
+                    const defs = getCatalogDefaults(exName);
+                    addLiftRow(exName, defs.defaultSets, defs.defaultReps, defs.defaultWeight);
+                });
+                showToast(`Loaded "${tpl.title}" routine`);
+            }
+            sel.value = '';
+        }
+
+        function toggleLiftCollapse(idx) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[idx]) return;
+            tempDayDraft.workout.lifts[idx].collapsed = !tempDayDraft.workout.lifts[idx].collapsed;
+            renderModalLifts();
+        }
+
+        function addSetRow(liftIdx) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[liftIdx]) return;
+            const lift = tempDayDraft.workout.lifts[liftIdx];
+            const prev = lift.setRows[lift.setRows.length - 1] || { reps: 8, weight: 100 };
+            lift.setRows.push({ reps: prev.reps, weight: prev.weight, done: false });
+            syncLiftSummary(lift);
+            modalDirty = true;
+            renderModalLifts();
+            renderModalMuscleGroups();
+        }
+
+        function removeSetRow(liftIdx, setIdx) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[liftIdx]) return;
+            const lift = tempDayDraft.workout.lifts[liftIdx];
+            if (lift.setRows.length <= 1) return;
+            lift.setRows.splice(setIdx, 1);
+            syncLiftSummary(lift);
+            modalDirty = true;
+            renderModalLifts();
+            renderModalMuscleGroups();
+        }
+
+        function updateSetField(liftIdx, setIdx, field, val) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[liftIdx]) return;
+            const lift = tempDayDraft.workout.lifts[liftIdx];
+            if (!lift.setRows[setIdx]) return;
+            lift.setRows[setIdx][field] = Math.max(0, Number(val) || 0);
+            syncLiftSummary(lift);
+            modalDirty = true;
+            updateSessionVolumeBadge();
+        }
+
+        function nudgeSetWeight(liftIdx, setIdx, delta) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[liftIdx]) return;
+            const lift = tempDayDraft.workout.lifts[liftIdx];
+            const row = lift.setRows[setIdx];
+            if (!row) return;
+            row.weight = Math.max(0, Math.round((Number(row.weight || 0) + delta) * 10) / 10);
+            syncLiftSummary(lift);
+            modalDirty = true;
+            renderModalLifts();
+        }
+
+        function toggleSetDone(liftIdx, setIdx) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[liftIdx]) return;
+            const lift = tempDayDraft.workout.lifts[liftIdx];
+            const row = lift.setRows[setIdx];
+            if (!row) return;
+            row.done = !row.done;
+            modalDirty = true;
+            if (row.done) {
+                startRestTimer(restTimerDefault);
+            }
+            renderModalLifts();
+        }
+
+        function updateLiftField(idx, field, val) {
+            if (!tempDayDraft || !tempDayDraft.workout.lifts[idx]) return;
+            if (field === 'name') {
+                tempDayDraft.workout.lifts[idx].name = val;
+                renderModalMuscleGroups();
+            }
+            modalDirty = true;
+            updateSessionVolumeBadge();
+        }
+
+        function removeLiftRow(idx) {
+            if (!tempDayDraft) return;
+            tempDayDraft.workout.lifts.splice(idx, 1);
+            modalDirty = true;
+            renderModalLifts();
+            renderModalMuscleGroups();
+        }
+
+        // --- Live Rest Timer & Workout Clock ---
+        function formatClockMMSS(sec) {
+            const s = Math.max(0, Math.floor(sec));
+            const m = String(Math.floor(s / 60)).padStart(2, '0');
+            const r = String(s % 60).padStart(2, '0');
+            return `${m}:${r}`;
+        }
+
+        function playTimerChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.35);
+            } catch (e) {}
+        }
+
+        function setRestTimerDefault(val) {
+            restTimerDefault = Math.max(15, Number(val) || 90);
+        }
+
+        function startRestTimer(seconds = restTimerDefault) {
+            clearInterval(restTimerInterval);
+            restTimerTotal = Math.max(15, Number(seconds) || 90);
+            restTimerSeconds = restTimerTotal;
+            renderRestTimerBar();
+            document.getElementById('rest-timer-bar')?.classList.remove('hidden');
+
+            restTimerInterval = setInterval(() => {
+                restTimerSeconds--;
+                if (restTimerSeconds <= 0) {
+                    stopRestTimer();
+                    playTimerChime();
+                    showToast('Rest complete — next set! 💪');
+                } else {
+                    renderRestTimerBar();
+                }
+            }, 1000);
+        }
+
+        function adjustRestTimer(delta) {
+            restTimerSeconds = Math.max(5, restTimerSeconds + delta);
+            if (restTimerSeconds > restTimerTotal) restTimerTotal = restTimerSeconds;
+            renderRestTimerBar();
+        }
+
+        function stopRestTimer() {
+            clearInterval(restTimerInterval);
+            restTimerInterval = null;
+            restTimerSeconds = 0;
+            document.getElementById('rest-timer-bar')?.classList.add('hidden');
+        }
+
+        function renderRestTimerBar() {
+            const disp = document.getElementById('rest-timer-display');
+            const prog = document.getElementById('rest-timer-progress');
+            if (disp) disp.textContent = formatClockMMSS(restTimerSeconds);
+            if (prog) {
+                const pct = restTimerTotal > 0 ? Math.max(0, Math.min(100, (restTimerSeconds / restTimerTotal) * 100)) : 0;
+                prog.style.width = `${pct}%`;
+            }
+        }
+
+        function toggleWorkoutClock() {
+            if (workoutClockRunning) {
+                clearInterval(workoutClockInterval);
+                workoutClockInterval = null;
+                workoutClockRunning = false;
+                // Sync elapsed minutes into duration input if > 0
+                const mins = Math.max(1, Math.round(workoutClockSeconds / 60));
+                if (workoutClockSeconds >= 30 && tempDayDraft) {
+                    document.getElementById('modal-workout-duration').value = mins;
+                    updateDurationDraft(mins);
+                }
+            } else {
+                workoutClockRunning = true;
+                workoutClockInterval = setInterval(() => {
+                    workoutClockSeconds++;
+                    updateWorkoutClockDisplay();
+                }, 1000);
+            }
+            updateWorkoutClockDisplay();
+        }
+
+        function stopWorkoutClock() {
+            if (workoutClockRunning && workoutClockSeconds >= 30 && tempDayDraft) {
+                const mins = Math.max(1, Math.round(workoutClockSeconds / 60));
+                const durInput = document.getElementById('modal-workout-duration');
+                if (durInput && !Number(durInput.value)) {
+                    durInput.value = mins;
+                    updateDurationDraft(mins);
+                }
+            }
+            clearInterval(workoutClockInterval);
+            workoutClockInterval = null;
+            workoutClockRunning = false;
+            workoutClockSeconds = 0;
+            updateWorkoutClockDisplay();
+        }
+
+        function updateWorkoutClockDisplay() {
+            const btn = document.getElementById('workout-clock-btn');
+            if (!btn) return;
+            const timeStr = formatClockMMSS(workoutClockSeconds);
+            btn.innerHTML = workoutClockRunning
+                ? `⏱ <span id="workout-clock-display">${timeStr}</span> · Pause`
+                : `⏱ <span id="workout-clock-display">${timeStr}</span> · Start`;
+            btn.className = workoutClockRunning
+                ? 'min-h-[30px] px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-bold tabular-nums transition active:scale-95'
+                : 'min-h-[30px] px-2.5 py-1 rounded-full bg-white dark:bg-slate-800 border border-violet-200 dark:border-violet-700 text-[11px] font-bold text-violet-700 dark:text-violet-300 tabular-nums transition active:scale-95';
+        }
+
+        function updateSessionVolumeBadge() {
+            const badge = document.getElementById('modal-session-volume-badge');
+            if (!badge || !tempDayDraft) return;
+            const vol = calcWorkoutVolume(tempDayDraft.workout);
+            badge.textContent = `${Math.round(vol).toLocaleString()} ${appState.weightUnit} vol`;
+        }
+
+        function renderModalLifts() {
+            const container = document.getElementById('modal-lifts-container');
+            if (!container || !tempDayDraft) return;
+            updateSessionVolumeBadge();
+
+            if (tempDayDraft.workout.lifts.length === 0) {
+                container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-3">Pick a Body Part & Exercise above, or load a routine to start tracking sets.</p>`;
+                return;
+            }
+
+            const weightStep = appState.weightUnit === 'kg' ? 2.5 : 5;
+
+            container.innerHTML = tempDayDraft.workout.lifts.map((l, idx) => {
+                const setRows = Array.isArray(l.setRows) ? l.setRows : [];
+                const doneCount = setRows.filter(s => s.done).length;
+                const vol = Math.round(calcLiftVolume(l));
+                const allDone = setRows.length > 0 && doneCount === setRows.length;
+                const lastRec = l.name ? findLastExerciseRecord(l.name, activeModalDate) : null;
+                const lastBadge = lastRec
+                    ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 block">Last (${formatShortDateKey(lastRec.dateKey)}): ${lastRec.sets}×${lastRec.reps} @ ${lastRec.weight} ${appState.weightUnit}</span>`
+                    : '';
+
+                if (l.collapsed) {
+                    return `
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-850 border ${allDone ? 'border-emerald-400/70 dark:border-emerald-700' : 'border-slate-200 dark:border-slate-700'} flex items-center justify-between gap-2">
+                            <button type="button" onclick="toggleLiftCollapse(${idx})" class="flex-1 min-w-0 text-left flex items-center gap-2">
+                                <span class="text-xs font-bold ${allDone ? 'text-emerald-600 dark:text-emerald-400' : 'text-violet-600 dark:text-violet-400'}">${allDone ? '✓' : '▸'}</span>
+                                <div class="min-w-0">
+                                    <div class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">${escapeHtml(l.name || 'Unnamed Lift')}</div>
+                                    <div class="text-[10px] text-slate-500 dark:text-slate-400">${doneCount}/${setRows.length} sets · ${vol.toLocaleString()} ${appState.weightUnit} vol</div>
+                                </div>
+                            </button>
+                            <button type="button" onclick="removeLiftRow(${idx})" aria-label="Remove lift" class="w-8 h-8 shrink-0 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-95">✕</button>
+                        </div>
+                    `;
+                }
+
+                const rowsHtml = setRows.map((sr, sIdx) => {
+                    const repOpts = [...REP_OPTIONS];
+                    if (sr.reps > 0 && !repOpts.includes(sr.reps)) {
+                        repOpts.push(sr.reps);
+                        repOpts.sort((a, b) => a - b);
+                    }
+                    const rowBg = sr.done
+                        ? 'bg-emerald-50/90 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700'
+                        : 'bg-slate-50 dark:bg-slate-900/70 border-slate-200/80 dark:border-slate-700';
+
+                    return `
+                        <div class="grid grid-cols-[26px_1fr_72px_38px] items-center gap-1.5 p-1.5 rounded-xl border transition ${rowBg}">
+                            <span class="text-[11px] font-bold text-center text-slate-500 dark:text-slate-400">${sIdx + 1}</span>
+                            <div class="flex items-center gap-1 min-w-0">
+                                <button type="button" onclick="nudgeSetWeight(${idx}, ${sIdx}, -${weightStep})" class="w-7 h-8 shrink-0 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-bold active:scale-95">−</button>
+                                <input type="number" inputmode="decimal" min="0" step="2.5" value="${sr.weight}" oninput="updateSetField(${idx}, ${sIdx}, 'weight', this.value)" aria-label="Weight" class="w-full min-w-0 h-8 rounded-lg bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-1 text-center text-xs font-bold tabular-nums">
+                                <button type="button" onclick="nudgeSetWeight(${idx}, ${sIdx}, ${weightStep})" class="w-7 h-8 shrink-0 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-bold active:scale-95">+</button>
+                            </div>
+                            <select onchange="updateSetField(${idx}, ${sIdx}, 'reps', this.value)" aria-label="Reps" class="h-8 rounded-lg bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 px-1 text-xs font-bold text-center tabular-nums">
+                                ${repOpts.map(r => `<option value="${r}" ${r === sr.reps ? 'selected' : ''}>${r} rep${r === 1 ? '' : 's'}</option>`).join('')}
+                            </select>
+                            <button type="button" onclick="toggleSetDone(${idx}, ${sIdx})" aria-label="Complete set" class="w-9 h-8 rounded-lg font-bold text-xs flex items-center justify-center transition active:scale-95 ${sr.done ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-500'}">
+                                ✓
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="p-3 rounded-2xl bg-white dark:bg-slate-850 border ${allDone ? 'border-emerald-400/70 dark:border-emerald-700' : 'border-slate-200 dark:border-slate-700'} space-y-2.5 shadow-2xs">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex-1 min-w-0 space-y-1">
+                                <div class="flex items-center gap-1.5">
+                                    <button type="button" onclick="toggleLiftCollapse(${idx})" aria-label="Collapse lift" class="w-7 h-7 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold flex items-center justify-center">▾</button>
+                                    <input type="text" value="${escapeHtml(l.name)}" oninput="updateLiftField(${idx}, 'name', this.value)" placeholder="Exercise name" class="flex-1 min-w-0 h-8 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-violet-500">
+                                </div>
+                                ${lastBadge}
+                            </div>
+                            <button type="button" onclick="removeLiftRow(${idx})" aria-label="Remove lift" class="w-8 h-8 shrink-0 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-95">✕</button>
+                        </div>
+
+                        <div class="grid grid-cols-[26px_1fr_72px_38px] gap-1.5 px-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                            <span class="text-center">Set</span>
+                            <span class="text-center">Weight (${appState.weightUnit})</span>
+                            <span class="text-center">Reps</span>
+                            <span class="text-center">Done</span>
+                        </div>
+
+                        <div class="space-y-1.5">${rowsHtml}</div>
+
+                        <div class="flex items-center justify-between pt-1">
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="addSetRow(${idx})" class="min-h-[32px] px-2.5 py-1 rounded-lg bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[11px] font-bold active:scale-95">+ Add Set</button>
+                                ${setRows.length > 1 ? `<button type="button" onclick="removeSetRow(${idx}, ${setRows.length - 1})" class="min-h-[32px] px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 text-[11px] font-semibold active:scale-95">− Set</button>` : ''}
+                            </div>
+                            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400">${doneCount}/${setRows.length} · ${vol.toLocaleString()} ${appState.weightUnit}</span>
+                        </div>
+                    </div>
                 `;
             }).join('');
         }
@@ -2143,90 +2810,6 @@
             modalDirty = true;
         }
 
-        function addLiftRow(name = '', sets = 3, reps = 8, weight = 0) {
-            if (!tempDayDraft) return;
-            if (!tempDayDraft.workout.modalities.includes('strength')) {
-                tempDayDraft.workout.modalities.push('strength');
-                renderModalModalities();
-            }
-            tempDayDraft.workout.lifts.push({ name, sets, reps, weight });
-            modalDirty = true;
-            renderModalLifts();
-            renderModalMuscleGroups();
-        }
-
-        function addPresetLift(name) {
-            const lower = name.toLowerCase();
-            let defaultWeight = 135;
-            if (lower.includes('lateral')) defaultWeight = 20;
-            else if (lower.includes('bicep') || lower.includes('curl')) defaultWeight = 35;
-            else if (lower.includes('tricep')) defaultWeight = 50;
-            else if (lower.includes('core')) defaultWeight = 25;
-            else if (lower.includes('overhead')) defaultWeight = 95;
-            addLiftRow(name, 3, lower.includes('lateral') ? 15 : 8, defaultWeight);
-        }
-
-        function updateLiftField(idx, field, val) {
-            if (!tempDayDraft || !tempDayDraft.workout.lifts[idx]) return;
-            if (field === 'name') {
-                tempDayDraft.workout.lifts[idx].name = val;
-                renderModalMuscleGroups();
-            } else {
-                tempDayDraft.workout.lifts[idx][field] = Math.max(0, Number(val) || 0);
-            }
-            modalDirty = true;
-            updateSessionVolumeBadge();
-        }
-
-        function removeLiftRow(idx) {
-            if (!tempDayDraft) return;
-            tempDayDraft.workout.lifts.splice(idx, 1);
-            modalDirty = true;
-            renderModalLifts();
-            renderModalMuscleGroups();
-        }
-
-        function updateSessionVolumeBadge() {
-            const badge = document.getElementById('modal-session-volume-badge');
-            if (!badge || !tempDayDraft) return;
-            const vol = calcWorkoutVolume(tempDayDraft.workout);
-            badge.textContent = `${Math.round(vol).toLocaleString()} ${appState.weightUnit} vol`;
-        }
-
-        function renderModalLifts() {
-            const container = document.getElementById('modal-lifts-container');
-            if (!container || !tempDayDraft) return;
-            updateSessionVolumeBadge();
-
-            if (tempDayDraft.workout.lifts.length === 0) {
-                container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-2">No lifts added yet — tap a preset or "+ Add Lift".</p>`;
-                return;
-            }
-
-            container.innerHTML = tempDayDraft.workout.lifts.map((l, idx) => `
-                <div class="p-2.5 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 space-y-2">
-                    <div class="flex items-center gap-2">
-                        <input type="text" value="${escapeHtml(l.name)}" oninput="updateLiftField(${idx}, 'name', this.value)" placeholder="Exercise name" class="flex-1 min-w-0 h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500">
-                        <button type="button" onclick="removeLiftRow(${idx})" aria-label="Remove lift" class="w-9 h-9 shrink-0 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-95">✕</button>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div>
-                            <label class="text-[10px] text-slate-400 block mb-0.5">Sets</label>
-                            <input type="number" inputmode="numeric" min="0" value="${l.sets}" oninput="updateLiftField(${idx}, 'sets', this.value)" class="w-full h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 text-center text-xs font-bold tabular-nums">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-400 block mb-0.5">Reps</label>
-                            <input type="number" inputmode="numeric" min="0" value="${l.reps}" oninput="updateLiftField(${idx}, 'reps', this.value)" class="w-full h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 text-center text-xs font-bold tabular-nums">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-400 block mb-0.5">Load (${appState.weightUnit})</label>
-                            <input type="number" inputmode="decimal" min="0" step="2.5" value="${l.weight}" oninput="updateLiftField(${idx}, 'weight', this.value)" class="w-full h-9 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 text-center text-xs font-bold tabular-nums">
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
         function renderModalHabits() {
             const container = document.getElementById('modal-habits-list');
             if (!container || !tempDayDraft) return;
@@ -2270,6 +2853,8 @@
         }
 
         function closeDayModal() {
+            stopRestTimer();
+            stopWorkoutClock();
             document.getElementById('day-modal').classList.add('hidden');
             tempDayDraft = null;
             modalDirty = false;
@@ -2428,14 +3013,22 @@
                 w.lifts.forEach(l => {
                     const key = (l.name || 'Unnamed Lift').trim();
                     if (!key) return;
-                    const vol = (Number(l.sets) || 0) * (Number(l.reps) || 0) * (Number(l.weight) || 0);
+                    const vol = calcLiftVolume(l);
+                    const maxW = Array.isArray(l.setRows) && l.setRows.length > 0
+                        ? Math.max(...l.setRows.map(s => Number(s.weight) || 0))
+                        : Number(l.weight) || 0;
+                    const bestRow = Array.isArray(l.setRows) && l.setRows.length > 0
+                        ? l.setRows.reduce((b, s) => s.weight >= b.weight ? s : b, l.setRows[0])
+                        : { reps: l.reps, weight: l.weight };
+                    const setCount = Array.isArray(l.setRows) && l.setRows.length > 0 ? l.setRows.length : l.sets;
+
                     if (!liftMap[key]) {
                         liftMap[key] = { name: key, maxWeight: 0, bestSetStr: '', bestVol: 0, sessions: 0 };
                     }
                     liftMap[key].sessions++;
-                    if (Number(l.weight) >= liftMap[key].maxWeight) {
-                        liftMap[key].maxWeight = Number(l.weight);
-                        liftMap[key].bestSetStr = `${l.sets}×${l.reps} @ ${l.weight} ${appState.weightUnit}`;
+                    if (maxW >= liftMap[key].maxWeight) {
+                        liftMap[key].maxWeight = maxW;
+                        liftMap[key].bestSetStr = `${setCount}×${bestRow.reps} @ ${bestRow.weight} ${appState.weightUnit}`;
                     }
                     if (vol > liftMap[key].bestVol) {
                         liftMap[key].bestVol = vol;
@@ -2623,17 +3216,20 @@
                 }
             });
             currentSuggestedWorkout.lifts.forEach(l => {
-                tempDayDraft.workout.lifts.push({ ...l });
+                addLiftRow(l.name, l.sets, l.reps, l.weight);
             });
             if (!tempDayDraft.workout.duration) {
                 tempDayDraft.workout.duration = 45;
                 document.getElementById('modal-workout-duration').value = 45;
             }
+            if (!workoutClockRunning) {
+                toggleWorkoutClock();
+            }
             modalDirty = true;
             renderModalModalities();
             renderModalMuscleGroups();
             renderModalLifts();
-            showToast(`Loaded "${currentSuggestedWorkout.title}" into today's log`);
+            showToast(`Loaded "${currentSuggestedWorkout.title}" into live workout`);
         }
 
         function renderRecoveryComparisonCard(dateKeys) {
